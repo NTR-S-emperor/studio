@@ -1,0 +1,12 @@
+Sarah
+mc : Hey $gf!
+gf : Hey $mc, how are you?
+mc : Look, I'll show you an example of sending a photo:
+mc : $pics = 1.png
+gf : Yes, I know that, and here's an example of a video:
+Girlfriend : $vids = 1.mp4
+mc : Oh, that's great, I think I can even make a voice memo—
+gf : Absolutely.
+Girlfriend : $audio = 1.mp3
+mc : We've covered sending multimedia content, let's look at the rest in another conversation with our friend Robert.
+$talks = lovepath/1.txt

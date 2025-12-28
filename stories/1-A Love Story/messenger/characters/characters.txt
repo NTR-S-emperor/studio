@@ -1,0 +1,7 @@
+Girlfriend "Sarah" (gf.png) = gf
+Benjamin (benjamin.png) = be
+Ophélie (ophelie.png) = op
+Lisa (lisa.png) = li
+Stéphane (stephane.png) = st
+Olivia (olivia.png) = ol
+Robert (robert.png) = ro

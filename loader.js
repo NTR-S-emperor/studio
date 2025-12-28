@@ -1,0 +1,394 @@
+// loader.js - Cache management and preloading system
+
+window.Loader = {
+    manifestKey: 'studio_manifest',
+    ageVerifiedKey: 'studio_age_verified',
+    loadingScreen: null,
+    loadingBarFill: null,
+    loadingPercent: null,
+    ageDisclaimer: null,
+    startTime: null,
+    minLoadingTime: 3000, // Minimum 3 seconds of loading
+    isReady: false,
+    loadingComplete: false,
+    progressInterval: null,
+    onReadyCallbacks: [],
+
+    /**
+     * Initialize the loader
+     */
+    async init() {
+        this.loadingScreen = document.getElementById('loadingScreen');
+        this.loadingBarFill = document.getElementById('loadingBarFill');
+        this.loadingPercent = document.getElementById('loadingPercent');
+        this.ageDisclaimer = document.getElementById('ageDisclaimer');
+        this.startTime = Date.now();
+
+        // Setup age disclaimer buttons
+        this.setupAgeDisclaimer();
+
+        // Start simulated progress animation
+        this.startProgressAnimation();
+
+        await this.load();
+    },
+
+    /**
+     * Check if age has been verified
+     */
+    isAgeVerified() {
+        try {
+            return localStorage.getItem(this.ageVerifiedKey) === 'true';
+        } catch (e) {
+            return false;
+        }
+    },
+
+    /**
+     * Save age verification
+     */
+    saveAgeVerified() {
+        try {
+            localStorage.setItem(this.ageVerifiedKey, 'true');
+        } catch (e) {
+            // localStorage unavailable
+        }
+    },
+
+    /**
+     * Setup age disclaimer button handlers
+     */
+    setupAgeDisclaimer() {
+        const yesBtn = document.getElementById('ageYesBtn');
+        const noBtn = document.getElementById('ageNoBtn');
+
+        if (yesBtn) {
+            yesBtn.addEventListener('click', () => {
+                this.saveAgeVerified();
+                this.hideAgeDisclaimer();
+            });
+        }
+
+        if (noBtn) {
+            noBtn.addEventListener('click', () => {
+                // Redirect to Google (common convention)
+                window.location.href = 'https://www.google.com';
+            });
+        }
+    },
+
+    /**
+     * Show age disclaimer with fade in
+     */
+    showAgeDisclaimer() {
+        if (!this.ageDisclaimer) return;
+
+        // Hide video and progress bar
+        const video = this.loadingScreen?.querySelector('.loading-video');
+        const progress = this.loadingScreen?.querySelector('.loading-progress');
+        if (video) video.style.display = 'none';
+        if (progress) progress.style.display = 'none';
+
+        // Show disclaimer
+        this.ageDisclaimer.classList.remove('hidden');
+        // Trigger reflow for transition
+        void this.ageDisclaimer.offsetWidth;
+        this.ageDisclaimer.classList.add('visible');
+    },
+
+    /**
+     * Hide age disclaimer and complete loading
+     */
+    hideAgeDisclaimer() {
+        if (!this.ageDisclaimer) return;
+
+        this.ageDisclaimer.classList.remove('visible');
+
+        setTimeout(() => {
+            this.ageDisclaimer.classList.add('hidden');
+            this.finalizeLoading();
+        }, 500);
+    },
+
+    /**
+     * Final step: remove loading screen and trigger ready
+     */
+    finalizeLoading() {
+        if (this.loadingScreen) {
+            this.loadingScreen.classList.add('fade-out');
+
+            setTimeout(() => {
+                if (this.loadingScreen) {
+                    this.loadingScreen.remove();
+                }
+                this.isReady = true;
+                this.triggerReady();
+            }, 500);
+        } else {
+            this.isReady = true;
+            this.triggerReady();
+        }
+    },
+
+    /**
+     * Animate progress bar over minLoadingTime duration (caps at 99%)
+     */
+    startProgressAnimation() {
+        const updateInterval = 50; // Update every 50ms for smooth animation
+
+        this.progressInterval = setInterval(() => {
+            const elapsed = Date.now() - this.startTime;
+            // Cap at 99% - only checkComplete() can set 100%
+            const progress = Math.min(99, (elapsed / this.minLoadingTime) * 99);
+
+            this.updateProgress(Math.round(progress));
+
+            // When animation reaches 99%, stop and check if we can complete
+            if (progress >= 99) {
+                clearInterval(this.progressInterval);
+                this.progressInterval = null;
+                this.checkComplete();
+            }
+        }, updateInterval);
+    },
+
+    /**
+     * Main loading process
+     */
+    async load() {
+        try {
+            // 1. Fetch server manifest
+            const serverManifest = await this.fetchManifest();
+            if (!serverManifest) {
+                this.complete();
+                return;
+            }
+
+            // 2. Get cached manifest
+            const cachedManifest = this.getCachedManifest();
+
+            // 3. Find files to update
+            const filesToLoad = this.getFilesToUpdate(serverManifest, cachedManifest);
+
+            // 4. Preload files (pass manifest for cache-busting)
+            if (filesToLoad.length > 0) {
+                await this.preloadFiles(filesToLoad, serverManifest);
+            }
+
+            // 5. Save new manifest
+            this.saveCachedManifest(serverManifest);
+
+            // 6. Complete loading
+            this.complete();
+
+        } catch (error) {
+            this.complete();
+        }
+    },
+
+    /**
+     * Fetch manifest from server
+     */
+    async fetchManifest() {
+        try {
+            const response = await fetch('manifest.php', { cache: 'no-store' });
+            if (!response.ok) return null;
+
+            const text = await response.text();
+            return this.parseManifest(text);
+        } catch (e) {
+            return null;
+        }
+    },
+
+    /**
+     * Parse manifest text to object
+     * Format: path:hash (one per line)
+     */
+    parseManifest(text) {
+        const manifest = {};
+        const lines = text.trim().split('\n');
+
+        for (const line of lines) {
+            const colonIndex = line.lastIndexOf(':');
+            if (colonIndex > 0) {
+                const path = line.substring(0, colonIndex);
+                const hash = line.substring(colonIndex + 1);
+                manifest[path] = hash;
+            }
+        }
+
+        return manifest;
+    },
+
+    /**
+     * Convert manifest object to compact string for storage
+     */
+    stringifyManifest(manifest) {
+        return Object.entries(manifest)
+            .map(([path, hash]) => `${path}:${hash}`)
+            .join('\n');
+    },
+
+    /**
+     * Get cached manifest from localStorage
+     */
+    getCachedManifest() {
+        try {
+            const data = localStorage.getItem(this.manifestKey);
+            if (!data) return {};
+            return this.parseManifest(data);
+        } catch (e) {
+            return {};
+        }
+    },
+
+    /**
+     * Save manifest to localStorage
+     */
+    saveCachedManifest(manifest) {
+        try {
+            localStorage.setItem(this.manifestKey, this.stringifyManifest(manifest));
+        } catch (e) {
+            // localStorage full or unavailable
+        }
+    },
+
+    /**
+     * Compare manifests and return files that need updating
+     */
+    getFilesToUpdate(serverManifest, cachedManifest) {
+        const filesToLoad = [];
+
+        for (const [path, hash] of Object.entries(serverManifest)) {
+            if (cachedManifest[path] !== hash) {
+                filesToLoad.push(path);
+            }
+        }
+
+        return filesToLoad;
+    },
+
+    /**
+     * Preload files with progress
+     */
+    async preloadFiles(files, manifest) {
+        // Load files in parallel with concurrency limit
+        const concurrency = 6;
+        const chunks = [];
+
+        for (let i = 0; i < files.length; i += concurrency) {
+            chunks.push(files.slice(i, i + concurrency));
+        }
+
+        for (const chunk of chunks) {
+            await Promise.all(chunk.map(async (file) => {
+                const hash = manifest[file];
+                await this.preloadFile(file, hash);
+            }));
+        }
+    },
+
+    /**
+     * Preload a single file with cache-busting hash
+     */
+    async preloadFile(path, hash) {
+        try {
+            const ext = path.split('.').pop().toLowerCase();
+            // Add hash as query param to bypass CDN cache
+            const url = hash ? `${path}?v=${hash}` : path;
+
+            // For images, use Image object for better caching
+            if (['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'].includes(ext)) {
+                return new Promise((resolve) => {
+                    const img = new Image();
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                    img.src = url;
+                });
+            }
+
+            // For videos, just fetch headers
+            if (['mp4', 'webm'].includes(ext)) {
+                await fetch(url, { method: 'HEAD' });
+                return;
+            }
+
+            // For other files, fetch content
+            await fetch(url);
+
+        } catch (e) {
+            // Ignore individual file errors
+        }
+    },
+
+    /**
+     * Update progress display
+     */
+    updateProgress(percent) {
+        if (this.loadingBarFill) {
+            this.loadingBarFill.style.width = percent + '%';
+        }
+        if (this.loadingPercent) {
+            this.loadingPercent.textContent = percent + '%';
+        }
+    },
+
+    /**
+     * Mark loading as complete (actual file loading done)
+     */
+    complete() {
+        this.loadingComplete = true;
+        this.checkComplete();
+    },
+
+    /**
+     * Check if both loading and animation are done, then fade out
+     */
+    checkComplete() {
+        // Wait for both: actual loading done AND progress animation finished
+        if (!this.loadingComplete || this.progressInterval !== null) {
+            return;
+        }
+
+        // Show 100% and wait 1 second before next step
+        this.updateProgress(100);
+
+        setTimeout(() => {
+            // Check if age verification is needed
+            if (!this.isAgeVerified()) {
+                // Show age disclaimer
+                this.showAgeDisclaimer();
+            } else {
+                // Already verified, proceed directly
+                this.finalizeLoading();
+            }
+        }, 1000);
+    },
+
+    /**
+     * Register callback for when loading is complete
+     */
+    onReady(callback) {
+        if (this.isReady) {
+            callback();
+        } else {
+            this.onReadyCallbacks.push(callback);
+        }
+    },
+
+    /**
+     * Trigger all ready callbacks
+     */
+    triggerReady() {
+        for (const callback of this.onReadyCallbacks) {
+            callback();
+        }
+        this.onReadyCallbacks = [];
+    }
+};
+
+// Auto-init when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    window.Loader.init();
+});

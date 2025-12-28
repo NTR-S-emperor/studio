@@ -1,0 +1,6 @@
+$tips = volume.png
+[b]Mute/unmute & global sound management[/b]
+
+A single click mutes/unmutes the sound.
+
+A long click allows you to manage the global volume (Messenger media and music).

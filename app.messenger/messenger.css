@@ -1,0 +1,1080 @@
+/* app.messenger/messenger.css */
+
+/* ===== MESSENGER SCREEN ===== */
+#messengerScreen {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+  height: 100%;
+}
+
+#messenger-app {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #e5e7eb;
+  font-size: 14px;
+}
+
+.ms-header {
+  display: none;
+}
+
+/* ===== GLOBAL LAYOUT ===== */
+.ms-layout {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  min-height: 0;
+  height: 100%;
+  padding: 8px;
+}
+
+/* ===== CONTACTS COLUMN ===== */
+.ms-contacts {
+  position: relative;
+  background: rgba(0, 0, 0, 0.17);
+  border-radius: 12px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 70px;
+  flex-shrink: 0;
+  transition: width 0.18s ease-out;
+  align-self: flex-start;
+}
+
+.ms-contacts::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 0 solid transparent;
+  border-right-width: 5.5px;
+  border-right-color: #535353cc;
+  pointer-events: none;
+  transition: border-right-color 0.15s ease;
+}
+
+.ms-contacts:has(.ms-contacts-toggle-zone:hover)::after {
+  border-right-color: #888888cc;
+}
+
+/* --- Contacts toggle zone --- */
+.ms-contacts-toggle-zone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 18px;
+  cursor: pointer;
+  z-index: 5;
+}
+
+.ms-contacts.ms-contacts--expanded {
+  width: auto;
+  min-width: 130px;
+}
+
+.ms-contacts-title {
+  display: none;
+}
+
+.ms-contacts-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+/* --- Individual contact --- */
+.ms-contact {
+  width: 100%;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 3px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  overflow: hidden;
+}
+
+.ms-contact:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.ms-contact--active {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.ms-contact-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  overflow: visible;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.ms-contact-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 999px;
+}
+
+/* --- New content indicator --- */
+.ms-contact--has-new .ms-contact-avatar {
+  box-shadow: 0 0 0 2.5px #4cca7a;
+}
+
+/* --- Online indicator --- */
+.ms-contact-online {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  width: 12px;
+  height: 12px;
+  background: #4cca7a;
+  border-radius: 50%;
+  border: 2px solid #1e1e2e;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* --- Group avatar --- */
+.ms-contact-avatar--group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+
+.ms-contact-avatar--group svg {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+/* --- Contact name --- */
+.ms-contact-name {
+  font-size: 12px;
+  display: none;
+  white-space: nowrap;
+  color: white;
+  margin-left: -3px;
+  margin-right: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70px;
+}
+
+.ms-contacts.ms-contacts--expanded .ms-contact-name {
+  display: block;
+}
+
+/* ===== CHAT COLUMN ===== */
+.ms-chat {
+  background: rgba(0, 0, 0, 0.17);
+  border-radius: 12px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  min-width: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+}
+
+/* --- Chat header --- */
+.ms-chat-header {
+  height: 50px;
+  min-height: 50px;
+  max-height: 50px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding-bottom: 6px;
+  position: static;
+  top: auto;
+  z-index: auto;
+}
+
+.ms-chat-header-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+/* --- Back button --- */
+.ms-chat-back-btn {
+  width: 39px;
+  height: 39px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.ms-chat-back-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+.ms-chat-back-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.ms-chat-back-btn:active {
+  transform: scale(0.94);
+}
+
+.ms-chat-back-btn--disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.ms-chat-back-btn--disabled:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* --- Header actions --- */
+.ms-chat-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-shrink: 0;
+  padding: 4px 0px 6px 5px;
+}
+
+/* --- Autoplay button --- */
+.ms-chat-autoplay-btn {
+  width: 39px;
+  height: 39px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.ms-chat-autoplay-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.ms-chat-autoplay-btn:active {
+  transform: scale(0.94);
+}
+
+.ms-autoplay-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+}
+
+.ms-autoplay-icon svg {
+  width: 100%;
+  height: 100%;
+  transform: translate(1px, 0);
+}
+
+.ms-chat-autoplay-btn--auto {
+  background: rgba(251, 146, 60, 0.25);
+  color: #fb923c;
+}
+
+.ms-chat-autoplay-btn--auto:hover {
+  background: rgba(251, 146, 60, 0.35);
+}
+
+.ms-chat-autoplay-btn--fast {
+  background: rgba(251, 146, 60, 0.25);
+  color: #fb923c;
+}
+
+.ms-chat-autoplay-btn--fast:hover {
+  background: rgba(251, 146, 60, 0.35);
+}
+
+/* --- Chat avatar and name --- */
+.ms-chat-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.ms-chat-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ms-chat-name {
+  font-size: 14px;
+  font-weight: 600;
+  padding-left: 8px;
+}
+
+.ms-chat-name-separator {
+  color: #9ca3af;
+}
+
+.ms-chat-name-clickable:hover {
+  opacity: 0.85;
+}
+
+/* --- Messages area --- */
+.ms-chat-messages {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 4px;
+  padding-right: 14px;
+  padding-left: 7px;
+  scrollbar-gutter: stable;
+}
+
+/* --- Input area --- */
+.ms-chat-input {
+  margin-top: 6px;
+  padding: 2px 6px 6px 6px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ms-chat-input-header {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.7;
+}
+
+.ms-chat-input-body {
+  min-height: 32px;
+  font-size: 13px;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ms-chat-input-main {
+  flex: 1;
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.ms-chat-input-idle {
+  margin: 0 auto;
+  opacity: 0.7;
+  font-size: 30px;
+  letter-spacing: 0.15em;
+  transform: translate(17px, -8px);
+}
+
+.ms-chat-input-placeholder {
+  opacity: 0.6;
+  font-style: italic;
+}
+
+/* --- Send button --- */
+.ms-chat-send-btn {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  border: 1.6px solid rgba(0, 0, 0, 0.22);
+  background: rgba(0, 0, 0, 0.36);
+  background-image: url("../assets/messenger/send_message.svg");
+  background-repeat: no-repeat;
+  background-position: 65% 50%;
+  background-size: 59%;
+  cursor: pointer;
+}
+
+.ms-chat-send-btn:hover {
+  background-color: rgba(151, 151, 151, 0.05);
+  border-radius: 999px;
+  border: 1.6px solid rgb(255 255 255 / 10%);
+}
+
+.ms-chat-send-btn:active {
+  transform: scale(0.94);
+}
+
+/* --- Choice list --- */
+.ms-choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.ms-choice {
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.58);
+  background: rgb(129, 204, 105);
+  color: #1f1f1f;
+  padding: 6px 8px;
+  font-size: 13.5px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ms-choice:hover {
+  background: rgb(141, 190, 125);
+}
+
+/* ===== STATUS ===== */
+.ms-status-row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 8px 0;
+}
+
+.ms-status-badge {
+  padding: 1px 8px 2px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.39);
+  color: #989898;
+  font-size: 8px;
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+/* ===== PLACEHOLDER ===== */
+.ms-placeholder {
+  text-align: center;
+  opacity: 0.65;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+/* ===== MESSAGE BUBBLES ===== */
+.ms-msg {
+  width: 100%;
+  display: flex;
+}
+
+.ms-msg--mc {
+  justify-content: flex-end;
+}
+
+.ms-msg--npc {
+  justify-content: flex-start;
+}
+
+.ms-msg-bubble {
+  max-width: 80%;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  word-wrap: break-word;
+  text-align: justify;
+  hyphens: auto;
+  white-space: pre-line;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* --- MC message arrow --- */
+.ms-msg--mc.ms-msg--first .ms-msg-bubble::after {
+  content: "";
+  position: absolute;
+  top: 2.3px;
+  right: -5px;
+  width: 12px;
+  height: 10px;
+  background: inherit;
+  transform: rotate(45deg);
+  border-radius: 2px;
+  z-index: -1;
+}
+
+/* --- NPC message arrow --- */
+.ms-msg--npc.ms-msg--first .ms-msg-bubble::after {
+  content: "";
+  position: absolute;
+  top: 2.3px;
+  left: -5px;
+  width: 12px;
+  height: 10px;
+  background: inherit;
+  transform: rotate(45deg);
+  border-radius: 2px;
+  z-index: -1;
+}
+
+/* --- Sent messages (MC) --- */
+.ms-msg--mc .ms-msg-bubble {
+  background: #144D37;
+  color: #ffffff;
+  border-bottom-right-radius: 3px;
+}
+
+/* --- Received messages (NPC) --- */
+.ms-msg--npc .ms-msg-bubble {
+  background: #1E1F1F;
+  color: #ffffff;
+  border-bottom-left-radius: 3px;
+}
+
+/* --- Deleted messages --- */
+.ms-msg-bubble--deleted {
+  opacity: 0.6;
+}
+
+.ms-msg-bubble--deleted em {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ===== IMAGE MESSAGES ===== */
+.ms-msg-bubble--image {
+  padding: 4px;
+}
+
+.ms-msg-image {
+  max-width: 200px;
+  max-height: 250px;
+  width: 100%;
+  border-radius: 6px;
+  display: block;
+  object-fit: contain;
+  padding: 4px;
+}
+
+/* ===== VIDEO MESSAGES ===== */
+.ms-msg-bubble--video {
+  padding: 4px;
+}
+
+.ms-msg-video-container {
+  position: relative;
+  display: inline-block;
+  padding: 3px;
+  max-width: 100%;
+}
+
+.ms-msg-video {
+  max-width: 200px;
+  max-height: 250px;
+  width: 100%;
+  border-radius: 6px;
+  display: block;
+  object-fit: contain;
+}
+
+.ms-msg-video-play-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  pointer-events: none;
+  padding-left: 4px;
+}
+
+.ms-msg-video-duration {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  color: white;
+  font-size: 8px;
+  font-weight: 500;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 2px 5px;
+  border-radius: 3px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ===== AUDIO MESSAGES ===== */
+.ms-msg-bubble--audio {
+  padding: 6px 10px;
+  min-width: 180px;
+}
+
+.ms-msg-audio-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ms-msg-audio-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.ms-msg-audio-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ms-msg-audio-avatar--mc {
+  font-size: 16px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.ms-msg-audio-play {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.ms-msg-audio-play:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.ms-msg-audio-play:active {
+  transform: scale(0.95);
+}
+
+.ms-msg-audio-play--paused {
+  padding-left: 3px;
+}
+
+.ms-msg-audio-progress {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  cursor: pointer;
+  overflow: hidden;
+  min-width: 60px;
+}
+
+.ms-msg-audio-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #4cca7a;
+  border-radius: 2px;
+  transition: width 0.1s linear;
+}
+
+.ms-msg-audio-duration {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  flex-shrink: 0;
+  min-width: 32px;
+  text-align: right;
+}
+
+.ms-msg-audio-container audio {
+  display: none;
+}
+
+/* ===== LIGHTBOX ===== */
+.ms-lightbox {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.ms-lightbox--open {
+  display: flex;
+}
+
+.ms-lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.ms-lightbox-content {
+  position: relative;
+  z-index: 1;
+  max-width: 90%;
+  max-height: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ms-lightbox-image {
+  max-width: 100%;
+  max-height: 70vh;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.ms-lightbox-image--avatar {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.ms-lightbox-video-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ms-lightbox-video {
+  max-width: 100%;
+  max-height: 65vh;
+  border-radius: 8px;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.ms-lightbox-progress {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 3px;
+  margin-top: 10px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.ms-lightbox-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #4cca7a;
+  border-radius: 3px;
+  transition: width 0.1s linear;
+}
+
+.ms-lightbox-close {
+  position: absolute;
+  top: -45px;
+  right: 0;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 36px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.ms-lightbox-close:hover {
+  color: #ccc;
+}
+
+/* ===== MESSAGE AVATARS ===== */
+.ms-msg-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  overflow: hidden;
+  flex-shrink: 0;
+  margin-right: 6px;
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+.ms-msg-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ms-msg-avatar-spacer {
+  width: 24px;
+  height: 0;
+  flex-shrink: 0;
+  margin-right: 6px;
+}
+
+/* ===== SPEAKER NAME ===== */
+.ms-msg-speaker {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  margin-bottom: 2px;
+  text-align: left;
+}
+
+/* ===== SCROLLBARS ===== */
+.ms-contacts-list::-webkit-scrollbar,
+.ms-chat-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ms-contacts-list::-webkit-scrollbar-thumb,
+.ms-chat-messages::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+}
+
+/* ===== DISABLED STATES ===== */
+.ms-chat-send-btn--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ===== LOCK MODAL ===== */
+.lock-modal {
+  position: absolute;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lock-modal.hidden {
+  display: none;
+}
+
+.lock-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+}
+
+.lock-modal-content {
+  position: relative;
+  background: linear-gradient(145deg, #1a1a2e, #16213e);
+  border-radius: 16px;
+  padding: 24px;
+  width: 85%;
+  max-width: 320px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lock-modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.lock-tier-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.lock-tier-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.lock-tier-hint {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+}
+
+.lock-tier-bronze {
+  background: linear-gradient(135deg, #cd7f32, #8b4513);
+  color: #fff;
+}
+
+.lock-tier-silver {
+  background: linear-gradient(135deg, #c0c0c0, #808080);
+  color: #1a1a2e;
+}
+
+.lock-tier-gold {
+  background: linear-gradient(135deg, #ffd700, #daa520);
+  color: #1a1a2e;
+}
+
+.lock-tier-diamond {
+  background: linear-gradient(135deg, #b9f2ff, #00bfff);
+  color: #1a1a2e;
+}
+
+.lock-tier-platinum {
+  background: linear-gradient(135deg, #e5e4e2, #a8a9ad);
+  color: #1a1a2e;
+}
+
+.lock-modal-description {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.lock-modal-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+}
+
+.lock-modal-input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lock-modal-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.lock-modal-error {
+  font-size: 12px;
+  color: #ff6b6b;
+  text-align: center;
+  min-height: 18px;
+  margin-bottom: 16px;
+}
+
+.lock-modal-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.lock-modal-btn {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lock-modal-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lock-modal-cancel {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.lock-modal-cancel:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.lock-modal-confirm {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+}
+
+.lock-modal-confirm:hover:not(:disabled) {
+  background: linear-gradient(135deg, #5a6fd6, #6a4190);
+  transform: translateY(-1px);
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .ms-msg-bubble {
+    max-width: 85%;
+  }
+
+  .ms-msg-bubble--image,
+  .ms-msg-bubble--video {
+    max-width: 70%;
+  }
+
+  .ms-msg-image,
+  .ms-msg-video {
+    max-width: 100%;
+    width: auto;
+    height: auto;
+  }
+
+  .ms-msg-video-container {
+    max-width: 100%;
+    width: 100%;
+  }
+}

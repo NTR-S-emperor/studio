@@ -1,0 +1,8 @@
+$tips = save.png
+[b]Quick & automatic backup[/b]
+
+A single click allows for quick saving.
+
+A long click allows for quick saving but with a custom name.
+
+Automatic saves are performed when a choice is presented to the player, after receiving media, and then during a new Messenger conversation. They are limited to 10. The oldest ones are overwritten.

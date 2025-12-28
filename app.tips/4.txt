@@ -1,0 +1,8 @@
+$tips = reading.png
+[b]Automatic & fast reading[/b]
+
+A single click activates automatic reading.
+
+A long click allows fast reading of messages.
+
+In both cases, the scrolling speed can be adjusted in the settings.

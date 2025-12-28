@@ -1,0 +1,8 @@
+$tips = cloud_save.png
+[b]Cloud backup[/b]
+
+To easily access your backup on other devices, long press the export button.
+
+This will give you the code you need to import your backup from the cloud to another device.
+
+You can also see this code appear at the top left of your backup window. Clicking on the code will automatically copy it.

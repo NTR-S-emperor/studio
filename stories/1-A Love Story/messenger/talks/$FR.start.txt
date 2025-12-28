@@ -1,0 +1,12 @@
+Sarah
+mc : Salut $gf !
+gf : Salut $mc, comment tu vas?
+mc : Regarde je te montre l'exemple d'envoi d'une photo :
+mc : $pics = 1.png
+gf : Oui, je connais, et voici l'exemple d'une vidéo :
+Girlfriend : $vids = 1.mp4
+mc : Oh c'est génial ça, je crois même que je peux faire une note vocal-
+gf : Tout à fait.
+Girlfriend : $audio = 1.mp3
+mc : On a fait le tour de l'envoi du contenu multimédia, regardons le reste dans une autre conversation avec notre ami Robert.
+$talks = lovepath/1.txt

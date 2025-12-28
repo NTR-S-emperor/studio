@@ -1,0 +1,240 @@
+# ============================================================================
+#                         SYSTEM TRANSLATIONS
+# ============================================================================
+#
+# FORMAT:
+#   @key: CODE= Text | CODE= Text | ...
+#
+# EXAMPLE:
+#   @btn.cancel: EN= Cancel | FR= Annuler
+#
+# DEFINE LANGUAGES:
+#   @LANG: CODE = Display Name
+#
+# ADD A LANGUAGE:
+#   1. Add @LANG: XX = Language Name
+#   2. Add XX= Translation to each line
+#
+# ============================================================================
+
+@LANG: EN = English
+@LANG: FR = Français
+
+
+# ============================================================================
+# APPLICATION
+# ============================================================================
+
+@app.title: EN= NTR/S Emperor Studio | FR= NTR/S Emperor Studio
+@app.settings: EN= Settings | FR= Paramètres
+@app.messenger: EN= Messenger | FR= Messenger
+@app.instapics: EN= InstaPics | FR= InstaPics
+@app.onlyslut: EN= OnlySlut | FR= OnlySlut
+@app.saves: EN= Saves | FR= Sauvegardes
+@app.gallery: EN= Gallery | FR= Galerie
+@app.patreon: EN= Patreon | FR= Patreon
+
+
+# ============================================================================
+# STATUS BAR
+# ============================================================================
+
+@status.quicksave: EN= Quick Save | FR= Sauvegarde rapide
+@status.volume: EN= Volume | FR= Volume
+@status.muted: EN= Muted | FR= Muet
+@status.unmute: EN= Unmute | FR= Activer le son
+@status.mute: EN= Mute | FR= Couper le son
+
+
+# ============================================================================
+# QUICK SAVE MODAL
+# ============================================================================
+
+@quicksave.title: EN= New save | FR= Nouvelle sauvegarde
+@quicksave.placeholder: EN= Name (optional) | FR= Nom (optionnel)
+
+
+# ============================================================================
+# CHARACTER NAME MODAL
+# ============================================================================
+
+@charname.gf.title: EN= What's your girlfriend's name? | FR= Comment s'appelle ta copine ?
+@charname.gf.hint: EN= Leave empty to keep the default name | FR= Laisse vide pour conserver le nom par défaut
+@charname.gf.hint.dynamic: EN= Leave empty for "{defaultName}" | FR= Laisse vide pour "{defaultName}"
+@charname.mc.title: EN= What's your nickname? | FR= Quel est ton pseudo ?
+@charname.mc.placeholder: EN= John | FR= John
+@charname.mc.hint: EN= Leave empty for "John" | FR= Laisse vide pour "John"
+@charname.btn.continue: EN= Continue | FR= Continuer
+@charname.btn.start: EN= Start | FR= Commencer
+
+
+# ============================================================================
+# ALERTS
+# ============================================================================
+
+@alert.instapics: EN= Please select a story first to open InstaPics. | FR= Sélectionne d'abord une histoire pour ouvrir InstaPics.
+@alert.onlyslut: EN= Please select a story first to open OnlySlut. | FR= Sélectionne d'abord une histoire pour ouvrir OnlySlut.
+@alert.messenger: EN= Please select a story first to open Messenger. | FR= Sélectionne d'abord une histoire pour ouvrir Messenger.
+@alert.gallery: EN= Please select a story first to open the gallery. | FR= Sélectionne d'abord une histoire pour ouvrir la galerie.
+
+
+# ============================================================================
+# SETTINGS
+# ============================================================================
+
+@settings.cat.system: EN= SYSTEM | FR= SYSTÈME
+@settings.cat.messenger: EN= MESSENGER | FR= MESSENGER
+@settings.cat.story: EN= STORY | FR= HISTOIRE
+@settings.cat.story.title: EN= STORY — {TITLE} | FR= HISTOIRE — {TITLE}
+@settings.language: EN= Language | FR= Langue
+@settings.music: EN= Background music | FR= Musique de fond
+@settings.media: EN= Media volume | FR= Volume des médias
+@settings.autoscroll: EN= Auto scroll | FR= Défilement auto
+@settings.fastscroll: EN= Fast Scroll | FR= Défilement rapide
+@settings.autoexpand: EN= Auto-expand media | FR= Agrandissement auto des médias
+@settings.wallpaper: EN= Wallpaper | FR= Fond d'écran
+@settings.wallpaper.choose: EN= Choose | FR= Choisir
+@settings.wallpaper.title: EN= Choose a wallpaper | FR= Choisir un fond d'écran
+@settings.wallpaper.loading: EN= Loading... | FR= Chargement ...
+@settings.wallpaper.default: EN= Default | FR= Par défaut
+@settings.wallpaper.item: EN= Wallpaper {n} | FR= Fond d'écran {n}
+@settings.wallpaper.error: EN= Loading error | FR= Erreur de chargement
+@settings.gf.label: EN= Girlfriend's name | FR= Nom de ma copine
+@settings.gf.hint: EN= Default name: "{defaultName}" | FR= Nom par défaut : "{defaultName}"
+@settings.gf.hint.empty: EN= Leave empty for default name | FR= Laisse vide pour le nom par défaut
+@settings.mc.label: EN= Nickname | FR= Pseudo
+@settings.mc.hint: EN= Leave empty for "John" | FR= Laisse vide pour "John"
+@settings.default: EN= Default settings | FR= Paramètres par défaut
+@settings.default.warning: EN= All settings will be reset to their default values. | FR= Tous les paramètres seront réinitialisés à leurs valeurs par défaut.
+@settings.default.note: EN= Story progress will not be affected. | FR= La progression de l'histoire ne sera pas affectée.
+@settings.reset: EN= Reset progress | FR= Réinitialiser la progression
+@settings.reset.warning: EN= You will lose all your progress in this story. This action is irreversible. | FR= Tu perdras toute ta progression dans cette histoire. Cette action est irréversible.
+@settings.reset.note: EN= Global settings will be preserved. | FR= Les paramètres globaux seront conservés.
+
+
+# ============================================================================
+# MESSENGER
+# ============================================================================
+
+@messenger.contacts: EN= Contacts | FR= Contacts
+@messenger.nocontacts: EN= No contacts for this story. | FR= Aucun contact pour cette histoire.
+@messenger.selectcontact: EN= Select a contact. | FR= Sélectionne un contact.
+@messenger.selectcontact.long: EN= Select a contact on the left to view the conversation. | FR= Sélectionne un contact à gauche pour voir la conversation.
+@messenger.selectcontact.short: EN= Select a contact on the left. | FR= Sélectionne un contact à gauche.
+@messenger.nomessages: EN= No messages for this contact. | FR= Aucun message pour ce contact.
+@messenger.deleted: EN= Message deleted | FR= Message supprimé
+
+
+# ============================================================================
+# INSTAPICS
+# ============================================================================
+
+@instapics.home: EN= Home | FR= Accueil
+@instapics.noposts: EN= No posts at the moment | FR= Aucune publication pour le moment
+@instapics.seemore: EN= See more... | FR= Voir plus ...
+
+
+# ============================================================================
+# GALLERY
+# ============================================================================
+
+@gallery.photos: EN= Photos | FR= Photos
+@gallery.videos: EN= Videos | FR= Vidéos
+@gallery.all: EN= All | FR= Tous
+@gallery.me: EN= Me | FR= Moi
+@gallery.nophotos: EN= No photos | FR= Aucune photo
+@gallery.novideos: EN= No videos | FR= Aucune vidéo
+@gallery.sentto: EN= Sent to {name} | FR= Envoyé à {name}
+@gallery.receivedfrom: EN= Received from {name} | FR= Reçu de {name}
+
+
+# ============================================================================
+# SAVES
+# ============================================================================
+
+@saves.title: EN= Saves - {title} | FR= Sauvegardes - {title}
+@saves.import: EN= Import | FR= Importer
+@saves.import.manual: EN= Import (manual) | FR= Importer (manuel)
+@saves.import.cloud: EN= Import (cloud) | FR= Importer (cloud)
+@saves.cloud.notavailable: EN= Cloud sync is not available yet. | FR= La synchronisation cloud n'est pas encore disponible.
+@saves.cloud.success.title: EN= Saved to Cloud! | FR= Sauvegardé dans le cloud !
+@saves.cloud.success.message: EN= Your save code is: | FR= Ton code de sauvegarde est :
+@saves.cloud.success.hint: EN= Use this code to import your save on any device. | FR= Utilise ce code pour importer ta sauvegarde sur n'importe quel appareil.
+@saves.cloud.import.title: EN= Import from Cloud | FR= Importer du cloud
+@saves.cloud.import.prompt: EN= Enter your 5-letter code: | FR= Entre ton code à 5 lettres :
+@saves.cloud.import.hint: EN= The code was given when the save was uploaded. | FR= Le code t'a été donné lors de l'envoi de la sauvegarde.
+@saves.cloud.import.btn: EN= Import | FR= Importer
+@saves.cloud.import.success: EN= Save imported successfully! | FR= Sauvegarde importée avec succès !
+@saves.cloud.error.title: EN= Error | FR= Erreur
+@saves.cloud.error.upload: EN= Upload failed. Please try again later. | FR= Échec de l'envoi. Réessaie plus tard.
+@saves.cloud.error.network: EN= Unable to connect to the server. Check your internet connection and try again. | FR= Impossible de se connecter au serveur. Vérifie ta connexion internet et réessaie.
+@saves.cloud.error.invalidcode: EN= Invalid code format. The code must contain exactly 5 letters (A-Z). | FR= Format de code invalide. Le code doit contenir exactement 5 lettres (A-Z).
+@saves.cloud.error.notfound: EN= No save found with this code. Check the code and try again. | FR= Aucune sauvegarde trouvée avec ce code. Vérifie le code et réessaie.
+@saves.cloud.error.ratelimit.title: EN= Too many requests | FR= Trop de requêtes
+@saves.cloud.error.ratelimit: EN= You have reached the upload limit (5 saves per hour). Please wait before uploading again. | FR= Tu as atteint la limite d'envoi (5 sauvegardes par heure). Patiente avant de réessayer.
+@saves.cloud.error.toolarge: EN= This save is too large to upload. The maximum size is 200 KB. | FR= Cette sauvegarde est trop volumineuse. La taille maximum est de 200 Ko.
+@saves.manual: EN= Manual | FR= Manuelles
+@saves.automatic: EN= Automatic | FR= Automatiques
+@saves.nosaves: EN= No saves | FR= Aucune sauvegarde
+@saves.createfirst: EN= Create your first save | FR= Crée ta première sauvegarde
+@saves.noauto: EN= No automatic saves | FR= Aucune sauvegarde automatique
+@saves.autohere: EN= Automatic saves will appear here | FR= Les sauvegardes automatiques apparaîtront ici
+@saves.nomanual: EN= No manual saves | FR= Aucune sauvegarde manuelle
+@saves.usebutton: EN= Use the + button or quick save | FR= Utilise le bouton + ou la sauvegarde rapide
+@saves.nosavesfor: EN= No saves for "{title}" | FR= Aucune sauvegarde pour "{title}"
+@saves.addnote: EN= Add a note... | FR= Ajouter une note ...
+@saves.imported: EN= (imported) | FR= (importée)
+@saves.imported.manual: EN= (manually imported) | FR= (importée manuellement)
+@saves.imported.cloud: EN= (cloud imported) | FR= (importée du cloud)
+@saves.auto: EN= (auto) | FR= (auto)
+@saves.confirm: EN= Confirmation | FR= Confirmation
+@saves.load.title: EN= Load save? | FR= Charger la sauvegarde ?
+@saves.load.message: EN= Do you want to load "{name}"?\n\nCurrent unsaved progress will be lost. | FR= Veux-tu charger "{name}" ?\n\nLa progression non sauvegardée sera perdue.
+@saves.load.btn: EN= Load | FR= Charger
+@saves.load.settings.title: EN= Keep general settings? | FR= Conserver les paramètres généraux ?
+@saves.load.settings.message: EN= Do you want to keep your current settings (language, volumes, wallpaper) instead of loading those from the save? | FR= Veux-tu conserver tes paramètres actuels (langue, volumes, fond d'écran) au lieu de charger ceux de la sauvegarde ?
+@saves.load.storySettings.title: EN= Keep story settings? | FR= Conserver les paramètres de l'histoire ?
+@saves.load.storySettings.message: EN= Do you want to keep your current character names instead of loading those from the save? | FR= Veux-tu conserver les prénoms actuels des personnages au lieu de charger ceux de la sauvegarde ?
+@saves.overwrite.title: EN= Overwrite save? | FR= Écraser la sauvegarde ?
+@saves.overwrite.message: EN= Do you want to overwrite "{name}"?\n\nYour current progress will replace this save. | FR= Veux-tu écraser "{name}" ?\n\nTa progression actuelle remplacera cette sauvegarde.
+@saves.overwrite.btn: EN= Overwrite | FR= Écraser
+@saves.delete.title: EN= Delete save? | FR= Supprimer la sauvegarde ?
+@saves.delete.message: EN= Do you want to permanently delete "{name}"? | FR= Veux-tu supprimer définitivement "{name}" ?
+@saves.delete.btn: EN= Delete | FR= Supprimer
+@saves.error.invalid: EN= Invalid save file. | FR= Fichier de sauvegarde invalide.
+@saves.error.read: EN= Unable to read save file. | FR= Impossible de lire le fichier de sauvegarde.
+@saves.error.file: EN= Error reading file. | FR= Erreur de lecture du fichier.
+@saves.cloud.copied: EN= Code copied | FR= Code copié
+@saves.cloud.error.offline: EN= The database is offline for 1 hour due to potentially fraudulent usage by some users. | FR= La base de données est hors-ligne pendant 1 heure en raison d'une utilisation potentiellement frauduleuse par certains usagers.
+
+
+# ============================================================================
+# NOTIFICATIONS
+# ============================================================================
+
+@notif.now: EN= now | FR= maintenant
+
+
+# ============================================================================
+# LOCK MODAL (Subscription)
+# ============================================================================
+
+@lock.title: EN= Premium Content | FR= Contenu Premium
+@lock.description: EN= This content requires a subscription code. | FR= Ce contenu nécessite un code d'abonnement.
+@lock.placeholder: EN= Enter your code | FR= Entre ton code
+@lock.confirm: EN= Confirm | FR= Confirmer
+@lock.orhigher: EN= or higher | FR= ou supérieur
+
+
+# ============================================================================
+# COMMON BUTTONS
+# ============================================================================
+
+@btn.cancel: EN= Cancel | FR= Annuler
+@btn.confirm: EN= Confirm | FR= Confirmer
+@btn.save: EN= Save | FR= Sauvegarder
+@btn.edit: EN= Edit | FR= Modifier
+@btn.reset: EN= Reset | FR= Réinitialiser
+@btn.close: EN= Close | FR= Fermer
+@btn.yes: EN= Yes | FR= Oui
+@btn.no: EN= No | FR= Non

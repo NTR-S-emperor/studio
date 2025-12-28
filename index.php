@@ -1,0 +1,340 @@
+<?php
+/**
+ * Dynamic index with cache-busting
+ * Generates all asset URLs with their hash for automatic cache invalidation
+ */
+
+// Prevent browser/CDN from caching this HTML page
+header('Cache-Control: no-cache, no-store, must-revalidate');
+header('Pragma: no-cache');
+header('Expires: 0');
+header('CDN-Cache-Control: no-store');
+header('Cloudflare-CDN-Cache-Control: no-store');
+
+// Build manifest of file hashes
+$manifest = [];
+$extensions = ['js', 'css', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'webp', 'mp4', 'webm', 'mp3'];
+
+function scanForManifest($dir, $basePath, $extensions, &$manifest) {
+    if (!is_dir($dir)) return;
+    $items = scandir($dir);
+    foreach ($items as $item) {
+        if ($item === '.' || $item === '..') continue;
+        $path = $dir . '/' . $item;
+        $relativePath = $basePath ? $basePath . '/' . $item : $item;
+        $relativePath = preg_replace('#^\./#', '', $relativePath);
+
+        if (is_dir($path)) {
+            scanForManifest($path, $relativePath, $extensions, $manifest);
+        } else {
+            $ext = strtolower(pathinfo($item, PATHINFO_EXTENSION));
+            if (in_array($ext, $extensions)) {
+                $manifest[$relativePath] = substr(md5_file($path), 0, 8);
+            }
+        }
+    }
+}
+
+scanForManifest('.', '', $extensions, $manifest);
+
+// Helper function to get versioned URL
+function v($path) {
+    global $manifest;
+    $hash = isset($manifest[$path]) ? $manifest[$path] : '';
+    return $hash ? $path . '?v=' . $hash : $path;
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NTR/S Emperor Studio</title>
+  <link rel="icon" type="image/png" href="<?= v('favicon.png') ?>">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400&family=Sour+Gummy:wght@200&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="<?= v('style.css') ?>">
+  <link rel="stylesheet" href="<?= v('app.instapics/instapics.css') ?>">
+  <link rel="stylesheet" href="<?= v('app.onlyslut/slutonly.css') ?>">
+  <link rel="stylesheet" href="<?= v('app.messenger/messenger.css') ?>">
+  <link rel="stylesheet" href="<?= v('app.gallery/gallery.css') ?>">
+  <link rel="stylesheet" href="<?= v('app.savesload/savesload.css') ?>">
+  <link rel="stylesheet" href="<?= v('app.settings/settings.css') ?>">
+  <link rel="stylesheet" href="<?= v('app.tips/tips.css') ?>">
+</head>
+<body class="app-body">
+  <div class="phone-shell">
+    <div class="phone-frame">
+
+      <!-- LOADING SCREEN -->
+      <div class="loading-screen" id="loadingScreen">
+        <video class="loading-video" autoplay loop muted playsinline>
+          <source src="<?= v('assets/system/loop.mp4') ?>" type="video/mp4">
+        </video>
+        <div class="loading-progress">
+          <div class="loading-bar">
+            <div class="loading-bar-fill" id="loadingBarFill"></div>
+          </div>
+          <span class="loading-percent" id="loadingPercent">0%</span>
+        </div>
+        <!-- Age disclaimer (shown after loading, before game) -->
+        <div class="age-disclaimer hidden" id="ageDisclaimer">
+          <div class="age-disclaimer-box">
+            <p class="age-disclaimer-text">Before continuing, you must confirm that you are of legal age in your country to access mature content.</p>
+            <div class="age-disclaimer-buttons">
+              <button type="button" class="age-disclaimer-btn age-disclaimer-yes" id="ageYesBtn">Yes, I confirm</button>
+              <button type="button" class="age-disclaimer-btn age-disclaimer-no" id="ageNoBtn">No</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SMARTPHONE STATUS BAR -->
+      <div class="phone-top">
+        <div class="status-controls hidden" id="statusControls">
+          <button class="quick-save-btn" id="quickSaveBtn">
+            <img src="<?= v('assets/status_bar/quick_save.svg') ?>" alt="Quick Save">
+          </button>
+          <button class="volume-toggle-btn" id="volumeToggleBtn">
+            <img src="<?= v('assets/status_bar/volume.svg') ?>" alt="Volume" class="volume-icon-on">
+            <img src="<?= v('assets/status_bar/volume_muted.svg') ?>" alt="Muted" class="volume-icon-off">
+          </button>
+        </div>
+        <div class="dynamic-island"></div>
+
+        <!-- VERSION TEXT TOP LEFT -->
+        <div class="status-left">
+          <span id="statusVersion" class="status-version"></span>
+        </div>
+
+        <div class="status-icons">
+          <div class="network-wrapper">
+            <img src="<?= v('assets/status_bar/signal-5.svg') ?>" class="network-icon" alt="">
+          </div>
+          <img src="<?= v('assets/status_bar/wifi-3.svg') ?>" class="icon wifi-icon" alt="">
+          <img src="<?= v('assets/status_bar/battery.svg') ?>" class="icon" alt="">
+        </div>
+      </div>
+
+      <!-- NOTIFICATIONS CONTAINER -->
+      <div id="notificationContainer" class="notification-container"></div>
+
+      <div class="separator"></div>
+
+      <!-- SCROLLABLE CONTENT INSIDE THE PHONE -->
+      <main class="app-main">
+        <section class="scroll-area">
+
+          <!-- Two pages: 1 = story selection, 2 = phone -->
+          <div class="phone-pages" id="phonePages">
+            <!-- PAGE 1: stories list -->
+            <section class="phone-page phone-page-stories">
+              <section class="stories-list" id="storiesContainer">
+                <!-- Dynamically filled by main.js -->
+              </section>
+            </section>
+
+            <!-- PAGE 2: phone desktop -->
+            <section class="phone-page phone-page-home">
+
+              <!-- desktop screen (icons) -->
+              <div class="apps-grid" id="homeScreen">
+
+                <!-- 1. SETTINGS -->
+                <button class="app-icon app-settings">
+                  <div class="app-icon-image">
+                    <img src="<?= v('assets/apps_icon/settings.png') ?>" alt="Settings">
+                  </div>
+                  <span class="app-icon-label" data-i18n="app.settings">Settings</span>
+                </button>
+
+                <!-- 2. MESSENGER -->
+                <button class="app-icon app-messenger" id="openMessengerBtn">
+                  <div class="app-icon-image">
+                    <img src="<?= v('assets/apps_icon/messenger.svg') ?>" alt="Messenger">
+                  </div>
+                  <span class="app-icon-label" data-i18n="app.messenger">Messenger</span>
+                </button>
+
+                <!-- 3. INSTAPICS -->
+                <button class="app-icon app-instapics" id="openInstapicsBtn">
+                  <div class="app-icon-image">
+                    <img src="<?= v('assets/apps_icon/instapics.svg') ?>" alt="InstaPics">
+                  </div>
+                  <span class="app-icon-label" data-i18n="app.instapics">InstaPics</span>
+                </button>
+
+                <!-- 4. ONLYSLUT -->
+                <button class="app-icon app-onlyslut" id="openOnlySlutBtn">
+                  <div class="app-icon-image">
+                    <img src="<?= v('assets/apps_icon/onlyslut.png') ?>" alt="OnlySlut">
+                  </div>
+                  <span class="app-icon-label" data-i18n="app.onlyslut">OnlySlut</span>
+                </button>
+
+                <!-- 5. SAVES & LOAD -->
+                <button class="app-icon app-savesload" id="openSavesLoadBtn">
+                  <div class="app-icon-image">
+                    <img src="<?= v('assets/apps_icon/savesload.svg') ?>" alt="Saves">
+                  </div>
+                  <span class="app-icon-label" data-i18n="app.saves">Saves</span>
+                </button>
+
+                <!-- 6. GALLERY -->
+                <button class="app-icon app-gallery" id="openGalleryBtn">
+                  <div class="app-icon-image">
+                    <img src="<?= v('assets/apps_icon/gallery.png') ?>" alt="Gallery">
+                  </div>
+                  <span class="app-icon-label" data-i18n="app.gallery">Gallery</span>
+                </button>
+
+                <!-- 7. PATREON -->
+                <button class="app-icon app-patreon">
+                  <div class="app-icon-image">
+                    <img src="<?= v('assets/apps_icon/patreon.png') ?>" alt="Patreon">
+                  </div>
+                  <span class="app-icon-label" data-i18n="app.patreon">Patreon</span>
+                </button>
+
+                <!-- 8. TIPS -->
+                <button class="app-icon app-tips" id="openTipsBtn">
+                  <div class="app-icon-image">
+                    <img src="<?= v('assets/apps_icon/tips.svg') ?>" alt="Tips">
+                  </div>
+                  <span class="app-icon-label" data-i18n="app.tips">Tips</span>
+                </button>
+
+              </div>
+
+              <!-- Messenger screen -->
+              <div id="messengerScreen" class="hidden"></div>
+
+              <!-- InstaPics screen, hidden by default -->
+              <div id="instapicsScreen" class="hidden"></div>
+
+              <!-- OnlySlut screen, hidden by default -->
+              <div id="onlyslutScreen" class="hidden"></div>
+
+              <!-- Gallery screen, hidden by default -->
+              <div id="galleryScreen" class="hidden"></div>
+
+              <!-- Saves & Load screen, hidden by default -->
+              <div id="savesloadScreen" class="hidden"></div>
+
+              <!-- Settings screen, hidden by default -->
+              <div id="settingsScreen" class="hidden"></div>
+
+              <!-- Tips screen, hidden by default -->
+              <div id="tipsScreen" class="hidden"></div>
+
+            </section>
+          </div>
+
+        </section>
+      </main>
+
+      <!-- QUICK SAVE MODAL (on top of everything) -->
+      <div id="quickSaveModal" class="quick-save-modal hidden">
+        <div class="quick-save-modal-backdrop"></div>
+        <div class="quick-save-modal-content">
+          <div class="quick-save-modal-title" data-i18n="quicksave.title">New save</div>
+          <input type="text" id="quickSaveInput" class="quick-save-modal-input" data-i18n-placeholder="quicksave.placeholder" placeholder="Name (optional)">
+          <div class="quick-save-modal-buttons">
+            <button type="button" class="quick-save-modal-btn quick-save-modal-cancel" data-i18n="btn.cancel">Cancel</button>
+            <button type="button" class="quick-save-modal-btn quick-save-modal-confirm" data-i18n="btn.save">Save</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOCK MODAL (subscription tier gate) -->
+      <div id="lockModal" class="lock-modal hidden">
+        <div class="lock-modal-backdrop"></div>
+        <div class="lock-modal-content">
+          <div class="lock-modal-title" data-i18n="lock.title">Premium Content</div>
+          <div class="lock-tier-row">
+            <span id="lockTierLabel" class="lock-tier-badge lock-tier-gold">GOLD</span>
+            <span class="lock-tier-hint" data-i18n="lock.orhigher">or higher</span>
+          </div>
+          <p class="lock-modal-description" data-i18n="lock.description">This content requires a subscription code.</p>
+          <input type="text" id="lockCodeInput" class="lock-modal-input" data-i18n-placeholder="lock.placeholder" placeholder="Enter your code">
+          <div id="lockError" class="lock-modal-error"></div>
+          <div class="lock-modal-buttons">
+            <button type="button" id="lockCancelBtn" class="lock-modal-btn lock-modal-cancel" data-i18n="btn.cancel">Cancel</button>
+            <button type="button" id="lockConfirmBtn" class="lock-modal-btn lock-modal-confirm" data-i18n="lock.confirm">Confirm</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANDROID-STYLE BOTTOM NAVIGATION BAR -->
+      <div class="phone-bottom-nav">
+        <button class="nav-button nav-recents" aria-label="Recent apps">
+          <img src="<?= v('assets/nav_bar/square.svg') ?>" class="nav-icon" alt="">
+        </button>
+
+        <button class="nav-button nav-home" aria-label="Home">
+          <img src="<?= v('assets/nav_bar/home.svg') ?>" class="nav-icon" alt="">
+        </button>
+
+        <button class="nav-button nav-back" aria-label="Back">
+          <img src="<?= v('assets/nav_bar/back.svg') ?>" class="nav-icon" alt="">
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Volume popup OUTSIDE phone-frame to avoid z-index and overflow issues -->
+  <div class="volume-slider-popup hidden" id="volumeSliderPopup">
+    <input type="range" class="volume-slider-input" id="volumeSliderInput" min="0" max="100" value="100">
+    <span class="volume-slider-value" id="volumeSliderValue">100%</span>
+  </div>
+
+  <!-- Character name customization modal (girlfriend + player) -->
+  <div class="character-name-modal hidden" id="characterNameModal">
+    <div class="character-name-modal-backdrop"></div>
+    <!-- Step 1: Player's nickname (shown first) -->
+    <div class="character-name-modal-content character-name-step character-name-step-mc" id="stepMc">
+      <div class="character-name-modal-title" data-i18n="charname.mc.title">What's your nickname?</div>
+      <input type="text" id="mcNameInput" class="character-name-modal-input character-name-input-mc" data-i18n-placeholder="charname.mc.placeholder" placeholder="John">
+      <p class="character-name-modal-hint" data-i18n="charname.mc.hint">Leave empty for "John"</p>
+      <div class="character-name-modal-buttons">
+        <button type="button" class="character-name-modal-btn character-name-btn-mc" id="confirmMcBtn" data-i18n="charname.btn.continue">Continue</button>
+      </div>
+    </div>
+    <!-- Step 2: Girlfriend's name -->
+    <div class="character-name-modal-content character-name-step character-name-step-gf hidden" id="stepGirlfriend">
+      <div class="character-name-modal-title" data-i18n="charname.gf.title">What's your girlfriend's name?</div>
+      <input type="text" id="girlfriendNameInput" class="character-name-modal-input character-name-input-gf" placeholder="">
+      <p class="character-name-modal-hint" id="girlfriendNameHint" data-i18n="charname.gf.hint">Leave empty to keep the default name</p>
+      <div class="character-name-modal-buttons">
+        <button type="button" class="character-name-modal-btn character-name-btn-gf" id="confirmGirlfriendBtn" data-i18n="charname.btn.start">Start</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Expose manifest to JavaScript for dynamic asset loading -->
+  <script>
+    window.assetManifest = <?= json_encode($manifest) ?>;
+    window.getAssetUrl = function(path) {
+      var hash = window.assetManifest[path];
+      // Use manifest hash if available, otherwise use timestamp fallback to bust cache
+      return hash ? path + '?v=' + hash : path + '?t=' + Date.now();
+    };
+  </script>
+
+  <script src="<?= v('loader.js') ?>"></script>
+  <script src="<?= v('translations.js') ?>"></script>
+  <script src="<?= v('main.js') ?>"></script>
+  <script src="<?= v('music.js') ?>"></script>
+  <script src="<?= v('notifications.js') ?>"></script>
+  <script src="<?= v('app.instapics/templates.js') ?>"></script>
+  <script src="<?= v('app.instapics/instapics.js') ?>"></script>
+  <script src="<?= v('app.onlyslut/templates.js') ?>"></script>
+  <script src="<?= v('app.onlyslut/slutonly.js') ?>"></script>
+  <script src="<?= v('app.messenger/messenger.js') ?>"></script>
+  <script src="<?= v('app.gallery/gallery.js') ?>"></script>
+  <script src="<?= v('app.savesload/savesload.js') ?>"></script>
+  <script src="<?= v('app.settings/settings.js') ?>"></script>
+  <script src="<?= v('app.tips/tips.js') ?>"></script>
+</body>
+</html>

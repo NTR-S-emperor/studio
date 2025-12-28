@@ -1,0 +1,492 @@
+/* onlyslut/onlyslut.css */
+
+/* ===== ONLYSLUT SCREEN ===== */
+#onlyslutScreen {
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* ===== MAIN CONTAINER ===== */
+#onlyslut-app {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  color: #111827;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 400;
+  overflow: hidden;
+}
+
+/* ===== HEADER WITH LOGO ===== */
+.os-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+}
+
+.os-logo {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* ===== MAIN LAYOUT (SIDEBAR + CONTENT) ===== */
+.os-layout {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ===== LEFT SIDEBAR ===== */
+.os-sidebar {
+  width: 72px;
+  flex-shrink: 0;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  background: #fafafa;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.os-users {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+}
+
+/* --- Scrollbar sidebar --- */
+.os-users::-webkit-scrollbar {
+  width: 4px;
+}
+
+.os-users::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+}
+
+/* ===== USER BUTTON (SIDEBAR) ===== */
+.os-user {
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 4px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  font-family: inherit;
+}
+
+.os-user:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.os-user--active {
+  background: #80b6e845;
+}
+
+.os-user-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: border-color 0.15s ease;
+}
+
+.os-user--active .os-user-avatar {
+  border-color: #44a7ff7d;
+}
+
+.os-user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* --- Home button --- */
+.os-user-home .os-user-avatar {
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.os-user-home .os-user-avatar img {
+  width: 41px;
+  height: 41px;
+  object-fit: contain;
+  transform: translate(0.5px, -1px);
+}
+
+.os-user-name {
+  font-size: 9px;
+  color: #555;
+  text-align: center;
+  max-width: 58px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.os-user--active .os-user-name {
+  font-weight: 600;
+  color: #111;
+}
+
+/* ===== MAIN CONTENT (FEED) ===== */
+.os-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-width: 0;
+}
+
+/* --- Content scrollbar --- */
+.os-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.os-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+}
+
+/* ===== FEED ===== */
+.os-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0px 8px 0px 0px;
+  flex: 1;
+}
+
+/* --- Empty message --- */
+.os-empty-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 200px;
+  color: #8888885c;
+  font-size: 30px;
+  text-align: center;
+  padding: 20px;
+}
+
+/* ===== POST ===== */
+.os-post {
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  width: 100%;
+}
+
+/* --- Alternating posts --- */
+.os-post:nth-child(odd) {
+  background: #80b6e845;
+}
+
+.os-post:nth-child(even) {
+  background: #ffffff;
+}
+
+.os-post header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+}
+
+.os-post .avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.os-post header span {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.os-post .photo {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+/* --- Text post without image --- */
+.os-text-placeholder {
+  display: block;
+  width: 100%;
+  padding: 20px 16px;
+  box-sizing: border-box;
+}
+
+.os-text-placeholder .caption {
+  font-size: 18px;
+  line-height: 1.5;
+  margin: 0;
+  text-align: left;
+}
+
+.os-post footer {
+  padding: 8px 12px 12px;
+}
+
+.os-post .caption {
+  margin-bottom: 6px;
+  font-size: 16px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* ===== ACTIONS (LIKES + COMMENTS) ===== */
+.os-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.os-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #111827;
+}
+
+.os-action-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.os-action-count {
+  font-family: 'Sour Gummy', sans-serif;
+  font-weight: 200;
+}
+
+.os-action-likes {
+  cursor: pointer;
+}
+
+.os-action-likes:hover .os-action-icon {
+  filter: brightness(1.25);
+  transition: filter 0.2s ease;
+}
+
+.os-action-likes.liked .os-action-icon:hover {
+  filter: brightness(1.35);
+}
+
+/* ===== HASHTAGS AND MENTIONS ===== */
+.os-tag,
+.os-mention {
+  color: #2563eb;
+  font-weight: 600;
+  font-size: 0.85em;
+  cursor: pointer;
+  user-select: none;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.os-tag:hover,
+.os-mention:hover {
+  color: #3b82f6;
+}
+
+/* ===== COMMENTS ===== */
+.os-comments {
+  margin-top: 6px;
+  font-size: 11px;
+}
+
+.os-comments-more {
+  margin-top: 4px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #828282;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.os-comments-more:hover {
+  color: #555;
+}
+
+.os-comments-more:focus {
+  outline: none;
+}
+
+.os-comment {
+  margin: 0;
+}
+
+.os-comment-root {
+  margin-bottom: 2px;
+}
+
+.os-comment-root p {
+  line-height: 1.4;
+}
+
+.os-comment-reply,
+.os-comment-subreply {
+  margin-bottom: 1px;
+}
+
+.os-comment-reply p,
+.os-comment-subreply p {
+  line-height: 1.3;
+}
+
+.os-comment-children {
+  margin-left: 12px;
+  padding-left: 8px;
+  margin-bottom: 4px;
+  border-left: 1px solid #e5e5e5;
+}
+
+.os-comment p {
+  margin: 0;
+}
+
+.os-comment strong {
+  margin-right: 4px;
+}
+
+/* --- Comment likes --- */
+.os-comment-like {
+  border: none;
+  background: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 4px;
+  margin-right: 4px;
+  cursor: pointer;
+  position: relative;
+  top: 1px;
+}
+
+.os-comment-like-icon {
+  width: 10px;
+  height: 10px;
+  display: block;
+}
+
+.os-comment-like-count {
+  font-size: 0.8em;
+  font-weight: 600;
+}
+
+.os-comment-like:hover .os-comment-like-icon {
+  filter: brightness(1.25);
+  transition: filter 0.2s ease;
+}
+
+/* ===== MODAL ===== */
+.os-modal {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.os-modal.hidden {
+  display: none;
+}
+
+.os-modal-backdrop {
+  position: absolute;
+  inset: 0;
+}
+
+.os-modal-dialog {
+  position: relative;
+  background: #ffffff;
+  max-width: 97%;
+  max-height: 88%;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+  overflow-y: auto;
+  color: #111827;
+}
+
+.os-post-full {
+  margin-bottom: 0;
+  box-shadow: none;
+}
+
+.os-modal-close {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  border: none;
+  background: none;
+  font-size: 32px;
+  line-height: 1;
+  cursor: pointer;
+  color: #999;
+  z-index: 1;
+}
+
+.os-modal-close:hover {
+  color: #111;
+}
+
+/* ===== CLICKABLE AVATAR ===== */
+.os-avatar-clickable {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.os-avatar-clickable:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== LARGE AVATAR MODAL ===== */
+.os-avatar-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.os-avatar-large {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}

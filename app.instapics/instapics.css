@@ -1,0 +1,437 @@
+/* instapics/instapics.css */
+
+/* ===== INSTAPICS SCREEN ===== */
+#instapicsScreen {
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+}
+
+#instapics-app {
+  width: 100%;
+  padding: 2px 2px 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #ffffff;
+  color: #111827;
+}
+
+/* ===== USERS / STORIES ===== */
+.ip-users {
+  display: flex;
+  gap: 14px;
+  overflow: hidden;
+  padding-bottom: 6px;
+  flex: 1;
+  justify-content: center;
+}
+
+/* --- Users row --- */
+.ip-users-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding-top: 10px;
+}
+
+/* --- Carousel navigation buttons --- */
+.ip-users-nav {
+  background: none;
+  border: none;
+  width: 24px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 36px;
+  color: #9ca3af;
+  padding: 0;
+  flex-shrink: 0;
+  margin-top: 0px;
+}
+
+.ip-users-nav:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.ip-user {
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.ip-user img {
+  width: 58px;
+  height: 58px;
+  border-radius: 999px;
+  border: 3px solid transparent;
+  object-fit: cover;
+  transition: border-color 0.15s ease;
+}
+
+.ip-user--active img {
+  border-color: #ff68b8;
+}
+
+.ip-user span {
+  margin-top: 4px;
+  font-size: 11px;
+}
+
+/* ===== FEED ===== */
+.ip-feed {
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  position: relative;
+}
+
+.ip-feed::before {
+  content: "";
+  width: 80%;
+  height: 1px;
+  background: rgba(0,0,0,0.10);
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* --- Empty message --- */
+.ip-empty-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8888885c;
+  font-size: 30px;
+  text-align: center;
+  padding: 40px 20px;
+  margin-top: 60px;
+}
+
+/* --- Post --- */
+.ip-post {
+  border: 1px solid rgba(255,255,255,0.09);
+  overflow: hidden;
+  margin-bottom: -18px; /* space before the separator */
+  padding-bottom: 2px;
+  width: 100%;
+}
+
+.ip-post::after {
+  content: none;
+}
+
+.ip-post header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  margin-left: 30px;
+}
+
+.ip-post .avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.ip-post .photo {
+  display: block;
+  width: 95%;
+  max-width: 95%;
+  margin: 0 auto 6px;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* --- Text post without image --- */
+.ip-text-placeholder {
+  display: block;
+  width: 100%;
+  padding: 16px 20px;
+  box-sizing: border-box;
+}
+
+.ip-text-placeholder .caption {
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
+  text-align: left;
+}
+
+.ip-post footer {
+  padding: 0px;
+}
+
+.ip-post .caption {
+  margin-bottom: 4px;
+  margin-left: 20px;
+  font-size: 16px;
+}
+
+.ip-post .date {
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+.ip-likes {
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ip-comment strong {
+  margin-right: 4px;
+}
+
+/* --- Alternating posts --- */
+.ip-post:nth-child(odd) {
+  background: #F5F5F5 !important;
+}
+
+.ip-post:nth-child(even) {
+  background: #FFFFFF !important;
+}
+
+/* ===== ACTIONS ===== */
+.ip-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin: 4px 30px 8px;
+}
+
+.ip-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #111827;
+}
+
+.ip-action-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.ip-action-count {
+  font-weight: 600;
+}
+
+/* --- Hashtags and mentions --- */
+.ip-tag,
+.ip-mention {
+  color: #2563eb;
+  font-weight: 600;
+  font-size: 0.85em;
+  cursor: pointer;
+  user-select: none;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.ip-tag:hover,
+.ip-mention:hover {
+  color: #3b82f6;
+}
+
+/* ===== COMMENTS ===== */
+.ip-comments {
+  margin-top: 8px;
+  margin-left: 30px;
+  margin-bottom: 5px;
+  font-size: 9px;
+}
+
+.ip-comments-more {
+  margin-top: 4px;
+  margin-left: 2px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #828282;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.ip-comments-more:hover {
+  color: #A7A7A7;
+}
+
+.ip-comments-more:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.ip-comments-more:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.ip-comment {
+  margin: 0;
+}
+
+.ip-comment-root {
+  margin-bottom: 0px;
+}
+
+.ip-comment-root p {
+  line-height: 1.4;
+}
+
+.ip-comment-reply,
+.ip-comment-subreply {
+  margin-bottom: 2px;
+}
+
+.ip-comment-reply p,
+.ip-comment-subreply p {
+  line-height: 1.25;
+}
+
+.ip-comment-children {
+  margin-left: 16px;
+  padding-left: 10px;
+  margin-bottom: 5px;
+  border-left: 1px solid #d4d4d8;
+}
+
+.ip-action-likes:hover .ip-action-icon {
+    filter: brightness(1.25);
+    transition: filter 0.2s ease;
+}
+
+.ip-action-likes.liked .ip-action-icon:hover {
+    filter: brightness(1.35);
+}
+
+.ip-action-likes {
+    cursor: pointer;
+}
+
+.ip-comment p {
+  margin: 0;
+}
+
+.ip-comment-like {
+  border: none;
+  background: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  margin-right: 1px;
+  margin-left: 2px;
+  cursor: pointer;
+  position: relative;
+  top: 1px;
+}
+
+.ip-comment-like-icon {
+  width: 9px;
+  height: 9px;
+  display: block;
+}
+
+.ip-comment-like-count {
+  font-size: 0.6em;
+  font-weight: 600;
+  margin-right: 1px;
+  position: relative;
+  top: 0.5px;
+}
+
+.ip-comment-like:hover .ip-comment-like-icon {
+  filter: brightness(1.25);
+  transition: filter 0.2s ease;
+}
+
+/* ===== INSTAPICS MODAL ===== */
+
+.ip-modal {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.ip-modal.hidden {
+  display: none;
+}
+
+.ip-modal-backdrop {
+  position: absolute;
+  inset: 0;
+}
+
+.ip-modal-dialog {
+  position: relative;
+  background: #ffffff;
+  max-width: 98%;
+  max-height: 89%;
+  width: 100%;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+  overflow-y: auto;
+  color: #111827;
+}
+
+.ip-post-full {
+  margin-bottom: 0;
+}
+
+.ip-modal-close {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  border: none;
+  background: none;
+  font-size: 40px;
+  line-height: 1;
+  cursor: pointer;
+  color: grey;
+}
+
+.ip-modal-close:hover {
+  color: #111827;
+}
+
+/* ===== CLICKABLE AVATAR ===== */
+.ip-avatar-clickable {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ip-avatar-clickable:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== AVATAR MODAL ===== */
+.ip-avatar-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.ip-avatar-large {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
