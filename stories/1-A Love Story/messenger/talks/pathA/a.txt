@@ -1,0 +1,6 @@
+Sarah, Stéphane
+gf : So!
+st : I'm ready for story A!
+mc : Great.
+gf : Now, all paths can meet at a given moment if they want to. All you have to do is call the same conversation everywhere.
+$talks = common.txt

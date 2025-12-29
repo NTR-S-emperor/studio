@@ -1,0 +1,12 @@
+Sarah
+$status = Maintenant
+gf : Nous sommes de nouveau ensemble, malgré les choix que tu as faits auparavant.
+mc : Super, ont est obligé de revenir à un point commun ?
+gf : Non, pas du tout, les choix peuvent déclencher des conversations scénarisées, il suffit d'appeler une conversation à un endroit qui n'est pas appelé à un autre endroit.
+gf : De cette façon, tu peux suivre un scénario différent.
+mc : Merci !
+gf : Et maintenant, le système de verrouillage pour passer au chapitre suivant.
+gf : Un code de niveau supérieur fonctionne pour les niveaux inférieurs. 
+gf : Le verrou ci-dessous est de niveau or, donc les niveaux diamant et platine fonctionnent. Utilisez le code "gold".
+gf : Les codes saisis sont stockés en mémoire mais vérifiés à chaque étape. Si un code a changé, l'utilisateur devra le saisir à nouveau.
+$lock = example.txt

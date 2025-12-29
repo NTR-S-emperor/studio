@@ -1,6 +1,9 @@
 <?php
 // stories.php
 header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-cache, no-store, must-revalidate');
+header('Pragma: no-cache');
+header('Expires: 0');
 
 // Stories folder (relative to this file)
 $storiesDir = __DIR__ . '/stories';

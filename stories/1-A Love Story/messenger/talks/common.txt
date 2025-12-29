@@ -1,0 +1,12 @@
+Sarah
+$status = Now
+gf : We're back together, despite the choices you made before.
+mc : Great, do we have to go back to a common point?
+gf : No, not at all, choices can trigger scripted conversations, you just have to call a conversation in one place that isn't called in another place.
+gf : That way, you can follow a different storyline.
+mc : Thanks!
+gf : And now, the lock system to move on to the next chapter.
+gf : A higher-level code works for lower levels. 
+gf : The lock below is gold level, so diamond and platinum levels work. Use the code “gold.”
+gf : The codes entered are stored in memory but checked at each stage. If a code has changed, the user will have to re-enter it.
+$lock = example.txt

@@ -1,0 +1,6 @@
+Sarah, Stéphane
+gf : Tu as vu ?
+st : Je suis prêt pour l'histoire C !
+mc : Super.
+gf : Maintenant, tous les chemins peuvent se croiser à un moment donné s'ils le souhaitent. Il suffit d'appeler la même conversation partout.
+$talks = common.txt

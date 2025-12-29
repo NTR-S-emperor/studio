@@ -1,0 +1,14 @@
+Sarah
+Image: example.jpg
+Text: Texte exemple. #love
+Likes: 3
+Comments:
+Elvis = C'est vrai !
+Ana 5 = Oui 😘
+Alan "comments.replied" = Je t'aime
+John 18 "replied.replied" = Salaud
+Anonyme "replied.replied" = ...
+Elena 2 "comments.replied" = C'est l'heure du chat
+Lisa "comments.replied" = Je suis coincée.
+Anonyme "replied.replied" = Fais attention.
+Elon = Super !

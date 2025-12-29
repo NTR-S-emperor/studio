@@ -1,0 +1,40 @@
+Sarah
+gf : Salut, nous sommes de retour en privé. 
+
+Tu remarqueras que notre conversation a repris ; cela ne crée pas une nouvelle conversation, ce qui est pratique pour l'expérience du joueur.
+mc : En effet.
+Girlfriend : Et maintenant, tu vas voir apparaître une publication InstaPics.
+$insta = ntspath/chapter1/Sarah/nts1.txt
+gf : Tu peux cliquer sur la notification pour y être redirigé. Tu peux également fermer la fenêtre ou attendre quelques secondes pour qu'elle disparaisse.
+mc : Merci !
+gf : OnlySlut fonctionne selon le même principe, jete-y un œil.
+$slut = lovepath/love1.txt
+gf : Une publication sur l'une de ces applications ne doit pas nécessairement inclure une image, comme tu peux le voir avec cette publication OnlySlut.
+mc : C'est pratique, merci !
+gf : Tout à l'heure, je t'ai montré que tu pouvais faire des choix dans les dialogues, mais ils n'influencent pas l'histoire, ils sont juste là pour l'immersion.
+gf : Maintenant, tu vas devoir faire un choix dans une liste, et le reste de l'histoire en sera influencé.
+$choices =
+A. Je veux commencer l'histoire A $/
+B. Je veux commencer l'histoire B $/
+C. Je veux commencer l'histoire C 
+
+path a
+gf : Nous sommes dans l'histoire A !
+mc : Génial. 
+gf : Et regarde, je te dirige vers un nouveau dialogue avec Stéphane qui ne concerne que le choix A !
+$talks = pathA/a.txt
+end path
+
+path b
+gf : Nous sommes dans l'histoire B !
+mc : Génial. 
+gf : Et regarde, je te dirige vers un nouveau dialogue avec Olivia qui ne concerne que le choix B !
+$talks = pathB/b.txt
+end path
+
+path c
+gf : Nous sommes dans l'histoire C !
+mc : Génial. 
+gf : Et regarde, je t'emmène vers un nouveau dialogue avec Lisa qui ne concerne que le choix c !
+$talks = pathC/c.txt
+end path

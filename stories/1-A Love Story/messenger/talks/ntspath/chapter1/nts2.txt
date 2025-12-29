@@ -1,0 +1,40 @@
+Sarah
+gf : Hi, we're back in private mode. 
+
+You'll notice that our conversation has been resumed; it doesn't create a new one, which is convenient for the player's experience.
+mc : Indeed.
+Girlfriend: And now, you'll see an InstaPics post appear.
+$insta = ntspath/chapter1/Sarah/nts1.txt
+gf : You can click on the notification to be redirected to it. You can also close the window or wait a few seconds for it to disappear.
+mc : Thank you!
+gf : OnlySlut works on the same principle, take a look.
+$slut = lovepath/love1.txt
+gf : A post on one of these apps doesn't necessarily have to include an image, as you can see with this OnlySlut post.
+mc : That's handy, thanks!
+gf : Earlier, I showed you that you can make choices in the dialogues, but they don't influence the story, they're just there for immersion.
+gf : Now, you're going to have to make a choice from a list, and the rest of the story will be influenced by it.
+$choices =
+A. I want to start storyline A $/
+B. I want to start storyline B $/
+C. I want to start storyline C 
+
+path a
+gf : We're in story A!
+mc : Awesome. 
+gf : And look, I'm directing you to a new dialogue with Stéphane that only concerns choice A!
+$talks = pathA/a.txt
+end path
+
+path b
+gf : We're in story B!
+mc : Awesome. 
+gf : And look, I'm directing you to a new dialogue with Olivia that only concerns choice B!
+$talks = pathB/b.txt
+end path
+
+path c
+gf : We're in story C!
+mc : Awesome. 
+gf : And look, I'm taking you to a new dialogue with Lisa that only concerns choice c!
+$talks = pathC/c.txt
+end path

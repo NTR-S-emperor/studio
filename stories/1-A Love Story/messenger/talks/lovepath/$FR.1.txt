@@ -1,0 +1,18 @@
+Robert, Girlfriend,
+ro : Salut à vous deux, regardez, on peux notifier des status :
+$status = Aujourd'hui
+ro : Très pratique pour notifier des timeline dans nos conversation.
+Girlfriend : Merci, d'ailleurs je remarque que dans une conversation groupée, l'image du groupe se créé automatiquement en fonction des membres qui le compose, c'est pratique.
+ro : Oui, et d'ailleurs il est possible de laisser la possibilité au joueur de faire des choix dans nos conversation, des choix qui n'ont aucun impact sur la suite de l'histoire :
+$fake.choices =
+En effet, c'est sympa pour l'immersion. $/
+C'est amusant. $/
+Je vais m'en servir
+ro : Il y a également possiblité de notifier la supression du dernier message envoyé, à la prochaine action du joueur, ce message sera supprimé. Ca fonctionne pour tout type de message (vidéos, photos, etc).
+$delete
+ro : Il est également possible de timer cette suppression en milisecondes, ce message sera supprimé automatiquement après 3 secondes :
+$delete = 3000
+mc : Pratique en effet.
+gf : Bon maintenant on a fait le point sur les conversation groupée, les status, les choix et les supressions.
+gf : Désormais, on va voir pour les publications sur OnlySlut ou InstaPics.
+$talks = ntspath/chapter1/nts2.txt

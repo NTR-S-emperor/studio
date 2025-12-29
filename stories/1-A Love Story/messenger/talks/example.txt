@@ -1,0 +1,2 @@
+[GOLD]
+$talks = chapter2/sun.txt

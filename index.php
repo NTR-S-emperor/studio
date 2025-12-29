@@ -13,7 +13,7 @@ header('Cloudflare-CDN-Cache-Control: no-store');
 
 // Build manifest of file hashes
 $manifest = [];
-$extensions = ['js', 'css', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'webp', 'mp4', 'webm', 'mp3'];
+$extensions = ['js', 'css', 'txt', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'webp', 'mp4', 'webm', 'mp3'];
 
 function scanForManifest($dir, $basePath, $extensions, &$manifest) {
     if (!is_dir($dir)) return;

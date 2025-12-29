@@ -1,0 +1,18 @@
+Robert, Girlfriend,
+ro : Hi, you two, look, we can post status updates:
+$status = Today
+ro : Very handy for posting timelines in our conversations.
+Girlfriend:  Thanks, by the way, I noticed that in a group conversation, the group image is automatically created based on the members in the group, which is handy.
+ro : Yes, and it's also possible to let the player make choices in our conversations, choices that have no impact on the rest of the story:
+$fake.choices =
+Actually, that's nice for immersion. $/
+It's fun. $/
+I'm going to use that.
+ro : It's also possible to notify the player that the last message sent will be deleted when they take their next action. This works for all types of messages (videos, photos, etc.).
+$delete
+ro : It's also possible to time this deletion in milliseconds. This message will be deleted automatically after 3 seconds:
+$delete = 3000
+mc : Very practical indeed.
+gf : Okay, now we've covered group conversations, statuses, choices, and deletions.
+gf : Next, we'll look at posts on OnlySlut or InstaPics.
+$talks = ntspath/chapter1/nts2.txt

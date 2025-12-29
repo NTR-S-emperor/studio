@@ -1258,7 +1258,7 @@ function initApp() {
 
  const versionSpan = document.getElementById('statusVersion');
   if (versionSpan) {
-    fetch('version.txt')
+    fetch(window.getAssetUrl('version.txt'))
       .then(response => {
         if (!response.ok) throw new Error('HTTP ' + response.status);
         return response.text();
