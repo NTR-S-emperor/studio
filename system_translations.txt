@@ -33,6 +33,7 @@
 @app.saves: EN= Saves | FR= Sauvegardes
 @app.gallery: EN= Gallery | FR= Galerie
 @app.patreon: EN= Patreon | FR= Patreon
+@app.tips: EN= Tips | FR= Tips
 
 
 # ============================================================================

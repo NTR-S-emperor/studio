@@ -1,3 +1,46 @@
+// ============================================================
+// AUTO-SCALE: Adapt phone size to screen on desktop
+// ============================================================
+(function initAutoScale() {
+  const PHONE_HEIGHT = 780;       // Reference height in px
+  const PHONE_WIDTH = 420;        // Reference width in px
+  const TARGET_FILL = 0.92;       // Fill 92% of screen height
+  const MOBILE_BREAKPOINT = 480;  // Don't apply on mobile
+
+  function applyScale() {
+    const phoneShell = document.querySelector('.phone-shell');
+    if (!phoneShell) return;
+
+    // Don't apply on mobile - CSS handles it
+    if (window.innerWidth <= MOBILE_BREAKPOINT) {
+      phoneShell.style.transform = '';
+      phoneShell.style.transformOrigin = '';
+      return;
+    }
+
+    // Target: phone fills TARGET_FILL % of viewport height
+    const targetHeight = window.innerHeight * TARGET_FILL;
+    const scale = targetHeight / PHONE_HEIGHT;
+
+    phoneShell.style.transform = `scale(${scale})`;
+    phoneShell.style.transformOrigin = 'center center';
+  }
+
+  // Apply on load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyScale);
+  } else {
+    applyScale();
+  }
+
+  // Apply on resize with debounce
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(applyScale, 100);
+  });
+})();
+
 // Wait for Loader to complete before initializing
 function initApp() {
   // ============================================================
