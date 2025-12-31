@@ -1,0 +1,1 @@
+Any image in this directory will be included in the list of choices for the user's wallpaper.
