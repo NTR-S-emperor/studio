@@ -62,6 +62,7 @@ function v($path) {
   <link rel="stylesheet" href="<?= v('app.savesload/savesload.css') ?>">
   <link rel="stylesheet" href="<?= v('app.settings/settings.css') ?>">
   <link rel="stylesheet" href="<?= v('app.tips/tips.css') ?>">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 </head>
 <body class="app-body">
   <div class="phone-shell">
@@ -69,9 +70,16 @@ function v($path) {
 
       <!-- LOADING SCREEN -->
       <div class="loading-screen" id="loadingScreen">
-        <video class="loading-video" autoplay loop muted playsinline>
-          <source src="<?= v('assets/system/loop.mp4') ?>" type="video/mp4">
-        </video>
+        <div class="loading-video" id="lottieLoader"></div>
+        <script>
+          lottie.loadAnimation({
+            container: document.getElementById('lottieLoader'),
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: '<?= v('assets/system/walking.json') ?>'
+          });
+        </script>
         <div class="loading-progress">
           <div class="loading-bar">
             <div class="loading-bar-fill" id="loadingBarFill"></div>
