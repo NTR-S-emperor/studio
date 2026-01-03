@@ -9,12 +9,14 @@
 
 #instapics-app {
   width: 100%;
+  height: 100%;
   padding: 2px 2px 2px;
   display: flex;
   flex-direction: column;
   gap: 6px;
   background: #ffffff;
   color: #111827;
+  overflow: hidden;
 }
 
 /* ===== USERS / STORIES ===== */
@@ -91,6 +93,9 @@
   flex-direction: column;
   gap: 22px;
   position: relative;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .ip-feed::before {
@@ -119,9 +124,9 @@
 /* --- Post --- */
 .ip-post {
   border: 1px solid rgba(255,255,255,0.09);
-  overflow: hidden;
-  margin-bottom: -18px; /* space before the separator */
-  padding-bottom: 2px;
+  overflow: visible;
+  margin-bottom: -22px;
+  padding-bottom: 10px;
   width: 100%;
 }
 
@@ -144,14 +149,42 @@
   object-fit: cover;
 }
 
-.ip-post .photo {
-  display: block;
+/* --- Photo container with letterboxing --- */
+.ip-photo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 95%;
-  max-width: 95%;
+  max-height: 280px;
   margin: 0 auto 6px;
+  background: #000;
   border-radius: 6px;
   overflow: hidden;
+}
+
+.ip-post .photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 280px;
+  object-fit: contain;
   cursor: pointer;
+}
+
+/* --- Photo container for modal (larger) --- */
+.ip-photo-container-full {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-height: 450px;
+  background: #000;
+  overflow: hidden;
+}
+
+.ip-photo-container-full .photo {
+  max-height: 450px;
+  cursor: default;
 }
 
 /* --- Text post without image --- */

@@ -98,7 +98,7 @@ window.OnlySlutTemplates = {
         const total = post.commentCount ?? (post.comments ? post.comments.length : 0);
         if (!post.comments || !post.comments.length) return "";
 
-        const maxLines = 4;
+        const maxLines = 5;
 
         // If we have 4 lines or less → display everything normally
         if (total <= maxLines) {
@@ -154,7 +154,7 @@ window.OnlySlutTemplates = {
         let captionInFooter;
 
         if (post.image) {
-            mediaHtml = `<img class="photo os-photo-clickable" src="${post.image}" alt="" data-post-index="${post.index}">`;
+            mediaHtml = `<div class="os-photo-container"><img class="photo os-photo-clickable" src="${post.image}" alt="" data-post-index="${post.index}"></div>`;
             captionInFooter = post.text ? `<p class="caption">${this.highlightKeywords(post.text)}</p>` : "";
         } else {
             mediaHtml = post.text ? `<div class="os-text-placeholder"><p class="caption">${this.highlightKeywords(post.text)}</p></div>` : "";
@@ -204,7 +204,7 @@ window.OnlySlutTemplates = {
         let captionInFooter;
 
         if (post.image) {
-            mediaHtml = `<img class="photo" src="${post.image}" alt="">`;
+            mediaHtml = `<div class="os-photo-container-full"><img class="photo" src="${post.image}" alt=""></div>`;
             captionInFooter = post.text ? `<p class="caption">${this.highlightKeywords(post.text)}</p>` : "";
         } else {
             mediaHtml = post.text ? `<div class="os-text-placeholder"><p class="caption">${this.highlightKeywords(post.text)}</p></div>` : "";
