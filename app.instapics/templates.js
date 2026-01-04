@@ -163,6 +163,10 @@ window.InstaPicsTemplates = {
         const likeCount = post.likes ?? 0;
         const commentCount = post.commentCount ?? (post.comments ? post.comments.length : 0);
 
+        // Check if GF liked this post (for spy mode)
+        const gfLikedClass = post.gfLiked ? ' liked' : '';
+        const heartIcon = post.gfLiked ? 'assets/instapics/filled_heart.svg' : 'assets/instapics/empty_heart.svg';
+
         return `
             <article class="ip-post${noImageClass}">
                 <header>
@@ -174,8 +178,8 @@ window.InstaPicsTemplates = {
 
                 <footer>
                     <div class="ip-actions">
-                        <div class="ip-action ip-action-likes">
-                            <img class="ip-action-icon" src="assets/instapics/empty_heart.svg" alt="Likes">
+                        <div class="ip-action ip-action-likes${gfLikedClass}">
+                            <img class="ip-action-icon" src="${heartIcon}" alt="Likes">
                             <span class="ip-action-count">${likeCount}</span>
                         </div>
                         <div class="ip-action ip-action-comments">
@@ -213,6 +217,10 @@ window.InstaPicsTemplates = {
         const likeCount = post.likes ?? 0;
         const commentCount = post.commentCount ?? (post.comments ? post.comments.length : 0);
 
+        // Check if GF liked this post (for spy mode)
+        const gfLikedClass = post.gfLiked ? ' liked' : '';
+        const heartIcon = post.gfLiked ? 'assets/instapics/filled_heart.svg' : 'assets/instapics/empty_heart.svg';
+
         return `
             <article class="ip-post ip-post-full${noImageClass}">
                 <header>
@@ -224,8 +232,8 @@ window.InstaPicsTemplates = {
 
                 <footer>
                     <div class="ip-actions">
-                        <div class="ip-action ip-action-likes">
-                            <img class="ip-action-icon" src="assets/instapics/empty_heart.svg" alt="Likes">
+                        <div class="ip-action ip-action-likes${gfLikedClass}">
+                            <img class="ip-action-icon" src="${heartIcon}" alt="Likes">
                             <span class="ip-action-count">${likeCount}</span>
                         </div>
                         <div class="ip-action ip-action-comments">

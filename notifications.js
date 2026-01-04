@@ -101,14 +101,14 @@ window.Notifications = {
 
         notification.innerHTML = `
             <img class="notification-icon" src="${appIcon}" alt="${app}">
-            <img class="notification-avatar" src="${avatar}" alt="${author}">
+            ${avatar ? `<img class="notification-avatar" src="${avatar}" alt="${author}">` : ''}
             <div class="notification-content">
                 <div class="notification-header">
                     <span class="notification-app">${app}</span>
                     <span class="notification-time" data-i18n="notif.now">now</span>
                 </div>
                 <div class="notification-body">
-                    <span class="notification-author">${author}</span>
+                    ${author ? `<span class="notification-author">${author}</span>` : ''}
                     ${text ? `<span class="notification-text">${text}</span>` : ''}
                 </div>
             </div>
@@ -189,6 +189,18 @@ window.Notifications = {
             this.openInstaPicsProfile(authorName);
         } else if (app === 'onlyslut') {
             this.openOnlySlutProfile(authorName);
+        } else if (app === 'spyapp') {
+            this.openSpyApp();
+        }
+    },
+
+    /**
+     * Open SpyApp
+     */
+    openSpyApp() {
+        const openBtn = document.getElementById('openSpyBtn');
+        if (openBtn && !openBtn.classList.contains('hidden')) {
+            openBtn.click();
         }
     },
 
@@ -314,6 +326,23 @@ window.Notifications = {
             author: author,
             text: text,
             postIndex: postIndex
+        });
+    },
+
+    /**
+     * Utility method to create a Spy notification
+     */
+    showSpy(text) {
+        // Use a data URI SVG for the spy icon
+        const spyIconSvg = 'data:image/svg+xml,' + encodeURIComponent('<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="11" fill="#1a1a2e"/><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="#e94560"/></svg>');
+
+        return this.show({
+            app: 'SpyApp',
+            appIcon: spyIconSvg,
+            avatar: null,
+            author: '',
+            text: text,
+            postIndex: 0
         });
     }
 };

@@ -1234,6 +1234,41 @@ window.Settings = {
             window.Gallery.render();
         }
 
+        // Reset Spy app state
+        const slug = window.currentStorySlug || 'default';
+        try {
+            // Remove spy anchor from localStorage
+            const spyAnchor = localStorage.getItem('studioSpyAnchor');
+            if (spyAnchor) {
+                const data = JSON.parse(spyAnchor);
+                delete data[slug];
+                localStorage.setItem('studioSpyAnchor', JSON.stringify(data));
+            }
+            // Remove spy insta posts from localStorage
+            const spyInsta = localStorage.getItem('studioSpyInsta');
+            if (spyInsta) {
+                const data = JSON.parse(spyInsta);
+                delete data[slug];
+                localStorage.setItem('studioSpyInsta', JSON.stringify(data));
+            }
+            // Remove spy slut posts from localStorage
+            const spySlut = localStorage.getItem('studioSpySlut');
+            if (spySlut) {
+                const data = JSON.parse(spySlut);
+                delete data[slug];
+                localStorage.setItem('studioSpySlut', JSON.stringify(data));
+            }
+        } catch (e) {}
+
+        // Reset spy global state
+        window.currentSpyAnchor = 0;
+        window.unlockedSpyInsta = [];
+        window.unlockedSpySlut = [];
+
+        // Reset and hide spy app
+        if (window.resetSpyAppState) {
+            window.resetSpyAppState();
+        }
 
         this.closeResetModal();
     },

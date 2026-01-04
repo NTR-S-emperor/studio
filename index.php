@@ -11,6 +11,14 @@ header('Expires: 0');
 header('CDN-Cache-Control: no-store');
 header('Cloudflare-CDN-Cache-Control: no-store');
 
+// Clear PHP file stat cache to ensure fresh hashes
+clearstatcache(true);
+
+// Clear OPcache if available (forces PHP to re-read files)
+if (function_exists('opcache_reset')) {
+    opcache_reset();
+}
+
 // Build manifest of file hashes
 $manifest = [];
 $extensions = ['js', 'css', 'txt', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'webp', 'mp4', 'webm', 'mp3'];
@@ -62,6 +70,7 @@ function v($path) {
   <link rel="stylesheet" href="<?= v('app.savesload/savesload.css') ?>">
   <link rel="stylesheet" href="<?= v('app.settings/settings.css') ?>">
   <link rel="stylesheet" href="<?= v('app.tips/tips.css') ?>">
+  <link rel="stylesheet" href="<?= v('app.spy/spy.css') ?>">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 </head>
 <body class="app-body">
@@ -213,6 +222,17 @@ function v($path) {
                   <span class="app-icon-label" data-i18n="app.tips">Tips</span>
                 </button>
 
+                <!-- 9. SPY (hidden by default, shown when unlocked) -->
+                <button class="app-icon app-spy hidden" id="openSpyBtn">
+                  <div class="app-icon-image app-icon-spy-svg">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="11" fill="#1a1a2e"/>
+                      <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="#e94560"/>
+                    </svg>
+                  </div>
+                  <span class="app-icon-label" data-i18n="app.spy">Spy</span>
+                </button>
+
               </div>
 
               <!-- Messenger screen -->
@@ -235,6 +255,9 @@ function v($path) {
 
               <!-- Tips screen, hidden by default -->
               <div id="tipsScreen" class="hidden"></div>
+
+              <!-- Spy screen, hidden by default -->
+              <div id="spyScreen" class="hidden"></div>
 
             </section>
           </div>
@@ -344,5 +367,6 @@ function v($path) {
   <script src="<?= v('app.savesload/savesload.js') ?>"></script>
   <script src="<?= v('app.settings/settings.js') ?>"></script>
   <script src="<?= v('app.tips/tips.js') ?>"></script>
+  <script src="<?= v('app.spy/spy.js') ?>"></script>
 </body>
 </html>

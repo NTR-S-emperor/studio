@@ -34,6 +34,7 @@
 @app.gallery: EN= Gallery | FR= Galerie
 @app.patreon: EN= Patreon | FR= Patreon
 @app.tips: EN= Tips | FR= Tips
+@app.spy: EN= Spy | FR= Spy
 
 
 # ============================================================================
@@ -77,6 +78,7 @@
 @alert.onlyslut: EN= Please select a story first to open OnlySlut. | FR= Sélectionne d'abord une histoire pour ouvrir OnlySlut.
 @alert.messenger: EN= Please select a story first to open Messenger. | FR= Sélectionne d'abord une histoire pour ouvrir Messenger.
 @alert.gallery: EN= Please select a story first to open the gallery. | FR= Sélectionne d'abord une histoire pour ouvrir la galerie.
+@alert.spy: EN= Please select a story first. | FR= Sélectionne d'abord une histoire.
 
 
 # ============================================================================
@@ -214,6 +216,7 @@
 # ============================================================================
 
 @notif.now: EN= now | FR= maintenant
+@notif.spy: EN= New content available | FR= Du nouveau contenu est disponible
 
 
 # ============================================================================

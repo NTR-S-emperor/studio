@@ -712,6 +712,36 @@ window.Messenger = {
       return;
     }
 
+    // If it's a "spy_unlock" message, unlock the Spy app
+    if (scriptMsg.kind === "spy_unlock") {
+      if (typeof window.unlockSpyApp === 'function') {
+        window.unlockSpyApp();
+      }
+
+      // Move to next message
+      conv.scriptIndex += 1;
+      this.advanceConversation(conv);
+      return;
+    }
+
+    // If it's a "spy_anchor" message, update the spy anchor level
+    if (scriptMsg.kind === "spy_anchor") {
+      if (typeof window.setSpyAnchor === 'function') {
+        window.setSpyAnchor(scriptMsg.anchor);
+      }
+
+      // Show notification for new spy content
+      if (window.Notifications && window.Notifications.showSpy) {
+        const notifText = window.Translations ? window.Translations.get('notif.spy') : 'SpyApp intercepted new content';
+        window.Notifications.showSpy(notifText);
+      }
+
+      // Move to next message
+      conv.scriptIndex += 1;
+      this.advanceConversation(conv);
+      return;
+    }
+
     // If it's a "thinking" message, handle the thinking overlay
     if (scriptMsg.kind === "thinking") {
       const blocks = scriptMsg.blocks || [];
@@ -2155,6 +2185,32 @@ window.Messenger = {
         continue;
       }
 
+      // --- SPY UNLOCK: $spy_unlock ---
+      if (/^\$spy_unlock\b/i.test(trimmed)) {
+        flushCurrentMessage();
+
+        rawMessages.push({
+          kind: "spy_unlock"
+        });
+
+        i++;
+        continue;
+      }
+
+      // --- SPY ANCHOR: $spy_anchor_X ---
+      const spyAnchorMatch = trimmed.match(/^\$spy_anchor[_\s]*(\d+)$/i);
+      if (spyAnchorMatch) {
+        flushCurrentMessage();
+
+        rawMessages.push({
+          kind: "spy_anchor",
+          anchor: parseInt(spyAnchorMatch[1], 10)
+        });
+
+        i++;
+        continue;
+      }
+
       // --- THINKING BLOCK: $thinking ... (until next message) ---
       if (/^\$thinking\b/i.test(trimmed)) {
         flushCurrentMessage();
@@ -2174,7 +2230,7 @@ window.Messenger = {
           }
 
           // Check for other $ commands that would end thinking
-          if (/^\$(status|talks|insta|slut|lock|delete|thinking)\b/i.test(thinkTrimmed)) {
+          if (/^\$(status|talks|insta|slut|lock|delete|thinking|spy_unlock|spy_anchor)\b/i.test(thinkTrimmed)) {
             break;
           }
 
@@ -2343,6 +2399,17 @@ window.Messenger = {
         convObj.messages.push({
           kind: "thinking",
           blocks: msg.blocks,
+          filename: filename
+        });
+      } else if (msg.kind === "spy_unlock") {
+        convObj.messages.push({
+          kind: "spy_unlock",
+          filename: filename
+        });
+      } else if (msg.kind === "spy_anchor") {
+        convObj.messages.push({
+          kind: "spy_anchor",
+          anchor: msg.anchor,
           filename: filename
         });
       } else {
@@ -2568,8 +2635,8 @@ window.Messenger = {
         continue;
       }
 
-      // Special messages: skip them (unlocks, locks, and thinking are handled separately)
-      if (scriptMsg.kind === "unlock" || scriptMsg.kind === "unlockInsta" || scriptMsg.kind === "unlockSlutOnly" || scriptMsg.kind === "lock" || scriptMsg.kind === "thinking") {
+      // Special messages: skip them (unlocks, locks, thinking, spy_unlock, and spy_anchor are handled separately)
+      if (scriptMsg.kind === "unlock" || scriptMsg.kind === "unlockInsta" || scriptMsg.kind === "unlockSlutOnly" || scriptMsg.kind === "lock" || scriptMsg.kind === "thinking" || scriptMsg.kind === "spy_unlock" || scriptMsg.kind === "spy_anchor") {
         conv.scriptIndex++;
         continue;
       }

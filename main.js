@@ -358,6 +358,21 @@ function initApp() {
     if (window.MusicPlayer && window.MusicPlayer.isInitialized && !window.MusicPlayer.isPlaying) {
       window.MusicPlayer.play();
     }
+
+    // Restore Spy app state if it was unlocked
+    if (typeof window.restoreSpyAppState === 'function') {
+      window.restoreSpyAppState();
+    }
+
+    // Restore Spy anchor level
+    if (typeof window.restoreSpyAnchor === 'function') {
+      window.restoreSpyAnchor();
+    }
+
+    // Restore Spy topics (InstaPics/OnlySlut)
+    if (typeof window.restoreSpyTopics === 'function') {
+      window.restoreSpyTopics();
+    }
   }
 
   async function handleStorySelection(story) {
@@ -454,6 +469,10 @@ function initApp() {
       // Hide quick save button
       updateQuickSaveVisibility();
 
+      // Hide Spy app icon (will be restored on next story selection if unlocked)
+      const spyBtn = document.getElementById('openSpyBtn');
+      if (spyBtn) spyBtn.classList.add('hidden');
+
       if (phonePages) {
         phonePages.classList.remove('phone-pages--show-second');
       }
@@ -484,6 +503,8 @@ function initApp() {
   const openSavesLoadBtn = document.getElementById('openSavesLoadBtn'); // Saves & Load icon
   const openSettingsBtn  = document.querySelector('.app-settings');     // Settings icon
   const openTipsBtn      = document.getElementById('openTipsBtn');      // Tips icon
+  const spyScreen        = document.getElementById('spyScreen');        // Spy app screen
+  const openSpyBtn       = document.getElementById('openSpyBtn');       // Spy icon
 
   function showHomeScreen() {
     if (!homeScreen) return;
@@ -496,6 +517,12 @@ function initApp() {
     if (savesloadScreen) savesloadScreen.classList.add('hidden');
     if (settingsScreen) settingsScreen.classList.add('hidden');
     if (tipsScreen) tipsScreen.classList.add('hidden');
+    if (spyScreen) spyScreen.classList.add('hidden');
+
+    // Cleanup spy mode if it was active
+    if (window.Spy && typeof window.Spy.cleanup === 'function') {
+      window.Spy.cleanup();
+    }
 
     // switch phone back to "wallpaper background" mode
     if (phoneFrame) {
@@ -520,6 +547,7 @@ function initApp() {
     if (savesloadScreen) savesloadScreen.classList.add('hidden');
     if (settingsScreen) settingsScreen.classList.add('hidden');
     if (tipsScreen) tipsScreen.classList.add('hidden');
+    if (spyScreen) spyScreen.classList.add('hidden');
 
     // force a uniform white background for the app
     if (phoneFrame) {
@@ -545,6 +573,7 @@ function initApp() {
     if (savesloadScreen) savesloadScreen.classList.add('hidden');
     if (settingsScreen) settingsScreen.classList.add('hidden');
     if (tipsScreen) tipsScreen.classList.add('hidden');
+    if (spyScreen) spyScreen.classList.add('hidden');
 
     // force a uniform white background for the app
     if (phoneFrame) {
@@ -570,6 +599,7 @@ function initApp() {
     if (savesloadScreen) savesloadScreen.classList.add('hidden');
     if (settingsScreen) settingsScreen.classList.add('hidden');
     if (tipsScreen) tipsScreen.classList.add('hidden');
+    if (spyScreen) spyScreen.classList.add('hidden');
 
     // dark background + texture (handled in CSS)
     if (phoneFrame) {
@@ -595,6 +625,7 @@ function initApp() {
     if (savesloadScreen) savesloadScreen.classList.add('hidden');
     if (settingsScreen) settingsScreen.classList.add('hidden');
     if (tipsScreen) tipsScreen.classList.add('hidden');
+    if (spyScreen) spyScreen.classList.add('hidden');
 
     // dark background (like Messenger)
     if (phoneFrame) {
@@ -620,6 +651,7 @@ function initApp() {
     if (galleryScreen) galleryScreen.classList.add('hidden');
     if (settingsScreen) settingsScreen.classList.add('hidden');
     if (tipsScreen) tipsScreen.classList.add('hidden');
+    if (spyScreen) spyScreen.classList.add('hidden');
 
     // dark background (like Messenger)
     if (phoneFrame) {
@@ -645,6 +677,7 @@ function initApp() {
     if (galleryScreen) galleryScreen.classList.add('hidden');
     if (savesloadScreen) savesloadScreen.classList.add('hidden');
     if (tipsScreen) tipsScreen.classList.add('hidden');
+    if (spyScreen) spyScreen.classList.add('hidden');
 
     // dark background (like Messenger)
     if (phoneFrame) {
@@ -670,6 +703,33 @@ function initApp() {
     if (galleryScreen) galleryScreen.classList.add('hidden');
     if (savesloadScreen) savesloadScreen.classList.add('hidden');
     if (settingsScreen) settingsScreen.classList.add('hidden');
+    if (spyScreen) spyScreen.classList.add('hidden');
+
+    // dark background (like Messenger)
+    if (phoneFrame) {
+      phoneFrame.classList.add('phone-app-dark');
+      phoneFrame.classList.remove('phone-app-white');
+    }
+
+    // keep the original light battery
+    if (batteryImg && originalBatterySrc) {
+      batteryImg.setAttribute('src', originalBatterySrc);
+    }
+  }
+
+  // new function: Spy screen with dark background
+  function showSpy() {
+    if (!homeScreen || !spyScreen) return;
+
+    homeScreen.classList.add('hidden');
+    spyScreen.classList.remove('hidden');
+    if (instapicsScreen) instapicsScreen.classList.add('hidden');
+    if (onlyslutScreen) onlyslutScreen.classList.add('hidden');
+    if (messengerScreen) messengerScreen.classList.add('hidden');
+    if (galleryScreen) galleryScreen.classList.add('hidden');
+    if (savesloadScreen) savesloadScreen.classList.add('hidden');
+    if (settingsScreen) settingsScreen.classList.add('hidden');
+    if (tipsScreen) tipsScreen.classList.add('hidden');
 
     // dark background (like Messenger)
     if (phoneFrame) {
@@ -709,6 +769,9 @@ function initApp() {
         break;
       case 'tips':
         showTips();
+        break;
+      case 'spy':
+        showSpy();
         break;
       default:
 
@@ -852,6 +915,27 @@ function initApp() {
     });
   }
 
+  // Click on Spy icon: open the app
+  if (openSpyBtn) {
+    openSpyBtn.addEventListener('click', () => {
+      // Check that a story is selected
+      if (!currentStory) {
+        alert(window.t('alert.spy') || 'Please select a story first.');
+        return;
+      }
+
+      showSpy();
+
+      // Initialize Spy with the story path
+      const slug = (currentStory.folder || currentStory.slug || currentStory.id || '').trim();
+      const storyPath = slug ? `stories/${slug}` : null;
+
+      if (window.Spy && typeof window.Spy.init === 'function') {
+        window.Spy.init(storyPath);
+      }
+    });
+  }
+
   // Phone HOME button: returns to apps desktop
   if (navHomeBtn) {
     navHomeBtn.addEventListener('click', () => {
@@ -883,6 +967,11 @@ function initApp() {
       // If the Settings modal is open, close it first
       if (window.Settings && window.Settings.modalOpen) {
         window.Settings.closeWallpaperModal();
+      }
+
+      // If in Spy mode, cleanup
+      if (window.Spy && typeof window.Spy.cleanup === 'function') {
+        window.Spy.cleanup();
       }
 
       showHomeScreen();
@@ -1003,6 +1092,16 @@ function initApp() {
             window.OnlySlut.resetFilter();
           }
         }
+        return;
+      }
+
+      // If in Spy screen
+      if (spyScreen && !spyScreen.classList.contains('hidden')) {
+        // If not on home screen of spy, go back to spy home
+        if (window.Spy && window.Spy.currentScreen !== 'home') {
+          window.Spy.showHomeScreen();
+        }
+        // Otherwise, back does nothing (like Messenger)
         return;
       }
     });

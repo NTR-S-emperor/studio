@@ -167,6 +167,10 @@ window.OnlySlutTemplates = {
         const likeCount = post.likes ?? 0;
         const commentCount = post.commentCount ?? (post.comments ? post.comments.length : 0);
 
+        // Check if GF liked this post (for spy mode)
+        const gfLikedClass = post.gfLiked ? ' liked' : '';
+        const heartIcon = post.gfLiked ? 'assets/onlyslut/filled_heart.svg' : 'assets/onlyslut/empty_heart.svg';
+
         return `
             <article class="os-post${noImageClass}">
                 <header>
@@ -178,8 +182,8 @@ window.OnlySlutTemplates = {
 
                 <footer>
                     <div class="os-actions">
-                        <div class="os-action os-action-likes">
-                            <img class="os-action-icon" src="assets/onlyslut/empty_heart.svg" alt="Likes">
+                        <div class="os-action os-action-likes${gfLikedClass}">
+                            <img class="os-action-icon" src="${heartIcon}" alt="Likes">
                             <span class="os-action-count">${likeCount}</span>
                         </div>
                         <div class="os-action os-action-comments">
@@ -217,6 +221,10 @@ window.OnlySlutTemplates = {
         const likeCount = post.likes ?? 0;
         const commentCount = post.commentCount ?? (post.comments ? post.comments.length : 0);
 
+        // Check if GF liked this post (for spy mode)
+        const gfLikedClass = post.gfLiked ? ' liked' : '';
+        const heartIcon = post.gfLiked ? 'assets/onlyslut/filled_heart.svg' : 'assets/onlyslut/empty_heart.svg';
+
         return `
             <article class="os-post os-post-full${noImageClass}">
                 <header>
@@ -228,8 +236,8 @@ window.OnlySlutTemplates = {
 
                 <footer>
                     <div class="os-actions">
-                        <div class="os-action os-action-likes">
-                            <img class="os-action-icon" src="assets/onlyslut/empty_heart.svg" alt="Likes">
+                        <div class="os-action os-action-likes${gfLikedClass}">
+                            <img class="os-action-icon" src="${heartIcon}" alt="Likes">
                             <span class="os-action-count">${likeCount}</span>
                         </div>
                         <div class="os-action os-action-comments">

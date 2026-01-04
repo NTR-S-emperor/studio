@@ -14,6 +14,14 @@ header('Expires: 0');
 header('CDN-Cache-Control: no-store');
 header('Cloudflare-CDN-Cache-Control: no-store');
 
+// Clear PHP file stat cache to ensure fresh hashes
+clearstatcache(true);
+
+// Clear OPcache if available (forces PHP to re-read files)
+if (function_exists('opcache_reset')) {
+    opcache_reset();
+}
+
 // File extensions to include
 $extensions = [
     'js', 'css', 'html', 'txt', 'json',

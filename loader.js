@@ -308,7 +308,7 @@ window.Loader = {
     async preloadFile(path, hash) {
         try {
             const ext = path.split('.').pop().toLowerCase();
-            // Add hash as query param to bypass CDN cache
+            // Add hash as query param to bypass cache when file changes
             const url = hash ? `${path}?v=${hash}` : path;
 
             // For images, use Image object for better caching

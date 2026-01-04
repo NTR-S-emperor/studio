@@ -180,6 +180,15 @@ window.SavesLoad = {
             }
         }
 
+        // Spy app state (sp=spy)
+        // u=unlocked, a=anchor, i=instaPosts, o=slutPosts
+        progress.sp = {
+            u: window.spyAppUnlocked || false,
+            a: window.currentSpyAnchor || 0,
+            i: [...(window.unlockedSpyInsta || [])],
+            o: [...(window.unlockedSpySlut || [])]
+        };
+
         return progress;
     },
 
@@ -509,6 +518,35 @@ window.SavesLoad = {
         if (window.InstaPics?.render) window.InstaPics.render();
         if (window.OnlySlut?.render) window.OnlySlut.render();
         if (window.Gallery?.render) window.Gallery.render();
+
+        // Restore Spy app state
+        if (progressData.sp) {
+            const sp = progressData.sp;
+            window.spyAppUnlocked = sp.u || false;
+            window.currentSpyAnchor = sp.a || 0;
+            window.unlockedSpyInsta = [...(sp.i || [])];
+            window.unlockedSpySlut = [...(sp.o || [])];
+
+            // Update home screen to show/hide spy icon
+            const spyBtn = document.getElementById('openSpyBtn');
+            if (spyBtn) {
+                if (window.spyAppUnlocked) {
+                    spyBtn.classList.remove('hidden');
+                } else {
+                    spyBtn.classList.add('hidden');
+                }
+            }
+
+            // Re-initialize SpyMessenger if it exists and spy is unlocked
+            if (window.spyAppUnlocked && window.SpyMessenger?.init) {
+                window.SpyMessenger.init();
+            }
+
+            // Update Spy apps if they exist
+            if (window.SpyInstaPics?.render) window.SpyInstaPics.render();
+            if (window.SpyOnlySlut?.render) window.SpyOnlySlut.render();
+            if (window.SpyGallery?.loadImages) window.SpyGallery.loadImages();
+        }
     },
 
     /**
