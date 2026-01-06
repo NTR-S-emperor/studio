@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - Studio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">&#9776;</button>
+
+    <div class="layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1>Studio</h1>
+                <p>Documentation</p>
+            </div>
+
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search..." id="search">
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Getting Started</div>
+                    <a href="index.html" class="nav-link active">Introduction</a>
+                    <a href="create-story.html" class="nav-link">Create a Story</a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Applications</div>
+                    <a href="messenger.html" class="nav-link">Messenger</a>
+                    <a href="messenger.html#characters" class="nav-link sub">Characters</a>
+                    <a href="messenger.html#conversations" class="nav-link sub">Conversations</a>
+                    <a href="messenger.html#commands" class="nav-link sub">Commands</a>
+                    <a href="instapics.html" class="nav-link">InstaPics</a>
+                    <a href="onlyslut.html" class="nav-link">OnlySlut</a>
+                    <a href="spy.html" class="nav-link">Spy App</a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Configuration</div>
+                    <a href="configuration.html" class="nav-link">General Settings</a>
+                    <a href="configuration.html#translations" class="nav-link sub">Translations</a>
+                    <a href="configuration.html#assets" class="nav-link sub">Music & Wallpapers</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <div class="intro-card">
+                <h1>Welcome to Studio</h1>
+                <p>Studio is a smartphone simulator for telling interactive narrative stories. This documentation guides you step by step through content creation.</p>
+            </div>
+
+            <h2>How does it work?</h2>
+            <p>Studio simulates a phone with several applications: <strong>Messenger</strong> for conversations, <strong>InstaPics</strong> and <strong>OnlySlut</strong> for social networks. The player experiences the story through these applications.</p>
+
+            <p>As a creator, you don't need to know how to code. Everything is done via <strong>text files (.txt)</strong> that you simply edit.</p>
+
+            <h2>Where to start?</h2>
+
+            <div class="quick-links">
+                <a href="create-story.html" class="quick-link">
+                    <h3>Create a Story</h3>
+                    <p>Folder structure, name, description, icon</p>
+                </a>
+                <a href="messenger.html" class="quick-link">
+                    <h3>Messenger</h3>
+                    <p>Create characters and write conversations</p>
+                </a>
+                <a href="instapics.html" class="quick-link">
+                    <h3>InstaPics</h3>
+                    <p>Instagram-like posts</p>
+                </a>
+                <a href="configuration.html" class="quick-link">
+                    <h3>Configuration</h3>
+                    <p>Translations, music, customization</p>
+                </a>
+            </div>
+
+            <h2>Story Structure</h2>
+            <p>Each story is a folder in <code>stories/</code> with this structure:</p>
+
+            <div class="file-tree">
+    <ul>
+        <li><span class="folder">stories</span>
+            <ul>
+                <li><span class="folder">1-My Story</span> <span class="desc">Your story folder</span>
+                    <ul>
+                        <li><span class="file">desc.txt</span> <span class="desc">Description</span></li>
+                        <li><span class="file">icon.png</span> <span class="desc">Icon</span></li>
+                        <li><span class="folder">messenger</span> <span class="desc">Conversations</span>
+                            <ul>
+                                <li><span class="folder">characters</span></li>
+                                <li><span class="folder">talks</span></li>
+                            </ul>
+                        </li>
+                        <li><span class="folder">instapics</span> <span class="desc">Instagram posts</span>
+                            <ul>
+                                <li><span class="folder">characters</span></li>
+                                <li><span class="folder">posts</span></li>
+                            </ul>
+                        </li>
+                        <li><span class="folder">onlyslut</span> <span class="desc">OnlySlut posts</span>
+                            <ul>
+                                <li><span class="folder">characters</span></li>
+                                <li><span class="folder">posts</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+            <div class="info-box tip">
+                <div class="info-box-title">Tip</div>
+                <p>To create a new story, simply duplicate an existing story folder and rename it. All necessary files will already be in place.</p>
+            </div>
+
+            <h2>Basic Principle</h2>
+            <p>Content (InstaPics posts, OnlySlut posts) only appears when it is <strong>unlocked via Messenger</strong>. The conversation drives the story forward and reveals content to the player.</p>
+
+            <table>
+                <tr>
+                    <th>In Messenger</th>
+                    <th>Effect</th>
+                </tr>
+                <tr>
+                    <td><code>$talks = next.txt</code></td>
+                    <td>Starts a new conversation</td>
+                </tr>
+                <tr>
+                    <td><code>$insta = post.txt</code></td>
+                    <td>Unlocks an InstaPics post + notification</td>
+                </tr>
+                <tr>
+                    <td><code>$slut = post.txt</code></td>
+                    <td>Unlocks an OnlySlut post + notification</td>
+                </tr>
+            </table>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+    </script>
+    <script src="search.js"></script>
+</body>
+</html>

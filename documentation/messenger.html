@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messenger - Documentation Studio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">&#9776;</button>
+
+    <div class="layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1>Studio</h1>
+                <p>Documentation</p>
+            </div>
+
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search..." id="search">
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Getting Started</div>
+                    <a href="index.html" class="nav-link">Introduction</a>
+                    <a href="create-story.html" class="nav-link">Create a Story</a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Applications</div>
+                    <a href="messenger.html" class="nav-link active">Messenger</a>
+                    <a href="#characters" class="nav-link sub">Characters</a>
+                    <a href="#conversations" class="nav-link sub">Conversations</a>
+                    <a href="#commands" class="nav-link sub">Commands</a>
+                    <a href="#media" class="nav-link sub">Media</a>
+                    <a href="#thinking" class="nav-link sub">Thinking</a>
+                    <a href="#choices" class="nav-link sub">Choices</a>
+                    <a href="instapics.html" class="nav-link">InstaPics</a>
+                    <a href="onlyslut.html" class="nav-link">OnlySlut</a>
+                    <a href="spy.html" class="nav-link">Spy App</a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Configuration</div>
+                    <a href="configuration.html" class="nav-link">General Settings</a>
+                    <a href="configuration.html#translations" class="nav-link sub">Translations</a>
+                    <a href="configuration.html#assets" class="nav-link sub">Music & Wallpapers</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <div class="breadcrumb">
+                <a href="index.html">Home</a>
+                <span>/</span>
+                <span>Messenger</span>
+            </div>
+
+            <h1>Messenger</h1>
+            <p>First, you need to create the characters that will appear on Messenger. Go to the "characters" folder. Once you've done that, go to "talks" to create your conversations.</p>
+
+            <!-- ========== CHARACTERS ========== -->
+            <h2 id="characters">Characters</h2>
+            <p>Open the characters.txt file located in <code>messenger/characters/characters.txt</code>.</p>
+
+<pre><code>Girlfriend "Sarah" (gf.png) = gf
+Benjamin (benjamin.png) = be
+Ophelie (ophelie.png) = op
+Lisa (lisa.png) = li
+Stephane (stephane.png) = st
+Robert (robert.png) = ro</code></pre>
+
+            <table>
+                <tr>
+                    <th>Element</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Girlfriend "Sarah"</code></td>
+                    <td>The first line is the MC's girlfriend. Just edit her name between the quotation marks, and that will be the default name.</td>
+                </tr>
+                <tr>
+                    <td><code>(gf.png)</code></td>
+                    <td>Profile picture in parentheses (square image recommended, but the code automatically adapts)</td>
+                </tr>
+                <tr>
+                    <td><code>= gf</code></td>
+                    <td>Abbreviations after the "=" are useful for coding dialogues more quickly</td>
+                </tr>
+            </table>
+
+            <div class="info-box info">
+                <div class="info-box-title">Avatar Images</div>
+                <p>The character images must be placed in the "avatar" folder where characters.txt is located.</p>
+            </div>
+
+            <!-- ========== CONVERSATIONS ========== -->
+            <h2 id="conversations">Conversations</h2>
+            <p>Your first conversation should be in <code>start.txt</code> in the <code>talks/</code> folder.</p>
+
+            <h3>Conversation Structure</h3>
+<pre><code>Sarah
+mc : Hey $gf!
+gf : Hey $mc, how are you?
+mc : Listen, I'll show you an example of sending a photo:
+mc : $pics = 1.png
+gf : Yes, I know, and here's an example of a video:
+Girlfriend : $vids = 1.mp4
+mc : Oh, that's great, I think I can even make a voice memo—
+gf : Absolutely.
+Girlfriend: $audio = 1.mp3
+mc : We've covered sending multimedia content, let's see the rest in another conversation.
+$talks = lovepath/1.txt</code></pre>
+
+            <table>
+                <tr>
+                    <th>Line</th>
+                    <th>Meaning</th>
+                </tr>
+                <tr>
+                    <td><code>Sarah</code></td>
+                    <td>The first line refers to the person with whom you are having the conversation. You can have a conversation with several people by separating their names with commas (e.g., Sarah, Robert, Lisa)</td>
+                </tr>
+                <tr>
+                    <td><code>mc : text</code></td>
+                    <td>To make the MC speak, use "mc: TEXT" (respect the spaces)</td>
+                </tr>
+                <tr>
+                    <td><code>gf : text</code></td>
+                    <td>To make a protagonist speak, use "Name: TEXT" (or "Abbreviation: TEXT")</td>
+                </tr>
+            </table>
+
+            <h3>Multi-line Messages</h3>
+            <p>As long as another protagonist does not speak, all the text you enter, including line breaks, will be in a single message:</p>
+
+<pre><code>mc : Hey!
+gf : Hey John, hwr?
+
+Did you do what I asked you to do?
+
+I haven't heard from you.
+mc : I completely forgot.</code></pre>
+
+            <p>This will only result in three messages.</p>
+
+            <h3>Navigation Between Conversations</h3>
+            <p>Once you have finished the conversation and want to start a new one, enter <code>$talks = PATH/NAME.txt</code></p>
+
+            <p>From the "talks" folder, you can create subfolders. For example, if you create "lovepath/chapter1/1.txt", the call will be:</p>
+<pre><code>$talks = lovepath/chapter1/1.txt</code></pre>
+
+            <p>If the MC already has a conversation with the person(s) in this new conversation, it will be reused and moved to the top of the MC's list, like a "new message" in WhatsApp.</p>
+
+            <!-- ========== COMMANDS ========== -->
+            <h2 id="commands">Commands Reference</h2>
+
+            <h3>Name Variables</h3>
+            <table>
+                <tr>
+                    <th>Command</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>$mc</code></td>
+                    <td>Allows you to use the MC's custom name</td>
+                </tr>
+                <tr>
+                    <td><code>$gf</code></td>
+                    <td>Allows you to use your girlfriend's custom name</td>
+                </tr>
+            </table>
+
+            <h3 id="media">Media</h3>
+            <table>
+                <tr>
+                    <th>Command</th>
+                    <th>Description</th>
+                    <th>Required Folder</th>
+                </tr>
+                <tr>
+                    <td><code>$pics = NAME.png</code></td>
+                    <td>To send a photo (you can use different image formats)</td>
+                    <td><code>pics/</code> folder next to the .txt file</td>
+                </tr>
+                <tr>
+                    <td><code>$vids = NAME.mp4</code></td>
+                    <td>To send a video</td>
+                    <td><code>vids/</code> folder next to the .txt file</td>
+                </tr>
+                <tr>
+                    <td><code>$audio = NAME.mp3</code></td>
+                    <td>To send a voice note</td>
+                    <td><code>audio/</code> folder next to the .txt file</td>
+                </tr>
+            </table>
+
+            <h3>Content Unlocking</h3>
+            <table>
+                <tr>
+                    <th>Command</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>$insta = NAME.txt</code></td>
+                    <td>Sends a notification to the MC of the InstaPics post. They can click on it to be redirected to it. As long as a post is not called in a conversation, it will not appear in the application.</td>
+                </tr>
+                <tr>
+                    <td><code>$slut = NAME.txt</code></td>
+                    <td>Same functionality as InstaPics but for OnlySlut</td>
+                </tr>
+            </table>
+
+            <h3>Special Effects</h3>
+            <table>
+                <tr>
+                    <th>Command</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>$status = TEXT</code></td>
+                    <td>Allows you to put a central bubble in the conversation, for example "TODAY"</td>
+                </tr>
+                <tr>
+                    <td><code>$delete</code></td>
+                    <td>The message just before this function is deleted (the bubble remains with "Message deleted" written on it)</td>
+                </tr>
+                <tr>
+                    <td><code>$delete = 3000</code></td>
+                    <td>Allows you to set a timer in milliseconds for deletion. This deletion will not wait for the user's "next" action</td>
+                </tr>
+                <tr>
+                    <td><code>@typing 2000</code></td>
+                    <td>Typing indicator (2000ms)</td>
+                </tr>
+            </table>
+
+            <h3 id="thinking">MC Thoughts ($thinking)</h3>
+            <p>The <code>$thinking</code> command displays the MC's inner thoughts as an overlay on top of the chat. This is useful to show what the MC is thinking without sending an actual message.</p>
+
+<pre><code>$thinking
+I don't know what's happening to her.
+Is she trying to provoke something in me? $/
+I need to try to dig deeper.
+
+mc : Hey, are you okay?</code></pre>
+
+            <table>
+                <tr>
+                    <th>Element</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>$thinking</code></td>
+                    <td>Starts the thinking overlay. All text below will be displayed as MC's thoughts.</td>
+                </tr>
+                <tr>
+                    <td><code>$/</code></td>
+                    <td>Separates thoughts into different bubbles/windows. Each section before <code>$/</code> appears in its own thought bubble.</td>
+                </tr>
+                <tr>
+                    <td>End of thoughts</td>
+                    <td>When you write a normal message (like <code>mc :</code>), the thinking overlay closes and the conversation resumes.</td>
+                </tr>
+            </table>
+
+            <div class="info-box tip">
+                <div class="info-box-title">Tip</div>
+                <p>Use <code>$/</code> to break long thoughts into multiple bubbles. Each bubble appears one after the other, creating a more dynamic inner monologue.</p>
+            </div>
+
+            <!-- ========== CHOICES ========== -->
+            <h2 id="choices">Choice System</h2>
+
+            <h3>Fake Choices (No Impact)</h3>
+            <p>This function allows the MC to submit a response of their choice, but it has no impact on the story. It is intended to enhance immersion.</p>
+
+<pre><code>$fake.choices =
+Choice 1. $/
+Choice 2. $/
+Choice 3.</code></pre>
+
+            <div class="info-box info">
+                <div class="info-box-title">Syntax</div>
+                <p>You can include as many choices as you wish, but it is important that each line ends with <code>$/</code>, except for the last one.</p>
+            </div>
+
+            <h3>Real Choices (With Impact)</h3>
+            <p>Here is an example of a choice-based feature that impacts the story:</p>
+
+<pre><code>$choices =
+A. Choice 1 $/
+B. Choice 2 $/
+C. Choice 3
+
+path a
+gf : We're in timeline 1!
+gf : And look, it's even possible to direct you to a discussion that will only concern this path!
+$talks = path1/example.txt
+end path
+
+path b
+gf : We're in timeline 2!
+$talks = path2/example.txt
+end path
+
+path c
+gf : We're in timeline 3!
+$talks = path3/example.txt
+end path</code></pre>
+
+            <table>
+                <tr>
+                    <th>Element</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>A.</code>, <code>B.</code>, <code>1.</code>, <code>2.</code>...</td>
+                    <td>Prefix to identify the choice (will not appear visually when making the choice)</td>
+                </tr>
+                <tr>
+                    <td><code>path a</code> ... <code>end path</code></td>
+                    <td>Opens the continuation for choice A, and ends the path</td>
+                </tr>
+            </table>
+
+            <p>Between these tags, you can create the conversation as you wish. You can even use <code>$talks = example.txt</code> to redirect the user to a discussion that only concerns that choice.</p>
+
+            <p>If you don't call up a discussion, after "end path" the conversation will revert to being common to all choices for whatever you put after it.</p>
+
+            <!-- ========== LOCKS ========== -->
+            <h2 id="locks">Code Locking</h2>
+            <p>It is possible to block certain users who have a code from continuing the game.</p>
+
+<pre><code>$lock = example.txt</code></pre>
+
+            <p>Content of the lock file:</p>
+<pre><code>[GOLD]
+$talks = chapter2/example.txt</code></pre>
+
+            <p>Only members with a gold code (or higher) will be able to access this chapter. The code is stored in LocalStorage.</p>
+
+            <table>
+                <tr>
+                    <th>Available Locks</th>
+                </tr>
+                <tr>
+                    <td><code>[BRONZE]</code>, <code>[SILVER]</code>, <code>[GOLD]</code>, <code>[DIAMOND]</code>, <code>[PLATINUM]</code></td>
+                </tr>
+            </table>
+
+            <!-- ========== QUICK REFERENCE ========== -->
+            <h2 id="summary">Quick Reference</h2>
+
+            <table>
+                <tr>
+                    <th>Command</th>
+                    <th>Usage</th>
+                </tr>
+                <tr>
+                    <td><code>$mc</code></td>
+                    <td>MC's custom name</td>
+                </tr>
+                <tr>
+                    <td><code>$gf</code></td>
+                    <td>Girlfriend's custom name</td>
+                </tr>
+                <tr>
+                    <td><code>$pics = NAME.png</code></td>
+                    <td>Send a photo</td>
+                </tr>
+                <tr>
+                    <td><code>$vids = NAME.mp4</code></td>
+                    <td>Send a video</td>
+                </tr>
+                <tr>
+                    <td><code>$audio = NAME.mp3</code></td>
+                    <td>Send a voice note</td>
+                </tr>
+                <tr>
+                    <td><code>$talks = path.txt</code></td>
+                    <td>Start new conversation</td>
+                </tr>
+                <tr>
+                    <td><code>$insta = post.txt</code></td>
+                    <td>Unlock InstaPics post</td>
+                </tr>
+                <tr>
+                    <td><code>$slut = post.txt</code></td>
+                    <td>Unlock OnlySlut post</td>
+                </tr>
+                <tr>
+                    <td><code>$status = TEXT</code></td>
+                    <td>Central bubble</td>
+                </tr>
+                <tr>
+                    <td><code>$delete</code></td>
+                    <td>Delete message</td>
+                </tr>
+                <tr>
+                    <td><code>$thinking</code></td>
+                    <td>MC's inner thoughts overlay</td>
+                </tr>
+                <tr>
+                    <td><code>$/</code></td>
+                    <td>Separate thought bubbles</td>
+                </tr>
+                <tr>
+                    <td><code>$fake.choices =</code></td>
+                    <td>Choices without impact</td>
+                </tr>
+                <tr>
+                    <td><code>$choices =</code></td>
+                    <td>Choices with impact</td>
+                </tr>
+                <tr>
+                    <td><code>$lock = file.txt</code></td>
+                    <td>Premium content lock</td>
+                </tr>
+                <tr>
+                    <td><code>$spy_unlock</code></td>
+                    <td>Unlock the Spy App</td>
+                </tr>
+                <tr>
+                    <td><code>$spy_anchor_X</code></td>
+                    <td>Set Spy visibility anchor</td>
+                </tr>
+            </table>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+    </script>
+    <script src="search.js"></script>
+</body>
+</html>

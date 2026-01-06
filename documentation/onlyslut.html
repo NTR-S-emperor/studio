@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OnlySlut - Documentation Studio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">&#9776;</button>
+
+    <div class="layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1>Studio</h1>
+                <p>Documentation</p>
+            </div>
+
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search..." id="search">
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Getting Started</div>
+                    <a href="index.html" class="nav-link">Introduction</a>
+                    <a href="create-story.html" class="nav-link">Create a Story</a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Applications</div>
+                    <a href="messenger.html" class="nav-link">Messenger</a>
+                    <a href="instapics.html" class="nav-link">InstaPics</a>
+                    <a href="onlyslut.html" class="nav-link active">OnlySlut</a>
+                    <a href="#characters" class="nav-link sub">Characters</a>
+                    <a href="#posts" class="nav-link sub">Posts</a>
+                    <a href="spy.html" class="nav-link">Spy App</a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Configuration</div>
+                    <a href="configuration.html" class="nav-link">General Settings</a>
+                    <a href="configuration.html#translations" class="nav-link sub">Translations</a>
+                    <a href="configuration.html#assets" class="nav-link sub">Music & Wallpapers</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <div class="breadcrumb">
+                <a href="index.html">Home</a>
+                <span>/</span>
+                <span>OnlySlut</span>
+            </div>
+
+            <h1>OnlySlut</h1>
+            <p>To create posts, you must first ensure that you create your protagonists in the "characters" folder. Posts are then created in the "posts" folder.</p>
+
+            <div class="info-box info">
+                <div class="info-box-title">Same Function as InstaPics</div>
+                <p>OnlySlut works exactly like InstaPics, except for the calling method: use <code>$slut</code> instead of <code>$insta</code>.</p>
+            </div>
+
+            <!-- ========== CHARACTERS ========== -->
+            <h2 id="characters">Characters</h2>
+            <p>Characters must be created in <code>onlyslut/characters/</code>.</p>
+
+            <h3>characters.txt</h3>
+<pre><code>Sarah (sarah.png)
+Lisa (lisa.png)</code></pre>
+
+            <p>Avatar images must be in the <code>avatar/</code> folder.</p>
+
+            <!-- ========== POSTS ========== -->
+            <h2 id="posts">Creating Posts</h2>
+            <p>Here, you can create OnlySlut posts using .txt files, for example "example.txt".</p>
+
+            <p>From the posts folder, you can freely create subfolders, sub-subfolders, etc. You can organize yourself however you like, if there are different paths to your story, etc.</p>
+
+            <div class="info-box info">
+                <div class="info-box-title">Images Folder</div>
+                <p>When you create a post and include an image in it, it is important that there is an "images" folder where your .txt file is located and which contains the image for your post.</p>
+            </div>
+
+            <h3>Post Structure</h3>
+<pre><code>Sarah
+Image: example.jpg
+Text: Example text.
+Likes: 3
+Comments
+Elvis = That's right!
+Ana 5 = Yes
+Alan "comments.replied" = I love you
+John 18 "replied.replied" = Bastard
+Anonymous "replied.replied" = ...
+Elena 2 "comments.replied" = It's chat time
+Lisa "comments.replied" = I'm stuck.
+Anonymous "replied.replied" = Be careful.
+Elon = Great!</code></pre>
+
+            <p>See <a href="instapics.html#posts">InstaPics documentation</a> for full details on post structure and comments.</p>
+
+            <!-- ========== CALLING ========== -->
+            <h2 id="calling">Calling a Post from Messenger</h2>
+            <p>When you call up a post in Messenger with <code>$slut</code>, be sure to specify the path from the "posts" folder.</p>
+
+            <div class="info-box info">
+                <div class="info-box-title">Example</div>
+                <p>If you have created an example.txt file in this path:<br><code>onlyslut/posts/lovepath/example.txt</code></p>
+                <p>The method for calling it will be: <code>$slut = lovepath/example.txt</code></p>
+            </div>
+
+            <h2>File Structure</h2>
+            <div class="file-tree">
+    <ul>
+        <li><span class="folder">onlyslut</span>
+            <ul>
+                <li><span class="folder">characters</span>
+                    <ul>
+                        <li><span class="file">characters.txt</span></li>
+                        <li><span class="folder">avatar</span>
+                            <ul>
+                                <li><span class="file">sarah.png</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><span class="folder">posts</span>
+                    <ul>
+                        <li><span class="folder">lovepath</span>
+                            <ul>
+                                <li><span class="file">post1.txt</span></li>
+                                <li><span class="folder">images</span>
+                                    <ul>
+                                        <li><span class="file">photo.jpg</span></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+            <h2>Differences with InstaPics</h2>
+            <table>
+                <tr>
+                    <th>InstaPics</th>
+                    <th>OnlySlut</th>
+                </tr>
+                <tr>
+                    <td>Command: <code>$insta = post.txt</code></td>
+                    <td>Command: <code>$slut = post.txt</code></td>
+                </tr>
+                <tr>
+                    <td>Folder: <code>instapics/</code></td>
+                    <td>Folder: <code>onlyslut/</code></td>
+                </tr>
+                <tr>
+                    <td>Classic social network style</td>
+                    <td>Subscription platform style</td>
+                </tr>
+            </table>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+    </script>
+    <script src="search.js"></script>
+</body>
+</html>

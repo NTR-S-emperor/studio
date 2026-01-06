@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spy App - Documentation Studio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">&#9776;</button>
+
+    <div class="layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1>Studio</h1>
+                <p>Documentation</p>
+            </div>
+
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search..." id="search">
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Getting Started</div>
+                    <a href="index.html" class="nav-link">Introduction</a>
+                    <a href="create-story.html" class="nav-link">Create a Story</a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Applications</div>
+                    <a href="messenger.html" class="nav-link">Messenger</a>
+                    <a href="instapics.html" class="nav-link">InstaPics</a>
+                    <a href="onlyslut.html" class="nav-link">OnlySlut</a>
+                    <a href="spy.html" class="nav-link active">Spy App</a>
+                    <a href="#unlock" class="nav-link sub">Unlock</a>
+                    <a href="#anchors" class="nav-link sub">Anchors</a>
+                    <a href="#gf-messenger" class="nav-link sub">GF Messenger</a>
+                    <a href="#gf-social" class="nav-link sub">GF Social</a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Configuration</div>
+                    <a href="configuration.html" class="nav-link">General Settings</a>
+                    <a href="configuration.html#translations" class="nav-link sub">Translations</a>
+                    <a href="configuration.html#assets" class="nav-link sub">Music & Wallpapers</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <div class="breadcrumb">
+                <a href="index.html">Home</a>
+                <span>/</span>
+                <span>Spy App</span>
+            </div>
+
+            <h1>Spy App</h1>
+            <p>The Spy App allows the MC to view the girlfriend's phone. This includes her Messenger conversations, InstaPics, and OnlySlut content. The content displayed depends on "anchors" that control how far the MC can see into her phone.</p>
+
+            <!-- ========== UNLOCK ========== -->
+            <h2 id="unlock">Unlocking the Spy App</h2>
+            <p>The Spy App is not available by default. It must be unlocked through the story.</p>
+
+            <p>To unlock the Spy App, use this command in the MC's Messenger conversation:</p>
+
+<pre><code>$spy_unlock</code></pre>
+
+            <p>Once the MC encounters this command, the Spy App becomes accessible from the phone's home screen.</p>
+
+            <!-- ========== ANCHORS ========== -->
+            <h2 id="anchors">Anchor System</h2>
+            <p>The Spy App uses an "anchor" system to control what content the MC can see on the girlfriend's phone. This prevents the MC from seeing future conversations or posts.</p>
+
+            <h3>How it works</h3>
+            <ol>
+                <li>Place anchor points in the <strong>girlfriend's conversations</strong> using <code>$spy_anchor_X</code></li>
+                <li>When the MC reaches <code>$spy_anchor_X</code> in <strong>his own conversation</strong>, he can see the girlfriend's content up to that anchor</li>
+            </ol>
+
+            <h3>Example</h3>
+            <p><strong>In the girlfriend's conversation:</strong></p>
+<pre><code>Sarah
+Benjamin : Hey, how are you?
+gf : I'm fine, just thinking about things...
+$spy_anchor_1
+Benjamin : Want to grab coffee later?
+gf : Sure, sounds good!
+$spy_anchor_2</code></pre>
+
+            <p><strong>In the MC's conversation:</strong></p>
+<pre><code>Sarah
+gf : Hey $mc!
+mc : Hey, what's up?
+$spy_anchor_1
+gf : Nothing much, just relaxing.
+mc : Cool, me too.
+$spy_anchor_2</code></pre>
+
+            <div class="info-box info">
+                <div class="info-box-title">How it works</div>
+                <p>When the MC reaches <code>$spy_anchor_1</code> in his conversation, he can see the girlfriend's messages up to her <code>$spy_anchor_1</code>. He won't see the coffee invitation until he reaches <code>$spy_anchor_2</code> in his own conversation.</p>
+            </div>
+
+            <div class="info-box tip">
+                <div class="info-box-title">Tip</div>
+                <p>Use anchors strategically to reveal information at the right moment in your story. This creates dramatic tension when the MC discovers what his girlfriend has been doing.</p>
+            </div>
+
+            <!-- ========== GF MESSENGER ========== -->
+            <h2 id="gf-messenger">Girlfriend's Messenger</h2>
+            <p>The girlfriend has her own Messenger with her own conversations. These are created the same way as the MC's conversations, in a separate folder structure.</p>
+
+            <h3>Structure</h3>
+            <div class="file-tree">
+                <ul>
+                    <li><span class="folder">stories</span>
+                        <ul>
+                            <li><span class="folder">1-My Story</span>
+                                <ul>
+                                    <li><span class="folder">messenger</span> <span class="desc">MC's messenger</span></li>
+                                    <li><span class="folder">spy</span> <span class="desc">GF's phone content</span>
+                                        <ul>
+                                            <li><span class="folder">messenger</span>
+                                                <ul>
+                                                    <li><span class="folder">characters</span></li>
+                                                    <li><span class="folder">talks</span></li>
+                                                </ul>
+                                            </li>
+                                            <li><span class="folder">instapics</span></li>
+                                            <li><span class="folder">onlyslut</span></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <h3>Writing GF's conversations</h3>
+            <p>The girlfriend's conversations are written the same way as the MC's. However, some commands behave differently:</p>
+
+            <table>
+                <tr>
+                    <th>Command</th>
+                    <th>Status</th>
+                    <th>Notes</th>
+                </tr>
+                <tr>
+                    <td><code>$talks</code></td>
+                    <td>Works</td>
+                    <td>Navigate between conversations</td>
+                </tr>
+                <tr>
+                    <td><code>$pics</code>, <code>$vids</code>, <code>$audio</code></td>
+                    <td>Works</td>
+                    <td>Send media in conversations</td>
+                </tr>
+                <tr>
+                    <td><code>$insta</code></td>
+                    <td>Works</td>
+                    <td>Unlock InstaPics posts on GF's phone</td>
+                </tr>
+                <tr>
+                    <td><code>$slut</code></td>
+                    <td>Works</td>
+                    <td>Unlock OnlySlut posts on GF's phone</td>
+                </tr>
+                <tr>
+                    <td><code>$spy_anchor_X</code></td>
+                    <td>Works</td>
+                    <td>Set anchor points for MC visibility</td>
+                </tr>
+                <tr>
+                    <td><code>$status</code></td>
+                    <td>Works</td>
+                    <td>Display status messages</td>
+                </tr>
+                <tr>
+                    <td><code>$delete</code></td>
+                    <td>Works</td>
+                    <td>Shows deleted message (by GF or her contacts)</td>
+                </tr>
+                <tr>
+                    <td><code>$delete = XXXX</code></td>
+                    <td>Disabled</td>
+                    <td>Timed deletion not available</td>
+                </tr>
+                <tr>
+                    <td><code>$choices</code></td>
+                    <td>Disabled</td>
+                    <td>Not available in GF's conversations</td>
+                </tr>
+                <tr>
+                    <td><code>$fake.choices</code></td>
+                    <td>Disabled</td>
+                    <td>Not available in GF's conversations</td>
+                </tr>
+                <tr>
+                    <td><code>$lock</code></td>
+                    <td>Disabled</td>
+                    <td>Not available in GF's conversations</td>
+                </tr>
+            </table>
+
+            <div class="info-box info">
+                <div class="info-box-title">About $delete</div>
+                <p>The <code>$delete</code> command works in the girlfriend's conversations. When the MC views her phone, he will see "Message deleted" - indicating that either the girlfriend or one of her contacts deleted a message. This can be useful for storytelling (hiding suspicious messages, etc.).</p>
+            </div>
+
+            <!-- ========== GF SOCIAL ========== -->
+            <h2 id="gf-social">Girlfriend's Social Media</h2>
+            <p>The girlfriend has her own InstaPics and OnlySlut feeds, separate from the MC's. Posts are unlocked through her Messenger conversations using <code>$insta</code> and <code>$slut</code>.</p>
+
+            <h3>Limitations</h3>
+            <p>The MC is viewing the girlfriend's phone as a "spy" - he cannot interact with her apps:</p>
+            <ul>
+                <li>Cannot like posts</li>
+                <li>Cannot comment</li>
+                <li>Cannot send messages</li>
+                <li>Can only view what she sees</li>
+            </ul>
+
+            <h3>Liked Posts Indicator</h3>
+            <p>There is a special feature to show which posts the girlfriend has liked. In the post file, add <code>(liked)</code> after the like count:</p>
+
+<pre><code>Sarah
+Image: photo.jpg
+Text: Beautiful sunset! #nature
+Likes: 24 (liked)
+Comments
+John = Amazing!</code></pre>
+
+            <p>The <code>(liked)</code> indicator tells the system that the girlfriend has liked this post. The MC will be able to see this when viewing her phone.</p>
+
+            <div class="info-box info">
+                <div class="info-box-title">Why this matters</div>
+                <p>This feature is specific to the girlfriend's social media. On the MC's side, he likes posts himself by interacting with them. But since the MC cannot interact with the girlfriend's apps, the <code>(liked)</code> indicator is the only way to show what she has liked - which can reveal important story information.</p>
+            </div>
+
+            <!-- ========== QUICK REFERENCE ========== -->
+            <h2 id="summary">Quick Reference</h2>
+            <table>
+                <tr>
+                    <th>Command</th>
+                    <th>Location</th>
+                    <th>Usage</th>
+                </tr>
+                <tr>
+                    <td><code>$spy_unlock</code></td>
+                    <td>MC's Messenger</td>
+                    <td>Unlock the Spy App</td>
+                </tr>
+                <tr>
+                    <td><code>$spy_anchor_X</code></td>
+                    <td>Both</td>
+                    <td>Set visibility anchor point (X = number)</td>
+                </tr>
+                <tr>
+                    <td><code>(liked)</code></td>
+                    <td>GF's posts</td>
+                    <td>Indicate GF liked the post</td>
+                </tr>
+                <tr>
+                    <td><code>gfwallpaper.png</code></td>
+                    <td>assets/wallpapers/</td>
+                    <td>Girlfriend's phone wallpaper</td>
+                </tr>
+            </table>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+    </script>
+    <script src="search.js"></script>
+</body>
+</html>

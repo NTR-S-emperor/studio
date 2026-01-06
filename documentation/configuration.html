@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration - Documentation Studio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">&#9776;</button>
+
+    <div class="layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1>Studio</h1>
+                <p>Documentation</p>
+            </div>
+
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search..." id="search">
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Getting Started</div>
+                    <a href="index.html" class="nav-link">Introduction</a>
+                    <a href="create-story.html" class="nav-link">Create a Story</a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Applications</div>
+                    <a href="messenger.html" class="nav-link">Messenger</a>
+                    <a href="instapics.html" class="nav-link">InstaPics</a>
+                    <a href="onlyslut.html" class="nav-link">OnlySlut</a>
+                    <a href="spy.html" class="nav-link">Spy App</a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Configuration</div>
+                    <a href="configuration.html" class="nav-link active">General Settings</a>
+                    <a href="#translations" class="nav-link sub">Translations</a>
+                    <a href="#assets" class="nav-link sub">Music & Wallpapers</a>
+                    <a href="#customization" class="nav-link sub">Customization</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <div class="breadcrumb">
+                <a href="index.html">Home</a>
+                <span>/</span>
+                <span>Configuration</span>
+            </div>
+
+            <h1>Configuration</h1>
+            <p>Customize your Studio site: translations, music, wallpapers, and more.</p>
+
+            <!-- ========== TRANSLATIONS ========== -->
+            <h2 id="translations">Translations</h2>
+
+            <h3>System Text</h3>
+            <p>System text changes (including the site title) can be changed here: <code>system_translations.txt</code>.</p>
+
+            <p>Note that this file also allows you to add new languages for translation.</p>
+
+            <h3>Translating Content</h3>
+            <p>For translations, simply duplicate a .txt file you have already created (whether in Messenger, OnlySlut, or InstaPics) and add the language abbreviation before the name with a "$" prefix.</p>
+
+            <table>
+                <tr>
+                    <th>Original File</th>
+                    <th>Translated File (French)</th>
+                </tr>
+                <tr>
+                    <td><code>start.txt</code></td>
+                    <td><code>$FR.start.txt</code></td>
+                </tr>
+                <tr>
+                    <td><code>chapter1/suite.txt</code></td>
+                    <td><code>chapter1/$FR.suite.txt</code></td>
+                </tr>
+            </table>
+
+            <div class="info-box info">
+                <div class="info-box-title">Format</div>
+                <p>For example, "start.txt" and "$FR.start.txt". All you have to do now is apply the translations in the file.</p>
+            </div>
+
+            <p>This works for all .txt files: Messenger conversations, InstaPics posts, OnlySlut posts.</p>
+
+            <!-- ========== ASSETS ========== -->
+            <h2 id="assets">Music & Wallpapers</h2>
+
+            <h3>Music</h3>
+            <p>Location: <code>assets/music/</code></p>
+
+            <p>Any MP3 music file from this repertoire will be played randomly.</p>
+
+            <div class="info-box info">
+                <div class="info-box-title">Random Playback</div>
+                <p>A song that has already been played cannot be repeated among the next three songs.</p>
+            </div>
+
+            <h3>Wallpapers</h3>
+            <p>Location: <code>assets/wallpapers/</code></p>
+
+            <p>Any image in this directory will be included in the list of choices for the user's wallpaper.</p>
+
+            <h4>Girlfriend's Wallpaper (Spy App)</h4>
+            <p>There is a special case for the girlfriend's phone wallpaper. When the player uses the Spy app to view the girlfriend's phone, a specific wallpaper can be displayed.</p>
+
+            <p>To set the girlfriend's wallpaper, name the file:</p>
+            <pre><code>gfwallpaper.png</code></pre>
+
+            <p>Place this file in <code>assets/wallpapers/</code>. This image will be used as the background on the girlfriend's phone in the Spy app.</p>
+
+            <div class="info-box info">
+                <div class="info-box-title">Note</div>
+                <p>This wallpaper is <strong>not</strong> available in the player's wallpaper choices. It is exclusively used for the girlfriend's phone in the Spy app.</p>
+            </div>
+
+            <!-- ========== CUSTOMIZATION ========== -->
+            <h2 id="customization">Site Customization</h2>
+
+            <h3>Favicon</h3>
+            <p>You can change the site's favicon by changing "favicon.png".</p>
+
+            <div class="info-box warning">
+                <div class="info-box-title">Important</div>
+                <p>You must keep this name and format for the image: <code>favicon.png</code></p>
+            </div>
+
+            <h3>Version</h3>
+            <p>The "version.txt" file allows you to change the version number displayed at the top left of the phone to something of your choice.</p>
+
+            <!-- ========== SUMMARY ========== -->
+            <h2>File Summary</h2>
+
+            <table>
+                <tr>
+                    <th>File</th>
+                    <th>Location</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td><code>system_translations.txt</code></td>
+                    <td>Root</td>
+                    <td>Interface text + languages</td>
+                </tr>
+                <tr>
+                    <td><code>favicon.png</code></td>
+                    <td>Root</td>
+                    <td>Site icon (browser tab)</td>
+                </tr>
+                <tr>
+                    <td><code>version.txt</code></td>
+                    <td>Root</td>
+                    <td>Displayed version number</td>
+                </tr>
+                <tr>
+                    <td>MP3 files</td>
+                    <td><code>assets/music/</code></td>
+                    <td>Background music</td>
+                </tr>
+                <tr>
+                    <td>Images</td>
+                    <td><code>assets/wallpapers/</code></td>
+                    <td>Available wallpapers</td>
+                </tr>
+            </table>
+
+            <div class="file-tree">
+    <ul>
+        <li><span class="folder">root</span>
+            <ul>
+                <li><span class="file">favicon.png</span></li>
+                <li><span class="file">version.txt</span></li>
+                <li><span class="file">system_translations.txt</span></li>
+                <li><span class="folder">assets</span>
+                    <ul>
+                        <li><span class="folder">music</span>
+                            <ul>
+                                <li><span class="file">music1.mp3</span></li>
+                                <li><span class="file">music2.mp3</span></li>
+                            </ul>
+                        </li>
+                        <li><span class="folder">wallpapers</span>
+                            <ul>
+                                <li><span class="file">wallpaper1.jpg</span></li>
+                                <li><span class="file">wallpaper2.jpg</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+    </script>
+    <script src="search.js"></script>
+</body>
+</html>

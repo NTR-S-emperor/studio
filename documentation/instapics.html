@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstaPics - Documentation Studio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">&#9776;</button>
+
+    <div class="layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1>Studio</h1>
+                <p>Documentation</p>
+            </div>
+
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search..." id="search">
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Getting Started</div>
+                    <a href="index.html" class="nav-link">Introduction</a>
+                    <a href="create-story.html" class="nav-link">Create a Story</a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Applications</div>
+                    <a href="messenger.html" class="nav-link">Messenger</a>
+                    <a href="instapics.html" class="nav-link active">InstaPics</a>
+                    <a href="#characters" class="nav-link sub">Characters</a>
+                    <a href="#posts" class="nav-link sub">Posts</a>
+                    <a href="#comments" class="nav-link sub">Comments</a>
+                    <a href="onlyslut.html" class="nav-link">OnlySlut</a>
+                    <a href="spy.html" class="nav-link">Spy App</a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Configuration</div>
+                    <a href="configuration.html" class="nav-link">General Settings</a>
+                    <a href="configuration.html#translations" class="nav-link sub">Translations</a>
+                    <a href="configuration.html#assets" class="nav-link sub">Music & Wallpapers</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <div class="breadcrumb">
+                <a href="index.html">Home</a>
+                <span>/</span>
+                <span>InstaPics</span>
+            </div>
+
+            <h1>InstaPics</h1>
+            <p>To create posts, you must first ensure that you create your protagonists in the "characters" folder. Posts are then created in the "posts" folder.</p>
+
+            <div class="info-box important">
+                <div class="info-box-title">Important</div>
+                <p>As long as a post is not called in a conversation with <code>$insta = post.txt</code>, it will not appear in the application.</p>
+            </div>
+
+            <!-- ========== CHARACTERS ========== -->
+            <h2 id="characters">Characters</h2>
+            <p>In "characters.txt" you can list different characters that you want to appear on InstaPics.</p>
+
+<pre><code>Sarah (sarah.png)
+Lisa (lisa.png)
+Robert (robert.png)</code></pre>
+
+            <p>To the right of their name, in parentheses, is the avatar image they will use. Be sure to include the file extension. These images should be placed in the "avatar" folder.</p>
+
+            <div class="info-box info">
+                <div class="info-box-title">Image Format</div>
+                <p>There is no mandatory format for the image, but a square image is recommended.</p>
+            </div>
+
+            <!-- ========== POSTS ========== -->
+            <h2 id="posts">Creating Posts</h2>
+            <p>Here, you can create InstaPics posts using .txt files, for example "example.txt".</p>
+
+            <p>From the posts folder, you can freely create subfolders, sub-subfolders, etc. You can organize yourself however you like, if there are different paths to your story, etc.</p>
+
+            <div class="info-box info">
+                <div class="info-box-title">Images Folder</div>
+                <p>When you create a post and include an image in it, it is important that there is an "images" folder where your .txt file is located and which contains the image for your post.</p>
+            </div>
+
+            <h3>Post Structure</h3>
+<pre><code>Sarah
+Image: example.jpg
+Text: Example text. #example
+Likes: 3
+Comments
+Elvis = That's right!
+Ana 5 = Yes
+Alan "comments.replied" = I love you
+John 18 "replied.replied" = Bastard
+Anonymous "replied.replied" = ...
+Elena 2 "comments.replied" = It's chat time
+Lisa "comments.replied" = I'm stuck.
+Anonymous "replied.replied" = Be careful.
+Elon = Great!</code></pre>
+
+            <table>
+                <tr>
+                    <th>Line</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Sarah</code></td>
+                    <td>Name of the character posting the message. This character must have been created in the "characters" folder.</td>
+                </tr>
+                <tr>
+                    <td><code>Image: example.jpg</code></td>
+                    <td>Image included in the message. Not mandatory; a post does not necessarily have to be accompanied by a photo.</td>
+                </tr>
+                <tr>
+                    <td><code>Text: Example text.</code></td>
+                    <td>Text of the message. Hashtags are automatically formatted.</td>
+                </tr>
+                <tr>
+                    <td><code>Likes: 3</code></td>
+                    <td>Number of 'likes' the message has received.</td>
+                </tr>
+                <tr>
+                    <td><code>Comments</code></td>
+                    <td>Start of the comments section.</td>
+                </tr>
+            </table>
+
+            <!-- ========== COMMENTS ========== -->
+            <h2 id="comments">Comments</h2>
+            <p>Comments go after the "Comments" line, one per line.</p>
+
+            <h3>Comment Syntax</h3>
+            <p>First the username, then =, then the text of the comment. If you want to add a number of likes to the comment, put the number of your choice to the right of the username.</p>
+
+            <table>
+                <tr>
+                    <th>Example</th>
+                    <th>Result</th>
+                </tr>
+                <tr>
+                    <td><code>Elvis = That's right!</code></td>
+                    <td>Elvis comments "That's right!" with no likes</td>
+                </tr>
+                <tr>
+                    <td><code>Ana 5 = Yes</code></td>
+                    <td>Ana comments "Yes" with 5 likes</td>
+                </tr>
+            </table>
+
+            <div class="info-box info">
+                <div class="info-box-title">Automatic Counter</div>
+                <p>The people who comment are purely fictional and do not have avatars, so there is no need to create them. The comment counter is automatic and based on the number of comments you have posted.</p>
+            </div>
+
+            <h3>Replies to Comments</h3>
+            <p>It is also possible to reply to comments, then reply to those replies.</p>
+
+            <table>
+                <tr>
+                    <th>Syntax</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>"comments.replied"</code></td>
+                    <td>Applies to the first comment detected above (to the right of the number of likes, or the username if there are no likes)</td>
+                </tr>
+                <tr>
+                    <td><code>"replied.replied"</code></td>
+                    <td>Applies to the line above, so it can respond to a comment or a reply to a comment</td>
+                </tr>
+            </table>
+
+            <h3>Complete Example</h3>
+<pre><code>Comments
+Elvis = Great photo!
+Ana 5 "comments.replied" = I agree!
+John "replied.replied" = Me too
+Marc "replied.replied" = +1
+Lisa "comments.replied" = Beautiful
+Robert = Top!</code></pre>
+
+            <p><strong>Result:</strong></p>
+            <ul>
+                <li>Elvis: "Great photo!"</li>
+                <li>&nbsp;&nbsp;&nbsp;&nbsp;Ana (5 likes): "I agree!" (reply to Elvis)</li>
+                <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;John: "Me too" (reply to Ana)</li>
+                <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Marc: "+1" (reply to John)</li>
+                <li>&nbsp;&nbsp;&nbsp;&nbsp;Lisa: "Beautiful" (reply to Elvis)</li>
+                <li>Robert: "Top!" (new main comment)</li>
+            </ul>
+
+            <!-- ========== CALLING ========== -->
+            <h2 id="calling">Calling a Post from Messenger</h2>
+            <p>When you call up a post in Messenger with <code>$insta</code>, be sure to specify the path from the "posts" folder.</p>
+
+            <div class="info-box info">
+                <div class="info-box-title">Example</div>
+                <p>If you have created an example.txt file in this path:<br><code>instapics/posts/lovepath/example.txt</code></p>
+                <p>The method for calling it will be: <code>$insta = lovepath/example.txt</code></p>
+            </div>
+
+            <h2>File Structure</h2>
+            <div class="file-tree">
+    <ul>
+        <li><span class="folder">instapics</span>
+            <ul>
+                <li><span class="folder">characters</span>
+                    <ul>
+                        <li><span class="file">characters.txt</span></li>
+                        <li><span class="folder">avatar</span>
+                            <ul>
+                                <li><span class="file">sarah.png</span></li>
+                                <li><span class="file">lisa.png</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><span class="folder">posts</span>
+                    <ul>
+                        <li><span class="folder">chapter1</span>
+                            <ul>
+                                <li><span class="file">post1.txt</span></li>
+                                <li><span class="folder">images</span>
+                                    <ul>
+                                        <li><span class="file">photo.jpg</span></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><span class="folder">chapter2</span>
+                            <ul>
+                                <li><span class="file">post2.txt</span></li>
+                                <li><span class="folder">images</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+    </script>
+    <script src="search.js"></script>
+</body>
+</html>
