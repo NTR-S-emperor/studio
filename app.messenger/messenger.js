@@ -86,8 +86,14 @@ window.Messenger = {
     scrollTop: 0,
     containerHeight: 0,
     isScrolling: false,
-    scrollTimeout: null
+    scrollTimeout: null,
+    isScrollingToBottom: false  // Flag to prevent onVirtualScroll during scrollToBottom
   },
+
+  // Scroll management to prevent race conditions
+  pendingScrollRAF: null,
+  pendingScrollTimeout: null,
+  renderVersion: 0,
 
   /**
    * Initializes the Messenger app for a given story.
@@ -240,6 +246,7 @@ window.Messenger = {
       this.renderContacts();
       this.renderConversation();
     } catch (e) {
+      console.error('Reload data error:', e.message);
     }
   },
 
@@ -682,9 +689,9 @@ window.Messenger = {
 
       conv.scriptIndex += 1;
       this.unlockFile(scriptMsg.file);
-      // Stop here - if the unlock triggers a new conversation,
-      // the player will need to click again to continue
-      this.renderConversation();
+      // Stop here - unlockFile will call reloadData() which calls renderConversation()
+      // Do NOT call renderConversation() here as it creates a race condition with the
+      // render that happens inside reloadData(), causing scroll issues
       return;
     }
 
@@ -1070,7 +1077,9 @@ window.Messenger = {
    * Unlocks a new file and reloads the data
    */
   async unlockFile(filename) {
-    if (this.unlockedFiles.includes(filename)) return;
+    if (this.unlockedFiles.includes(filename)) {
+      return;
+    }
 
     this.unlockedFiles.push(filename);
 
@@ -2753,7 +2762,21 @@ window.Messenger = {
   },
 
   renderConversation() {
+    const conv = this.conversationsByKey[this.selectedKey];
+
     if (!this.chatHeaderEl || !this.chatMessagesEl) return;
+
+    // Cancel any pending scroll operations to prevent race conditions
+    if (this.pendingScrollRAF) {
+      cancelAnimationFrame(this.pendingScrollRAF);
+      this.pendingScrollRAF = null;
+    }
+    if (this.pendingScrollTimeout) {
+      clearTimeout(this.pendingScrollTimeout);
+      this.pendingScrollTimeout = null;
+    }
+    // Increment render version to invalidate any in-flight scroll callbacks
+    this.renderVersion++;
 
     this.chatHeaderEl.innerHTML = "";
     this.chatMessagesEl.innerHTML = "";
@@ -2775,7 +2798,7 @@ window.Messenger = {
     }
 
     const contact = this.contacts.find(c => c.key === this.selectedKey);
-    const conv = this.conversationsByKey[this.selectedKey];
+    // conv already declared at top of function for logging
 
     if (!contact || !conv) {
       const placeholder = document.createElement('div');
@@ -2952,7 +2975,8 @@ window.Messenger = {
         end: totalMessages
       };
 
-      this.renderVirtualMessages(conv, cumulativeHeights, true);
+      // Don't scroll here - scrollToBottom() is called at the end of renderConversation()
+      this.renderVirtualMessages(conv, cumulativeHeights, false);
     } else {
       // Standard rendering for small conversations
       this.virtualScroll.enabled = false;
@@ -2964,9 +2988,6 @@ window.Messenger = {
         this.chatMessagesEl.appendChild(element);
         previousFrom = newPreviousFrom;
       }
-
-      // Scroll to bottom
-      this.scrollToBottom();
     }
 
     // Render thinking overlay if active
@@ -2974,6 +2995,9 @@ window.Messenger = {
 
     // Display the correct area at bottom (idle or active choice block)
     this.renderChoices(conv);
+
+    // Scroll to bottom AFTER all DOM modifications are complete
+    this.scrollToBottom();
   },
 
   renderThinkingOverlay(conv) {
@@ -4455,6 +4479,8 @@ window.Messenger = {
   onVirtualScroll() {
     if (!this.virtualScroll.enabled) return;
     if (!this.chatMessagesEl) return;
+    // Don't update during scrollToBottom to prevent race conditions
+    if (this.virtualScroll.isScrollingToBottom) return;
 
     const conv = this.conversationsByKey[this.selectedKey];
     if (!conv || !conv.playedMessages || conv.playedMessages.length === 0) return;
@@ -4598,21 +4624,56 @@ window.Messenger = {
     this.virtualScroll.scrollTop = 0;
   },
 
-  // Robust scroll to bottom
+  // Robust scroll to bottom with race condition protection
   scrollToBottom() {
     if (!this.chatMessagesEl) return;
 
+    // Block virtual scroll updates during our scroll operation
+    this.virtualScroll.isScrollingToBottom = true;
+
+    // Capture current render version to detect if a new render started
+    const currentRenderVersion = this.renderVersion;
+
     const doScroll = () => {
+      // Only scroll if render version hasn't changed (no new render started)
+      if (this.renderVersion !== currentRenderVersion || !this.chatMessagesEl) {
+        return;
+      }
+      // Force scroll to absolute bottom
       this.chatMessagesEl.scrollTop = this.chatMessagesEl.scrollHeight;
     };
 
-    // Double requestAnimationFrame to ensure the DOM is updated
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        doScroll();
-        // Additional scroll after a short delay for loading media
-        setTimeout(doScroll, 100);
-      });
+    // Immediate scroll attempt
+    doScroll();
+
+    // Use requestAnimationFrame to ensure DOM is ready
+    this.pendingScrollRAF = requestAnimationFrame(() => {
+      if (this.renderVersion !== currentRenderVersion) {
+        this.virtualScroll.isScrollingToBottom = false;
+        return;
+      }
+
+      // Force a reflow to ensure layout is complete
+      void this.chatMessagesEl.offsetHeight;
+
+      doScroll();
+
+      // Multiple scroll attempts to handle async content loading
+      this.pendingScrollTimeout = setTimeout(() => {
+        if (this.renderVersion === currentRenderVersion) {
+          doScroll();
+          // One more attempt after another delay
+          setTimeout(() => {
+            if (this.renderVersion === currentRenderVersion) {
+              doScroll();
+            }
+            // Unblock virtual scroll after all scroll attempts are done
+            this.virtualScroll.isScrollingToBottom = false;
+          }, 200);
+        } else {
+          this.virtualScroll.isScrollingToBottom = false;
+        }
+      }, 100);
     });
   },
 
