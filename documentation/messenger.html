@@ -286,6 +286,49 @@ Choice 3.</code></pre>
                 <p>You can include as many choices as you wish, but it is important that each line ends with <code>$/</code>, except for the last one.</p>
             </div>
 
+            <h4>Custom Responses</h4>
+            <p>You can add a personalized response from an interlocutor for each choice. When the player selects that choice, the specified character will automatically reply with the custom message.</p>
+
+<pre><code>gf : What do you want to do tonight?
+$fake.choices =
+Watch a movie. $/ [gf : Great idea! I'll prepare the popcorn!]
+Go out for dinner. $/ [gf : Perfect, I know a nice restaurant!]
+Stay home and relax. $/ [gf : Sounds cozy, I like it.]
+I don't know, you choose.</code></pre>
+
+            <table>
+                <tr>
+                    <th>Element</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>[gf : message]</code></td>
+                    <td>Custom response from a character. Use their abbreviation (gf, be, etc.) followed by <code>:</code> and the message.</td>
+                </tr>
+                <tr>
+                    <td><code>$/</code></td>
+                    <td>Choice separator (required before the custom response brackets)</td>
+                </tr>
+            </table>
+
+            <div class="info-box tip">
+                <div class="info-box-title">Note</div>
+                <p>Custom responses are <strong>completely optional</strong>. You don't need to add one to every choice—mix and match as needed. In the example above, the last choice has no custom response, which is perfectly valid.</p>
+            </div>
+
+            <h4>More Examples</h4>
+
+<pre><code>mc : Hey, how was your day?
+gf : It was okay... kind of boring. You?
+$fake.choices =
+Same here, nothing special. $/
+I had a crazy day at work! $/ [gf : Oh really? Tell me everything!]
+I missed you all day. $/ [gf : Aww, that's so sweet! 💕]
+
+gf : Anyway, what should we have for dinner?</code></pre>
+
+            <p>In this example, only 2 out of 3 choices trigger a custom response. The conversation then continues normally regardless of which choice was selected.</p>
+
             <h3>Real Choices (With Impact)</h3>
             <p>Here is an example of a choice-based feature that impacts the story:</p>
 
@@ -409,6 +452,10 @@ $talks = chapter2/example.txt</code></pre>
                 <tr>
                     <td><code>$fake.choices =</code></td>
                     <td>Choices without impact</td>
+                </tr>
+                <tr>
+                    <td><code>[speaker : msg]</code></td>
+                    <td>Custom response after a fake choice (optional)</td>
                 </tr>
                 <tr>
                     <td><code>$choices =</code></td>
