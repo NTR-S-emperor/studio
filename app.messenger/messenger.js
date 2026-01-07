@@ -929,8 +929,15 @@ window.Messenger = {
     this.renderConversation();
 
     // Auto-expand media in lightbox if enabled (only for images and videos, not audio)
+    // Do NOT auto-expand if the next message is a $delete (media will be deleted)
+    const nextMsgForAutoExpand = conv.scriptIndex < scriptMessages.length
+      ? scriptMessages[conv.scriptIndex]
+      : null;
+    const willBeDeleted = nextMsgForAutoExpand && nextMsgForAutoExpand.kind === "delete";
+
     if ((scriptMsg.kind === 'image' || scriptMsg.kind === 'video') &&
-        window.Settings && window.Settings.get('autoExpandMedia')) {
+        window.Settings && window.Settings.get('autoExpandMedia') &&
+        !willBeDeleted) {
       // Build the media source path
       let mediaSrc;
       if (scriptMsg.kind === 'image') {
@@ -2505,6 +2512,17 @@ window.Messenger = {
           text: msg.text,
           filename: filename
         });
+      }
+    }
+
+    // Post-process: mark media messages that will be deleted
+    // This prevents auto-expand and click-to-open on media that will be deleted
+    const mediaKinds = ['image', 'video', 'audio'];
+    for (let i = baseIndex; i < convObj.messages.length - 1; i++) {
+      const msg = convObj.messages[i];
+      const nextMsg = convObj.messages[i + 1];
+      if (mediaKinds.includes(msg.kind) && nextMsg && nextMsg.kind === 'delete') {
+        msg.willBeDeleted = true;
       }
     }
 
@@ -4387,10 +4405,13 @@ window.Messenger = {
       img.src = imageSrc;
       img.alt = 'Image';
       img.className = 'ms-msg-image';
-      img.style.cursor = 'pointer';
-      img.addEventListener('click', () => {
-        this.openLightbox(imageSrc, 'image');
-      });
+      // Don't allow click on media that will be deleted
+      if (!msg.willBeDeleted) {
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', () => {
+          this.openLightbox(imageSrc, 'image');
+        });
+      }
       img.addEventListener('load', () => {
         // Cache actual height
         this.virtualScroll.cachedHeights[index] = row.offsetHeight + 8;
@@ -4439,10 +4460,13 @@ window.Messenger = {
       videoContainer.appendChild(playOverlay);
       videoContainer.appendChild(durationEl);
 
-      videoContainer.style.cursor = 'pointer';
-      videoContainer.addEventListener('click', () => {
-        this.openLightbox(videoSrc, 'video');
-      });
+      // Don't allow click on media that will be deleted
+      if (!msg.willBeDeleted) {
+        videoContainer.style.cursor = 'pointer';
+        videoContainer.addEventListener('click', () => {
+          this.openLightbox(videoSrc, 'video');
+        });
+      }
 
       bubble.appendChild(videoContainer);
     } else if (msg.kind === 'audio') {
@@ -4519,26 +4543,29 @@ window.Messenger = {
         progressBar.style.width = '0%';
       });
 
-      playBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (audio.paused) {
-          audio.play();
-          playBtn.innerHTML = '❚❚';
-          playBtn.classList.remove('ms-msg-audio-play--paused');
-        } else {
-          audio.pause();
-          playBtn.innerHTML = '▶';
-          playBtn.classList.add('ms-msg-audio-play--paused');
-        }
-      });
+      // Don't allow audio playback if the message will be deleted
+      if (!msg.willBeDeleted) {
+        playBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (audio.paused) {
+            audio.play();
+            playBtn.innerHTML = '❚❚';
+            playBtn.classList.remove('ms-msg-audio-play--paused');
+          } else {
+            audio.pause();
+            playBtn.innerHTML = '▶';
+            playBtn.classList.add('ms-msg-audio-play--paused');
+          }
+        });
 
-      progressContainer.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const rect = progressContainer.getBoundingClientRect();
-        const clickX = e.clientX - rect.left;
-        const percent = clickX / rect.width;
-        audio.currentTime = percent * audio.duration;
-      });
+        progressContainer.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const rect = progressContainer.getBoundingClientRect();
+          const clickX = e.clientX - rect.left;
+          const percent = clickX / rect.width;
+          audio.currentTime = percent * audio.duration;
+        });
+      }
 
       audioContainer.appendChild(playBtn);
       audioContainer.appendChild(progressContainer);
