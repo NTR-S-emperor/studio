@@ -1949,8 +1949,10 @@ window.Messenger = {
           const line = lines[i];
           const t = line.trim();
 
+          // Check if this line is a speaker line (ends the choices block)
+          // But NOT if the line contains $/ or [ (which are part of choices)
           const speakerMatch = line.match(/^([^:]+)\s*:(.*)$/);
-          if (speakerMatch) {
+          if (speakerMatch && !line.includes('$/') && !line.includes('[')) {
             if (currentChoiceLines.length) {
               const joined = currentChoiceLines.join("\n").trim();
               if (joined) block.options.push(joined);
@@ -1967,12 +1969,19 @@ window.Messenger = {
               currentChoiceLines.push(before);
             }
 
+            const after = line.slice(markerIndex + 2).trim();
+
+            // If after starts with '[', it's a response for THIS choice, include it
+            if (after.startsWith('[')) {
+              currentChoiceLines.push(after);
+            }
+
             const joined = currentChoiceLines.join("\n").trim();
             if (joined) block.options.push(joined);
             currentChoiceLines = [];
 
-            const after = line.slice(markerIndex + 2).trim();
-            if (after) {
+            // Only start next choice if after doesn't start with '['
+            if (after && !after.startsWith('[')) {
               currentChoiceLines.push(after);
             }
           } else {
@@ -1990,6 +1999,30 @@ window.Messenger = {
           const joined = currentChoiceLines.join("\n").trim();
           if (joined) block.options.push(joined);
         }
+
+        // Post-process options to extract responses (format: "Choice text [speaker : response]")
+        block.options = block.options.map(optText => {
+          // Match [speaker : message] pattern
+          const bracketMatch = optText.match(/\[([^\]]+)\]\s*$/);
+          if (bracketMatch) {
+            const choiceText = optText.slice(0, optText.lastIndexOf('[')).trim();
+            const responsePart = bracketMatch[1].trim();
+            // Parse "speaker : message"
+            const colonIndex = responsePart.indexOf(':');
+            if (colonIndex !== -1) {
+              const speaker = responsePart.slice(0, colonIndex).trim().toLowerCase();
+              const message = responsePart.slice(colonIndex + 1).trim();
+              return {
+                text: choiceText,
+                response: { speaker, message }
+              };
+            }
+            // Bracket found but no valid response format
+            return { text: choiceText, response: null };
+          }
+          // No bracket - simple choice
+          return { text: optText, response: null };
+        });
 
         if (block.options.length) {
           choiceBlocks.push(block);
@@ -3232,7 +3265,9 @@ window.Messenger = {
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className = "ms-choice";
-        btn.textContent = opt;
+        // Support both old format (string) and new format (object with text/response)
+        const optText = typeof opt === 'string' ? opt : opt.text;
+        btn.textContent = optText;
 
         btn.addEventListener("click", (e) => {
           const timeSinceDisplay = Date.now() - choicesDisplayedAt;
@@ -3407,7 +3442,7 @@ window.Messenger = {
     this.lightboxEl = lightbox;
   },
 
-  onChoiceSelected(conv, blockIndex, optionText) {
+  onChoiceSelected(conv, blockIndex, option) {
     if (!conv) return;
     if (this.selectedKey !== conv.key) return;
 
@@ -3420,12 +3455,30 @@ window.Messenger = {
         ? conv.fakeChoices[blockIndex]
         : null;
 
+    // Support both old format (string) and new format (object with text/response)
+    const optionText = typeof option === 'string' ? option : option.text;
+    const optionResponse = typeof option === 'object' ? option.response : null;
+
+    // Add MC's choice as a message
     conv.playedMessages.push({
       kind: "talk",
       from: "mc",
       text: optionText,
       chapter: block ? block.chapter : null
     });
+
+    // If there's a response from an interlocutor, add it too
+    if (optionResponse && optionResponse.speaker && optionResponse.message) {
+      // Resolve speaker key (could be abbreviation like "gf" or full name)
+      const speakerKey = this.nameToKey[optionResponse.speaker] || optionResponse.speaker;
+      conv.playedMessages.push({
+        kind: "talk",
+        from: speakerKey === 'mc' ? 'mc' : conv.key,
+        speakerKey: speakerKey,
+        text: optionResponse.message,
+        chapter: block ? block.chapter : null
+      });
+    }
 
     // Save choice for optimized saving
     if (!Array.isArray(conv.choicesMade)) conv.choicesMade = [];
