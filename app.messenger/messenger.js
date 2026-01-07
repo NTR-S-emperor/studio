@@ -725,6 +725,12 @@ window.Messenger = {
         window.unlockSpyApp();
       }
 
+      // Show notification for SpyApp installation
+      if (window.Notifications && window.Notifications.showSpy) {
+        const notifText = window.Translations ? window.Translations.get('notif.spy.installed') : 'SpyApp has been successfully installed';
+        window.Notifications.showSpy(notifText);
+      }
+
       // Move to next message
       conv.scriptIndex += 1;
       this.advanceConversation(conv);
@@ -740,6 +746,42 @@ window.Messenger = {
       // Show notification for new spy content
       if (window.Notifications && window.Notifications.showSpy) {
         const notifText = window.Translations ? window.Translations.get('notif.spy') : 'SpyApp intercepted new content';
+        window.Notifications.showSpy(notifText);
+      }
+
+      // Move to next message
+      conv.scriptIndex += 1;
+      this.advanceConversation(conv);
+      return;
+    }
+
+    // If it's a "spy_unlock_instapics" message, unlock InstaPics on GF's phone
+    if (scriptMsg.kind === "spy_unlock_instapics") {
+      if (typeof window.unlockSpyInstapicsApp === 'function') {
+        window.unlockSpyInstapicsApp();
+      }
+
+      // Show notification for new app detected
+      if (window.Notifications && window.Notifications.showSpy) {
+        const notifText = window.Translations ? window.Translations.get('notif.spy.instapics') : 'New app detected: InstaPics';
+        window.Notifications.showSpy(notifText);
+      }
+
+      // Move to next message
+      conv.scriptIndex += 1;
+      this.advanceConversation(conv);
+      return;
+    }
+
+    // If it's a "spy_unlock_onlyslut" message, unlock OnlySlut on GF's phone
+    if (scriptMsg.kind === "spy_unlock_onlyslut") {
+      if (typeof window.unlockSpyOnlyslutApp === 'function') {
+        window.unlockSpyOnlyslutApp();
+      }
+
+      // Show notification for new app detected
+      if (window.Notifications && window.Notifications.showSpy) {
+        const notifText = window.Translations ? window.Translations.get('notif.spy.onlyslut') : 'New app detected: OnlySlut';
         window.Notifications.showSpy(notifText);
       }
 
@@ -2220,6 +2262,30 @@ window.Messenger = {
         continue;
       }
 
+      // --- SPY UNLOCK INSTAPICS: $spy_unlock_instapics ---
+      if (/^\$spy_unlock_instapics\b/i.test(trimmed)) {
+        flushCurrentMessage();
+
+        rawMessages.push({
+          kind: "spy_unlock_instapics"
+        });
+
+        i++;
+        continue;
+      }
+
+      // --- SPY UNLOCK ONLYSLUT: $spy_unlock_onlyslut ---
+      if (/^\$spy_unlock_onlyslut\b/i.test(trimmed)) {
+        flushCurrentMessage();
+
+        rawMessages.push({
+          kind: "spy_unlock_onlyslut"
+        });
+
+        i++;
+        continue;
+      }
+
       // --- THINKING BLOCK: $thinking ... (until next message) ---
       if (/^\$thinking\b/i.test(trimmed)) {
         flushCurrentMessage();
@@ -2239,7 +2305,7 @@ window.Messenger = {
           }
 
           // Check for other $ commands that would end thinking
-          if (/^\$(status|talks|insta|slut|lock|delete|thinking|spy_unlock|spy_anchor)\b/i.test(thinkTrimmed)) {
+          if (/^\$(status|talks|insta|slut|lock|delete|thinking|spy_unlock|spy_unlock_instapics|spy_unlock_onlyslut|spy_anchor)\b/i.test(thinkTrimmed)) {
             break;
           }
 
@@ -2419,6 +2485,16 @@ window.Messenger = {
         convObj.messages.push({
           kind: "spy_anchor",
           anchor: msg.anchor,
+          filename: filename
+        });
+      } else if (msg.kind === "spy_unlock_instapics") {
+        convObj.messages.push({
+          kind: "spy_unlock_instapics",
+          filename: filename
+        });
+      } else if (msg.kind === "spy_unlock_onlyslut") {
+        convObj.messages.push({
+          kind: "spy_unlock_onlyslut",
           filename: filename
         });
       } else {
@@ -2644,8 +2720,8 @@ window.Messenger = {
         continue;
       }
 
-      // Special messages: skip them (unlocks, locks, thinking, spy_unlock, and spy_anchor are handled separately)
-      if (scriptMsg.kind === "unlock" || scriptMsg.kind === "unlockInsta" || scriptMsg.kind === "unlockSlutOnly" || scriptMsg.kind === "lock" || scriptMsg.kind === "thinking" || scriptMsg.kind === "spy_unlock" || scriptMsg.kind === "spy_anchor") {
+      // Special messages: skip them (unlocks, locks, thinking, spy commands are handled separately)
+      if (scriptMsg.kind === "unlock" || scriptMsg.kind === "unlockInsta" || scriptMsg.kind === "unlockSlutOnly" || scriptMsg.kind === "lock" || scriptMsg.kind === "thinking" || scriptMsg.kind === "spy_unlock" || scriptMsg.kind === "spy_anchor" || scriptMsg.kind === "spy_unlock_instapics" || scriptMsg.kind === "spy_unlock_onlyslut") {
         conv.scriptIndex++;
         continue;
       }

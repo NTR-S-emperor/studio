@@ -47,11 +47,52 @@ window.getUnlockedSpySlut = function() {
 };
 
 /**
+ * Unlocked spy apps (InstaPics and OnlySlut visibility on GF's home screen)
+ * Apps are hidden by default and unlocked via $spy_unlock_instapics / $spy_unlock_onlyslut
+ */
+window.spyAppsUnlocked = {
+  instapics: false,
+  onlyslut: false
+};
+
+/**
+ * Unlock SpyInstaPics app (called via $spy_unlock_instapics in MC's conversations)
+ */
+window.unlockSpyInstapicsApp = function() {
+  window.spyAppsUnlocked.instapics = true;
+};
+
+/**
+ * Unlock SpyOnlySlut app (called via $spy_unlock_onlyslut in MC's conversations)
+ */
+window.unlockSpyOnlyslutApp = function() {
+  window.spyAppsUnlocked.onlyslut = true;
+};
+
+/**
+ * Check if SpyInstaPics app is unlocked
+ */
+window.isSpyInstapicsUnlocked = function() {
+  return window.spyAppsUnlocked.instapics;
+};
+
+/**
+ * Check if SpyOnlySlut app is unlocked
+ */
+window.isSpyOnlyslutUnlocked = function() {
+  return window.spyAppsUnlocked.onlyslut;
+};
+
+/**
  * Reset spy unlocks (called when changing story)
  */
 window.resetSpyUnlocks = function() {
   window.unlockedSpyInsta = [];
   window.unlockedSpySlut = [];
+  window.spyAppsUnlocked = {
+    instapics: false,
+    onlyslut: false
+  };
 };
 
 /**
@@ -230,14 +271,14 @@ window.Spy = {
             <span class="spy-app-icon-label" data-i18n="app.messenger">Messenger</span>
           </button>
 
-          <!-- InstaPics -->
-          <button class="spy-app-icon" data-app="instapics">
+          <!-- InstaPics (hidden by default, unlocked via $spy_unlock_instapics) -->
+          <button class="spy-app-icon" data-app="instapics" id="spyAppInstapics" style="display: none;">
             <img class="spy-app-icon-image" src="assets/apps_icon/instapics.svg" alt="InstaPics">
             <span class="spy-app-icon-label" data-i18n="app.instapics">InstaPics</span>
           </button>
 
-          <!-- OnlySlut -->
-          <button class="spy-app-icon" data-app="onlyslut">
+          <!-- OnlySlut (hidden by default, unlocked via $spy_unlock_onlyslut) -->
+          <button class="spy-app-icon" data-app="onlyslut" id="spyAppOnlyslut" style="display: none;">
             <img class="spy-app-icon-image" src="assets/apps_icon/onlyslut.png" alt="OnlySlut">
             <span class="spy-app-icon-label" data-i18n="app.onlyslut">OnlySlut</span>
           </button>
@@ -370,6 +411,27 @@ window.Spy = {
     const homeScreen = document.getElementById('spyHomeScreen');
     if (homeScreen) {
       homeScreen.style.display = 'grid';
+    }
+
+    // Update app visibility based on unlock state
+    this.updateAppsVisibility();
+  },
+
+  /**
+   * Update visibility of unlockable apps (InstaPics, OnlySlut)
+   */
+  updateAppsVisibility() {
+    const instapicsApp = document.getElementById('spyAppInstapics');
+    const onlyslutApp = document.getElementById('spyAppOnlyslut');
+
+    const instapicsUnlocked = window.spyAppsUnlocked && window.spyAppsUnlocked.instapics;
+    const onlyslutUnlocked = window.spyAppsUnlocked && window.spyAppsUnlocked.onlyslut;
+
+    if (instapicsApp) {
+      instapicsApp.style.display = instapicsUnlocked ? 'flex' : 'none';
+    }
+    if (onlyslutApp) {
+      onlyslutApp.style.display = onlyslutUnlocked ? 'flex' : 'none';
     }
   },
 
@@ -657,6 +719,12 @@ window.SpyMessenger = {
     let fileIndex = 0;
     let stopParsing = false;
 
+    // If anchor is 0, don't parse any content (SpyApp is unlocked but empty)
+    // Content before $spy_anchor_1 requires currentAnchor >= 1
+    if (currentAnchor === 0) {
+      return;
+    }
+
     while (fileIndex < filesToParse.length && !stopParsing) {
       const filename = filesToParse[fileIndex];
 
@@ -755,6 +823,14 @@ window.SpyMessenger = {
               stopParsing = true;
               break;
             }
+            // Add a separator to mark the boundary between anchor sections
+            // This helps users see where "old content" begins when scrolling up
+            if (contactKey && this.conversationsByKey[contactKey]) {
+              this.conversationsByKey[contactKey].messages.push({
+                type: 'separator',
+                anchor: anchor
+              });
+            }
             continue;
           }
 
@@ -780,6 +856,24 @@ window.SpyMessenger = {
             if (window.unlockSpySlut) window.unlockSpySlut(slutMatch[1].trim());
             continue;
           }
+
+          // Handle $delete (simple) - mark previous message as deleted
+          // Note: $delete = XXXX (timed deletion) is disabled in GF's conversations
+          if (trimmed === '$delete') {
+            const msgs = this.conversationsByKey[contactKey]?.messages;
+            if (msgs && msgs.length > 0) {
+              msgs[msgs.length - 1].deleted = true;
+            }
+            continue;
+          }
+
+          // Explicitly ignore disabled commands in GF's conversations:
+          // - $delete = XXXX (timed deletion)
+          // - $choices / $fake.choices (choice system)
+          // - $lock (premium locks)
+          if (trimmed.match(/^\$delete\s*=\s*\d+$/i)) continue;
+          if (trimmed.match(/^\$(fake\.)?choices\s*=/i)) continue;
+          if (trimmed.match(/^\$lock\s*=/i)) continue;
 
           // Skip other $ commands that are not part of messages
           if (trimmed.startsWith('$') && !trimmed.match(/^[^:]+\s*:\s*\$/)) continue;
@@ -1151,6 +1245,14 @@ window.SpyMessenger = {
    * Create HTML for a single message
    */
   createMessageHtml(msg, index, conv, previousSender) {
+    // Handle separator (anchor boundary)
+    if (msg.type === 'separator') {
+      const separatorText = window.Translations
+        ? window.Translations.get('spy.separator.old')
+        : 'Previous content';
+      return `<div class="ms-separator" data-anchor="${msg.anchor}"><span class="ms-separator-text">${separatorText}</span></div>`;
+    }
+
     const isGf = msg.sender === this.gfKey;
     const sideClass = isGf ? 'ms-msg--mc' : 'ms-msg--npc';
     const isFirstOfSeries = msg.sender !== previousSender;
@@ -1179,6 +1281,13 @@ window.SpyMessenger = {
 
     let bubbleContent = '';
     let bubbleClass = 'ms-msg-bubble';
+
+    // Handle deleted messages
+    if (msg.deleted) {
+      bubbleClass += ' ms-msg-bubble--deleted';
+      bubbleContent = `${speakerHtml}<em>Message deleted</em>`;
+      return `<div class="ms-msg ${sideClass} ${firstClass}" data-msg-index="${index}">${avatarHtml}<div class="${bubbleClass}">${bubbleContent}</div></div>`;
+    }
 
     if (msg.kind === 'image') {
       bubbleClass += ' ms-msg-bubble--image';
@@ -1276,7 +1385,9 @@ window.SpyMessenger = {
     const heights = this.virtualScroll.estimatedHeights;
     let height = heights.spacerMin;
 
-    if (msg.kind === 'image') {
+    if (msg.deleted) {
+      height += 40;
+    } else if (msg.kind === 'image') {
       height += heights.image;
     } else if (msg.kind === 'video') {
       height += heights.video;

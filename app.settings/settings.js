@@ -1262,12 +1262,27 @@ window.Settings = {
 
         // Reset spy global state
         window.currentSpyAnchor = 0;
-        window.unlockedSpyInsta = [];
-        window.unlockedSpySlut = [];
+
+        // Reset spy unlocks (posts + app visibility)
+        if (window.resetSpyUnlocks) {
+            window.resetSpyUnlocks();
+        } else {
+            window.unlockedSpyInsta = [];
+            window.unlockedSpySlut = [];
+            window.spyAppsUnlocked = { instapics: false, onlyslut: false };
+        }
 
         // Reset and hide spy app
         if (window.resetSpyAppState) {
             window.resetSpyAppState();
+        }
+
+        // Force SpyMessenger to reload data next time SpyApp opens
+        if (window.SpyMessenger) {
+            window.SpyMessenger.dataLoaded = false;
+            window.SpyMessenger.parsedFiles = [];
+            window.SpyMessenger.conversationsByKey = {};
+            window.SpyMessenger.conversations = [];
         }
 
         this.closeResetModal();

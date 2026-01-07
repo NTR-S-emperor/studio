@@ -181,12 +181,13 @@ window.SavesLoad = {
         }
 
         // Spy app state (sp=spy)
-        // u=unlocked, a=anchor, i=instaPosts, o=slutPosts
+        // u=unlocked, a=anchor, i=instaPosts, o=slutPosts, apps=spyAppsUnlocked
         progress.sp = {
             u: window.spyAppUnlocked || false,
             a: window.currentSpyAnchor || 0,
             i: [...(window.unlockedSpyInsta || [])],
-            o: [...(window.unlockedSpySlut || [])]
+            o: [...(window.unlockedSpySlut || [])],
+            apps: window.spyAppsUnlocked ? { ...window.spyAppsUnlocked } : { instapics: false, onlyslut: false }
         };
 
         return progress;
@@ -526,6 +527,7 @@ window.SavesLoad = {
             window.currentSpyAnchor = sp.a || 0;
             window.unlockedSpyInsta = [...(sp.i || [])];
             window.unlockedSpySlut = [...(sp.o || [])];
+            window.spyAppsUnlocked = sp.apps ? { ...sp.apps } : { instapics: false, onlyslut: false };
 
             // Update home screen to show/hide spy icon
             const spyBtn = document.getElementById('openSpyBtn');

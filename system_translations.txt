@@ -217,6 +217,10 @@
 
 @notif.now: EN= now | FR= maintenant
 @notif.spy: EN= New content available | FR= Du nouveau contenu est disponible
+@notif.spy.installed: EN= SpyApp has been successfully installed | FR= SpyApp a été installé avec succès
+@notif.spy.instapics: EN= New app detected: InstaPics | FR= Nouvelle application détectée : InstaPics
+@notif.spy.onlyslut: EN= New app detected: OnlySlut | FR= Nouvelle application détectée : OnlySlut
+@spy.separator.old: EN= Previous content | FR= Contenu précédent
 
 
 # ============================================================================

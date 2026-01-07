@@ -23,6 +23,8 @@
         { term: '$/', description: 'Separate thought bubbles', page: 'messenger.html', anchor: '#thinking' },
         { term: '@typing', description: 'Typing indicator effect', page: 'messenger.html', anchor: '#commands' },
         { term: '$spy_unlock', description: 'Unlock the Spy App', page: 'spy.html', anchor: '#unlock' },
+        { term: '$spy_unlock_instapics', description: 'Show InstaPics on GF phone', page: 'spy.html', anchor: '#unlock' },
+        { term: '$spy_unlock_onlyslut', description: 'Show OnlySlut on GF phone', page: 'spy.html', anchor: '#unlock' },
         { term: '$spy_anchor', description: 'Set visibility anchor point', page: 'spy.html', anchor: '#anchors' },
         { term: '(liked)', description: 'Indicate GF liked the post', page: 'spy.html', anchor: '#gf-social' },
         { term: 'path', description: 'Narrative choice branch', page: 'messenger.html', anchor: '#choices' },
