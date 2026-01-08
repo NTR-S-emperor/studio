@@ -1,0 +1,12 @@
+<svg clip-rule="evenodd" fill-rule="evenodd" height="1.707in" image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" viewBox="0 0 1707 1707" width="1.707in" xmlns="http://www.w3.org/2000/svg">
+  <g id="Layer_x0020_1">
+    <!-- Off-white border circle -->
+    <circle cx="853.5" cy="853.5" r="700" fill="#F5F5F0"/>
+    <!-- Red background circle -->
+    <circle cx="853.5" cy="853.5" r="620" fill="#B8293D"/>
+    <!-- Exclamation mark bar -->
+    <rect x="793.5" y="400" width="120" height="500" rx="60" fill="#F5F5F0"/>
+    <!-- Exclamation mark dot -->
+    <circle cx="853.5" cy="1100" r="85" fill="#F5F5F0"/>
+  </g>
+</svg>

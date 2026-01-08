@@ -495,6 +495,11 @@ function initApp() {
   const openTipsBtn      = document.getElementById('openTipsBtn');      // Tips icon
   const spyScreen        = document.getElementById('spyScreen');        // Spy app screen
   const openSpyBtn       = document.getElementById('openSpyBtn');       // Spy icon
+  const disclaimerPopup  = document.getElementById('disclaimerPopup');  // Disclaimer popup
+  const openDisclaimerBtn = document.getElementById('openDisclaimerBtn'); // Disclaimer icon
+  const closeDisclaimerPopup = document.getElementById('closeDisclaimerPopup'); // Close disclaimer btn
+  const disclaimerAgreeBtn = document.getElementById('disclaimerAgreeBtn'); // Agree btn
+  const disclaimerDisagreeBtn = document.getElementById('disclaimerDisagreeBtn'); // Disagree btn
 
   function showHomeScreen() {
     if (!homeScreen) return;
@@ -942,6 +947,43 @@ function initApp() {
       if (window.Tips && typeof window.Tips.onOpen === 'function') {
         window.Tips.onOpen();
       }
+    });
+  }
+
+  // Click on Disclaimer icon: open the popup
+  if (openDisclaimerBtn && disclaimerPopup) {
+    openDisclaimerBtn.addEventListener('click', () => {
+      disclaimerPopup.classList.remove('hidden');
+      // Trigger reflow for transition
+      void disclaimerPopup.offsetWidth;
+      disclaimerPopup.classList.add('visible');
+    });
+  }
+
+  // Close disclaimer popup (X button)
+  if (closeDisclaimerPopup && disclaimerPopup) {
+    closeDisclaimerPopup.addEventListener('click', () => {
+      disclaimerPopup.classList.remove('visible');
+      setTimeout(() => {
+        disclaimerPopup.classList.add('hidden');
+      }, 300);
+    });
+  }
+
+  // Disclaimer agree button: close popup and continue
+  if (disclaimerAgreeBtn && disclaimerPopup) {
+    disclaimerAgreeBtn.addEventListener('click', () => {
+      disclaimerPopup.classList.remove('visible');
+      setTimeout(() => {
+        disclaimerPopup.classList.add('hidden');
+      }, 300);
+    });
+  }
+
+  // Disclaimer disagree button: redirect to Google
+  if (disclaimerDisagreeBtn) {
+    disclaimerDisagreeBtn.addEventListener('click', () => {
+      window.location.href = 'https://www.google.com';
     });
   }
 

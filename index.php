@@ -99,10 +99,28 @@ function v($path) {
         <div class="age-disclaimer hidden" id="ageDisclaimer">
           <div class="age-disclaimer-box">
             <p class="age-disclaimer-text">Before continuing, you must confirm that you are of legal age in your country to access mature content.</p>
+            <p class="age-disclaimer-legal">
+              All characters depicted are entirely fictional and are 18 years of age or older. Any resemblance to real persons, living or dead, is purely coincidental.<br><br>
+              All scenarios portrayed involve consenting adults. Any beverages shown do not contain alcohol. Any scenes that may appear to depict coercion are purely fictional; all interactions are fully consensual between all participants.
+            </p>
             <div class="age-disclaimer-buttons">
               <button type="button" class="age-disclaimer-btn age-disclaimer-yes" id="ageYesBtn">Yes, I confirm</button>
               <button type="button" class="age-disclaimer-btn age-disclaimer-no" id="ageNoBtn">No</button>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DISCLAIMER POPUP (opened from app icon) -->
+      <div class="disclaimer-popup hidden" id="disclaimerPopup">
+        <div class="disclaimer-popup-box">
+          <button type="button" class="disclaimer-popup-close" id="closeDisclaimerPopup">&times;</button>
+          <h3 class="disclaimer-popup-title" data-i18n="disclaimer.title">Disclaimer</h3>
+          <p class="disclaimer-popup-text" data-i18n="disclaimer.text1">All characters depicted are entirely fictional and are 18 years of age or older. Any resemblance to real persons, living or dead, is purely coincidental.</p>
+          <p class="disclaimer-popup-text" data-i18n="disclaimer.text2">All scenarios portrayed involve consenting adults. Any beverages shown do not contain alcohol. Any scenes that may appear to depict coercion are purely fictional; all interactions are fully consensual between all participants.</p>
+          <div class="disclaimer-popup-buttons">
+            <button type="button" class="disclaimer-popup-btn disclaimer-agree" id="disclaimerAgreeBtn" data-i18n="disclaimer.agree">I still agree</button>
+            <button type="button" class="disclaimer-popup-btn disclaimer-disagree" id="disclaimerDisagreeBtn" data-i18n="disclaimer.disagree">I no longer agree</button>
           </div>
         </div>
       </div>
@@ -158,15 +176,7 @@ function v($path) {
               <!-- desktop screen (icons) -->
               <div class="apps-grid" id="homeScreen">
 
-                <!-- 1. SETTINGS -->
-                <button class="app-icon app-settings">
-                  <div class="app-icon-image">
-                    <img src="<?= v('assets/apps_icon/settings.png') ?>" alt="Settings">
-                  </div>
-                  <span class="app-icon-label" data-i18n="app.settings">Settings</span>
-                </button>
-
-                <!-- 2. MESSENGER -->
+                <!-- 1. MESSENGER -->
                 <button class="app-icon app-messenger" id="openMessengerBtn">
                   <div class="app-icon-image">
                     <img src="<?= v('assets/apps_icon/messenger.svg') ?>" alt="Messenger">
@@ -174,7 +184,7 @@ function v($path) {
                   <span class="app-icon-label" data-i18n="app.messenger">Messenger</span>
                 </button>
 
-                <!-- 3. INSTAPICS -->
+                <!-- 2. INSTAPICS -->
                 <button class="app-icon app-instapics" id="openInstapicsBtn">
                   <div class="app-icon-image">
                     <img src="<?= v('assets/apps_icon/instapics.svg') ?>" alt="InstaPics">
@@ -182,7 +192,7 @@ function v($path) {
                   <span class="app-icon-label" data-i18n="app.instapics">InstaPics</span>
                 </button>
 
-                <!-- 4. ONLYSLUT -->
+                <!-- 3. ONLYSLUT -->
                 <button class="app-icon app-onlyslut" id="openOnlySlutBtn">
                   <div class="app-icon-image">
                     <img src="<?= v('assets/apps_icon/onlyslut.png') ?>" alt="OnlySlut">
@@ -190,20 +200,28 @@ function v($path) {
                   <span class="app-icon-label" data-i18n="app.onlyslut">OnlySlut</span>
                 </button>
 
-                <!-- 5. SAVES & LOAD -->
-                <button class="app-icon app-savesload" id="openSavesLoadBtn">
-                  <div class="app-icon-image">
-                    <img src="<?= v('assets/apps_icon/savesload.svg') ?>" alt="Saves">
-                  </div>
-                  <span class="app-icon-label" data-i18n="app.saves">Saves</span>
-                </button>
-
-                <!-- 6. GALLERY -->
+                <!-- 4. GALLERY -->
                 <button class="app-icon app-gallery" id="openGalleryBtn">
                   <div class="app-icon-image">
                     <img src="<?= v('assets/apps_icon/gallery.png') ?>" alt="Gallery">
                   </div>
                   <span class="app-icon-label" data-i18n="app.gallery">Gallery</span>
+                </button>
+
+                <!-- 5. SETTINGS -->
+                <button class="app-icon app-settings">
+                  <div class="app-icon-image">
+                    <img src="<?= v('assets/apps_icon/settings.png') ?>" alt="Settings">
+                  </div>
+                  <span class="app-icon-label" data-i18n="app.settings">Settings</span>
+                </button>
+
+                <!-- 6. SAVES & LOAD -->
+                <button class="app-icon app-savesload" id="openSavesLoadBtn">
+                  <div class="app-icon-image">
+                    <img src="<?= v('assets/apps_icon/savesload.svg') ?>" alt="Saves">
+                  </div>
+                  <span class="app-icon-label" data-i18n="app.saves">Saves</span>
                 </button>
 
                 <!-- 7. PATREON -->
@@ -222,7 +240,15 @@ function v($path) {
                   <span class="app-icon-label" data-i18n="app.tips">Tips</span>
                 </button>
 
-                <!-- 9. SPY (hidden by default, shown when unlocked) -->
+                <!-- 9. DISCLAIMER -->
+                <button class="app-icon app-disclaimer" id="openDisclaimerBtn">
+                  <div class="app-icon-image">
+                    <img src="<?= v('assets/apps_icon/disclaimer.svg') ?>" alt="Disclaimer">
+                  </div>
+                  <span class="app-icon-label" data-i18n="app.disclaimer">Disclaimer</span>
+                </button>
+
+                <!-- 10. SPY (hidden by default, shown when unlocked) -->
                 <button class="app-icon app-spy hidden" id="openSpyBtn">
                   <div class="app-icon-image app-icon-spy-svg">
                     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

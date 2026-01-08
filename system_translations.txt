@@ -35,6 +35,7 @@
 @app.patreon: EN= Patreon | FR= Patreon
 @app.tips: EN= Tips | FR= Tips
 @app.spy: EN= Spy | FR= Spy
+@app.disclaimer: EN= Disclaimer | FR= Disclaimer
 
 
 # ============================================================================
@@ -232,6 +233,17 @@
 @lock.placeholder: EN= Enter your code | FR= Entre ton code
 @lock.confirm: EN= Confirm | FR= Confirmer
 @lock.orhigher: EN= or higher | FR= ou supérieur
+
+
+# ============================================================================
+# DISCLAIMER POPUP
+# ============================================================================
+
+@disclaimer.title: EN= Disclaimer | FR= Avertissement
+@disclaimer.text1: EN= All characters depicted are entirely fictional and are 18 years of age or older. Any resemblance to real persons, living or dead, is purely coincidental. | FR= Tous les personnages représentés sont entièrement fictifs et sont âgés de 18 ans ou plus. Toute ressemblance avec des personnes réelles, vivantes ou décédées, serait purement fortuite.
+@disclaimer.text2: EN= All scenarios portrayed involve consenting adults. Any beverages shown do not contain alcohol. Any scenes that may appear to depict coercion are purely fictional; all interactions are fully consensual between all participants. | FR= Tous les scénarios présentés impliquent des adultes consentants. Les boissons présentées ne contiennent pas d'alcool. Toute scène pouvant sembler représenter une contrainte est purement fictive ; toutes les interactions sont entièrement consenties par l'ensemble des participants.
+@disclaimer.agree: EN= I still agree | FR= Je suis toujours d'accord
+@disclaimer.disagree: EN= I no longer agree | FR= Je ne suis plus d'accord
 
 
 # ============================================================================

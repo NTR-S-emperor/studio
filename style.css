@@ -191,6 +191,15 @@ body.app-body {
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.9);
   text-align: center;
+  margin: 0 0 16px;
+  font-family: 'Fredoka', sans-serif;
+}
+
+.age-disclaimer-legal {
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
+  text-align: center;
   margin: 0 0 20px;
   font-family: 'Fredoka', sans-serif;
 }
@@ -233,6 +242,113 @@ body.app-body {
 
 .age-disclaimer-no:hover {
   background: rgba(255, 255, 255, 0.15);
+}
+
+/* ===== DISCLAIMER POPUP ===== */
+.disclaimer-popup {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.disclaimer-popup.visible {
+  opacity: 1;
+}
+
+.disclaimer-popup.hidden {
+  display: none;
+}
+
+.disclaimer-popup-box {
+  position: relative;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 320px;
+  margin: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.disclaimer-popup-close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.disclaimer-popup-close:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.disclaimer-popup-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  text-align: center;
+  margin: 0 0 16px;
+  font-family: 'Fredoka', sans-serif;
+}
+
+.disclaimer-popup-text {
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  margin: 0 0 12px;
+  font-family: 'Fredoka', sans-serif;
+}
+
+.disclaimer-popup-text:last-of-type {
+  margin-bottom: 20px;
+}
+
+.disclaimer-popup-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.disclaimer-popup-btn {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Fredoka', sans-serif;
+}
+
+.disclaimer-popup-btn:hover {
+  opacity: 0.9;
+}
+
+.disclaimer-popup-btn:active {
+  transform: scale(0.97);
+}
+
+.disclaimer-agree {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+}
+
+.disclaimer-disagree {
+  background: linear-gradient(135deg, #e94560 0%, #c73e54 100%);
+  color: #fff;
 }
 
 /* ===== PHONE SHELL ===== */
