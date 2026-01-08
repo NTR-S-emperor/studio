@@ -403,6 +403,11 @@ window.Spy = {
   showHomeScreen() {
     this.currentScreen = 'home';
 
+    // Reset SpyMessenger thinking state when leaving messenger
+    if (window.SpyMessenger && window.SpyMessenger.resetThinking) {
+      window.SpyMessenger.resetThinking();
+    }
+
     // Hide all app screens
     const screens = this.root.querySelectorAll('.spy-app-screen');
     screens.forEach(s => s.classList.remove('active'));
@@ -576,6 +581,19 @@ window.SpyMessenger = {
 
   // Colors for group participants (same as MC)
   groupColors: ['#60a5fa', '#f472b6', '#34d399', '#fbbf24', '#a78bfa', '#fb923c'],
+
+  // Thinking overlay state
+  thinking: {
+    active: false,
+    blocks: [],
+    currentBlockIndex: 0,
+    triggerElement: null,
+    overlayEl: null,
+    scrollLocked: false
+  },
+
+  // Intersection Observer for thinking triggers
+  thinkingObserver: null,
 
   /**
    * Preload data only (characters + conversations) without rendering UI
@@ -867,6 +885,56 @@ window.SpyMessenger = {
             continue;
           }
 
+          // Handle $thinking blocks - GF's inner thoughts
+          if (/^\$thinking\b/i.test(trimmed)) {
+            const thinkingLines = [];
+
+            // Collect all lines until we hit a normal message or another command
+            while (i < lines.length) {
+              const thinkLine = lines[i];
+              const thinkTrimmed = thinkLine.trim();
+
+              // Check if this line is a normal message (key : text)
+              if (/^([^:]+)\s*:(.*)$/.test(thinkLine) && !thinkTrimmed.startsWith('$')) {
+                break;
+              }
+
+              // Check for other $ commands that would end thinking
+              if (/^\$(status|talks|insta|slut|lock|delete|thinking|spy_unlock|spy_anchor)\b/i.test(thinkTrimmed)) {
+                break;
+              }
+
+              thinkingLines.push(thinkLine);
+              i++;
+            }
+
+            // Parse thinking blocks separated by $/
+            const thinkingText = thinkingLines.join('\n');
+            const blocks = thinkingText.split(/\$\//).map(block => block.trim()).filter(block => block.length > 0);
+
+            if (blocks.length > 0 && contactKey && this.conversationsByKey[contactKey]) {
+              // Replace $gf and $mc in thinking blocks
+              const processedBlocks = blocks.map(block => {
+                if (window.customCharacterNames) {
+                  if (window.customCharacterNames[this.gfKey]) {
+                    block = block.replace(/\$gf/gi, window.customCharacterNames[this.gfKey]);
+                  }
+                  if (window.customCharacterNames['mc']) {
+                    block = block.replace(/\$mc/gi, window.customCharacterNames['mc']);
+                  }
+                }
+                return block;
+              });
+
+              this.conversationsByKey[contactKey].messages.push({
+                kind: 'thinking',
+                blocks: processedBlocks,
+                sender: this.gfKey // Thinking is from GF's perspective
+              });
+            }
+            continue;
+          }
+
           // Explicitly ignore disabled commands in GF's conversations:
           // - $delete = XXXX (timed deletion)
           // - $choices / $fake.choices (choice system)
@@ -1085,6 +1153,9 @@ window.SpyMessenger = {
    * Select a conversation (show in chat panel)
    */
   selectConversation(key) {
+    // Reset thinking state when changing conversation
+    this.resetThinking();
+
     this.selectedKey = key;
 
     const conv = this.conversations.find(c => c.key === key);
@@ -1189,6 +1260,9 @@ window.SpyMessenger = {
     this.chatMessagesEl.innerHTML = html;
     this.bindMediaEvents();
     this.chatMessagesEl.scrollTop = this.chatMessagesEl.scrollHeight;
+
+    // Initialize thinking observer after messages are rendered
+    this.initThinkingObserver();
   },
 
   /**
@@ -1238,6 +1312,9 @@ window.SpyMessenger = {
       this.chatMessagesEl.scrollTop = this.chatMessagesEl.scrollHeight;
     }
 
+    // Initialize thinking observer after messages are rendered
+    this.initThinkingObserver();
+
     return true;
   },
 
@@ -1251,6 +1328,12 @@ window.SpyMessenger = {
         ? window.Translations.get('spy.separator.old')
         : 'Previous content';
       return `<div class="ms-separator" data-anchor="${msg.anchor}"><span class="ms-separator-text">${separatorText}</span></div>`;
+    }
+
+    // Handle thinking trigger (invisible element that triggers the overlay when scrolled into view)
+    if (msg.kind === 'thinking') {
+      const blocksData = encodeURIComponent(JSON.stringify(msg.blocks));
+      return `<div class="spy-thinking-trigger" data-msg-index="${index}" data-thinking-blocks="${blocksData}" data-thinking-seen="false"></div>`;
     }
 
     const isGf = msg.sender === this.gfKey;
@@ -1336,6 +1419,9 @@ window.SpyMessenger = {
     if (!this.virtualScroll.enabled) return;
     if (!this.chatMessagesEl || !this.currentConversation) return;
 
+    // Don't update virtual scroll while thinking is active (scroll is locked)
+    if (this.thinking.active) return;
+
     const messages = this.currentConversation.messages;
     if (!messages || messages.length < 100) return;
 
@@ -1380,6 +1466,16 @@ window.SpyMessenger = {
   estimateMessageHeight(msg, index) {
     if (this.virtualScroll.cachedHeights[index] !== undefined) {
       return this.virtualScroll.cachedHeights[index];
+    }
+
+    // Thinking triggers have no visual height
+    if (msg.kind === 'thinking') {
+      return 0;
+    }
+
+    // Separators have minimal height
+    if (msg.type === 'separator') {
+      return 40;
     }
 
     const heights = this.virtualScroll.estimatedHeights;
@@ -1815,6 +1911,213 @@ window.SpyMessenger = {
     }
     const generalVolume = window.getGeneralVolume ? window.getGeneralVolume() : 1.0;
     return mediaVolume * generalVolume;
+  },
+
+  // ============================================================
+  // THINKING OVERLAY SYSTEM
+  // Displays GF's inner thoughts when scrolling through messages
+  // ============================================================
+
+  /**
+   * Initialize Intersection Observer for thinking triggers
+   * Triggers when element reaches middle of the visible area
+   */
+  initThinkingObserver() {
+    // Cleanup existing observer
+    if (this.thinkingObserver) {
+      this.thinkingObserver.disconnect();
+    }
+
+    if (!this.chatMessagesEl) return;
+
+    // Create observer that triggers when element reaches ~75% of viewport height
+    this.thinkingObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const trigger = entry.target;
+            // Only trigger if not already seen and no thinking is active
+            if (trigger.dataset.thinkingSeen === 'false' && !this.thinking.active) {
+              this.onThinkingTriggerInView(trigger);
+            }
+          }
+        }
+      },
+      {
+        root: this.chatMessagesEl,
+        // rootMargin: top and bottom margins to create a "trigger zone" at 3/4 of viewport
+        // -70% top, -20% bottom = triggers when element is around 70-80% from top
+        rootMargin: '-70% 0px -20% 0px',
+        threshold: 0
+      }
+    );
+
+    // Observe all thinking triggers
+    const triggers = this.chatMessagesEl.querySelectorAll('.spy-thinking-trigger[data-thinking-seen="false"]');
+    triggers.forEach(trigger => {
+      this.thinkingObserver.observe(trigger);
+    });
+  },
+
+  /**
+   * Called when a thinking trigger scrolls into the middle of the view
+   */
+  onThinkingTriggerInView(triggerEl) {
+    // Mark as seen so it won't trigger again
+    triggerEl.dataset.thinkingSeen = 'true';
+
+    // Stop observing this element
+    if (this.thinkingObserver) {
+      this.thinkingObserver.unobserve(triggerEl);
+    }
+
+    // Parse the blocks data
+    try {
+      const blocksData = triggerEl.dataset.thinkingBlocks;
+      const blocks = JSON.parse(decodeURIComponent(blocksData));
+
+      if (blocks && blocks.length > 0) {
+        this.showThinkingOverlay(blocks, triggerEl);
+      }
+    } catch (e) {
+      console.error('SpyMessenger: Failed to parse thinking blocks', e);
+    }
+  },
+
+  /**
+   * Show the thinking overlay and lock scroll
+   */
+  showThinkingOverlay(blocks, triggerEl) {
+    this.thinking.active = true;
+    this.thinking.blocks = blocks;
+    this.thinking.currentBlockIndex = 0;
+    this.thinking.triggerElement = triggerEl;
+
+    // Lock scroll
+    this.lockScroll();
+
+    // Create and show overlay
+    this.renderThinkingOverlay();
+  },
+
+  /**
+   * Render/update the thinking overlay
+   */
+  renderThinkingOverlay() {
+    // Remove existing overlay
+    if (this.thinking.overlayEl) {
+      this.thinking.overlayEl.remove();
+    }
+
+    const blocks = this.thinking.blocks;
+    const currentIndex = this.thinking.currentBlockIndex;
+    const isLastBlock = currentIndex >= blocks.length - 1;
+    const currentText = blocks[currentIndex] || '';
+
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'spy-thinking-overlay';
+
+    // Create bubble
+    const bubble = document.createElement('div');
+    bubble.className = 'spy-thinking-bubble';
+
+    // Text content
+    const textEl = document.createElement('div');
+    textEl.className = 'spy-thinking-text';
+    textEl.textContent = currentText;
+    bubble.appendChild(textEl);
+
+    // Action button (arrow for next, X for close)
+    const actionBtn = document.createElement('button');
+    actionBtn.className = 'spy-thinking-action';
+    actionBtn.type = 'button';
+
+    if (isLastBlock) {
+      // Close button (X)
+      actionBtn.classList.add('spy-thinking-action--close');
+      actionBtn.innerHTML = '&times;';
+      actionBtn.setAttribute('aria-label', 'Close');
+      actionBtn.addEventListener('click', () => this.closeThinkingOverlay());
+    } else {
+      // Next button (arrow)
+      actionBtn.classList.add('spy-thinking-action--next');
+      actionBtn.innerHTML = '&#8250;'; // Right arrow ›
+      actionBtn.setAttribute('aria-label', 'Next');
+      actionBtn.addEventListener('click', () => this.nextThinkingBlock());
+    }
+    bubble.appendChild(actionBtn);
+
+    overlay.appendChild(bubble);
+
+    // Add to chat section
+    const chatSection = this.container.querySelector('.ms-chat');
+    if (chatSection) {
+      chatSection.appendChild(overlay);
+    } else if (this.chatMessagesEl && this.chatMessagesEl.parentElement) {
+      this.chatMessagesEl.parentElement.appendChild(overlay);
+    }
+
+    this.thinking.overlayEl = overlay;
+  },
+
+  /**
+   * Go to next thinking block
+   */
+  nextThinkingBlock() {
+    if (this.thinking.currentBlockIndex < this.thinking.blocks.length - 1) {
+      this.thinking.currentBlockIndex++;
+      this.renderThinkingOverlay();
+    }
+  },
+
+  /**
+   * Close the thinking overlay and unlock scroll
+   */
+  closeThinkingOverlay() {
+    // Remove overlay
+    if (this.thinking.overlayEl) {
+      this.thinking.overlayEl.remove();
+      this.thinking.overlayEl = null;
+    }
+
+    // Reset state
+    this.thinking.active = false;
+    this.thinking.blocks = [];
+    this.thinking.currentBlockIndex = 0;
+    this.thinking.triggerElement = null;
+
+    // Unlock scroll
+    this.unlockScroll();
+  },
+
+  /**
+   * Lock scroll on chat messages container
+   */
+  lockScroll() {
+    if (!this.chatMessagesEl) return;
+    this.thinking.scrollLocked = true;
+    this.chatMessagesEl.style.overflow = 'hidden';
+  },
+
+  /**
+   * Unlock scroll on chat messages container
+   */
+  unlockScroll() {
+    if (!this.chatMessagesEl) return;
+    this.thinking.scrollLocked = false;
+    this.chatMessagesEl.style.overflow = '';
+  },
+
+  /**
+   * Reset thinking state (called when changing conversation or leaving spy messenger)
+   */
+  resetThinking() {
+    this.closeThinkingOverlay();
+    if (this.thinkingObserver) {
+      this.thinkingObserver.disconnect();
+      this.thinkingObserver = null;
+    }
   }
 };
 

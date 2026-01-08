@@ -492,3 +492,109 @@
   letter-spacing: 0.5px;
   white-space: nowrap;
 }
+
+/* ===== SPY THINKING OVERLAY ===== */
+/* GF's inner thoughts displayed when scrolling through messages */
+
+/* Invisible trigger element - has no visual appearance */
+.spy-thinking-trigger {
+  height: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  visibility: hidden;
+}
+
+/* Overlay container - covers the chat area */
+.spy-thinking-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+  padding: 20px;
+  animation: spy-thinking-fade-in 0.2s ease-out;
+}
+
+@keyframes spy-thinking-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Thinking bubble */
+.spy-thinking-bubble {
+  position: relative;
+  max-width: 85%;
+  background: rgba(0, 0, 0, 0.92);
+  color: #ffffff;
+  padding: 16px 38px 16px 22px;
+  font-size: 13px;
+  line-height: 1.55;
+  font-style: italic;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  animation: spy-thinking-bubble-in 0.25s ease-out;
+}
+
+@keyframes spy-thinking-bubble-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Text content */
+.spy-thinking-text {
+  white-space: pre-line;
+  word-wrap: break-word;
+}
+
+/* Action button (close X or next arrow) */
+.spy-thinking-action {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  line-height: 1;
+  transition: all 0.15s ease;
+}
+
+.spy-thinking-action:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+/* Close button (X) */
+.spy-thinking-action--close {
+  font-size: 18px;
+}
+
+/* Next button (arrow) - more subtle */
+.spy-thinking-action--next {
+  font-size: 20px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.spy-thinking-action--next:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
