@@ -425,7 +425,7 @@
   border-radius: 999px;
   border: 1.6px solid rgba(0, 0, 0, 0.22);
   background: rgba(0, 0, 0, 0.36);
-  background-image: url("../assets/messenger/send_message.svg");
+  /* background-image set via JavaScript for cache-busting */
   background-repeat: no-repeat;
   background-position: 65% 50%;
   background-size: 59%;

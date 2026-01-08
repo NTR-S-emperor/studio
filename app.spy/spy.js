@@ -206,6 +206,16 @@ window.Spy = {
   gfKey: null, // Will be set from customizableCharacterInfo
 
   /**
+   * Get URL with cache-busting hash from manifest
+   */
+  getCacheBustedUrl(url) {
+    if (window.getAssetUrl) {
+      return window.getAssetUrl(url);
+    }
+    return url;
+  },
+
+  /**
    * Initialize the Spy app
    */
   async init(storyBasePath) {
@@ -395,6 +405,13 @@ window.Spy = {
         btn.addEventListener('click', () => this.showHomeScreen());
       }
     });
+
+    // Apply GF wallpaper with cache-busting
+    const homeScreen = document.getElementById('spyHomeScreen');
+    if (homeScreen) {
+      const wallpaperUrl = this.getCacheBustedUrl('assets/wallpapers/gfwallpaper.png');
+      homeScreen.style.backgroundImage = `url('${wallpaperUrl}')`;
+    }
   },
 
   /**
@@ -1087,6 +1104,13 @@ window.SpyMessenger = {
     // Apply translations
     if (window.Translations && window.Translations.updateDOM) {
       window.Translations.updateDOM();
+    }
+
+    // Apply texture background with cache-busting
+    const messengerApp = this.container.querySelector('.spy-messenger-app');
+    if (messengerApp) {
+      const textureUrl = window.getAssetUrl ? window.getAssetUrl('assets/messenger/texture.png') : 'assets/messenger/texture.png';
+      messengerApp.style.backgroundImage = `url('${textureUrl}')`;
     }
 
     // Auto-select the first (most recent) conversation

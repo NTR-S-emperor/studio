@@ -447,7 +447,11 @@ window.Messenger = {
     this.chatInputMainEl    = root.querySelector('.ms-chat-input-main');
     this.chatSendBtnEl      = root.querySelector('.ms-chat-send-btn');
 
+    // Apply send button icon with cache-busting
     if (this.chatSendBtnEl) {
+      const sendIconUrl = this.getCacheBustedUrl('assets/messenger/send_message.svg');
+      this.chatSendBtnEl.style.backgroundImage = `url('${sendIconUrl}')`;
+
       this.chatSendBtnEl.addEventListener('click', () => {
         this.onSendButtonClick();
       });
