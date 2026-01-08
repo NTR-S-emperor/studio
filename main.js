@@ -529,6 +529,11 @@ function initApp() {
   function showInstapics() {
     if (!homeScreen || !instapicsScreen) return;
 
+    // Pause Messenger autoplay when leaving
+    if (window.Messenger && typeof window.Messenger.onClose === 'function') {
+      window.Messenger.onClose();
+    }
+
     homeScreen.classList.add('hidden');
     instapicsScreen.classList.remove('hidden');
     if (onlyslutScreen) onlyslutScreen.classList.add('hidden');
@@ -554,6 +559,11 @@ function initApp() {
   // OnlySlut screen with white background (like InstaPics)
   function showOnlySlut() {
     if (!homeScreen || !onlyslutScreen) return;
+
+    // Pause Messenger autoplay when leaving
+    if (window.Messenger && typeof window.Messenger.onClose === 'function') {
+      window.Messenger.onClose();
+    }
 
     homeScreen.classList.add('hidden');
     onlyslutScreen.classList.remove('hidden');
@@ -607,6 +617,11 @@ function initApp() {
   function showGallery() {
     if (!homeScreen || !galleryScreen) return;
 
+    // Pause Messenger autoplay when leaving
+    if (window.Messenger && typeof window.Messenger.onClose === 'function') {
+      window.Messenger.onClose();
+    }
+
     homeScreen.classList.add('hidden');
     galleryScreen.classList.remove('hidden');
     if (instapicsScreen) instapicsScreen.classList.add('hidden');
@@ -632,6 +647,11 @@ function initApp() {
   // new function: Saves & Load screen with dark background (like Messenger)
   function showSavesLoad() {
     if (!homeScreen || !savesloadScreen) return;
+
+    // Pause Messenger autoplay when leaving
+    if (window.Messenger && typeof window.Messenger.onClose === 'function') {
+      window.Messenger.onClose();
+    }
 
     homeScreen.classList.add('hidden');
     savesloadScreen.classList.remove('hidden');
@@ -659,6 +679,11 @@ function initApp() {
   function showSettings() {
     if (!homeScreen || !settingsScreen) return;
 
+    // Pause Messenger autoplay when leaving
+    if (window.Messenger && typeof window.Messenger.onClose === 'function') {
+      window.Messenger.onClose();
+    }
+
     homeScreen.classList.add('hidden');
     settingsScreen.classList.remove('hidden');
     if (instapicsScreen) instapicsScreen.classList.add('hidden');
@@ -685,6 +710,11 @@ function initApp() {
   function showTips() {
     if (!homeScreen || !tipsScreen) return;
 
+    // Pause Messenger autoplay when leaving
+    if (window.Messenger && typeof window.Messenger.onClose === 'function') {
+      window.Messenger.onClose();
+    }
+
     homeScreen.classList.add('hidden');
     tipsScreen.classList.remove('hidden');
     if (instapicsScreen) instapicsScreen.classList.add('hidden');
@@ -710,6 +740,11 @@ function initApp() {
   // new function: Spy screen with dark background
   function showSpy() {
     if (!homeScreen || !spyScreen) return;
+
+    // Pause Messenger autoplay when leaving
+    if (window.Messenger && typeof window.Messenger.onClose === 'function') {
+      window.Messenger.onClose();
+    }
 
     homeScreen.classList.add('hidden');
     spyScreen.classList.remove('hidden');
@@ -824,6 +859,11 @@ function initApp() {
       // Pass the messenger folder path of the story
       if (window.Messenger && typeof window.Messenger.init === 'function') {
         window.Messenger.init(currentStoryMessengerPath);
+      }
+
+      // Resume autoplay if it was active
+      if (window.Messenger && typeof window.Messenger.onOpen === 'function') {
+        window.Messenger.onOpen();
       }
     });
   }

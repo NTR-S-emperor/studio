@@ -67,6 +67,7 @@ window.Messenger = {
   autoplayInterval: null,
   autoplayLongPressTimer: null,
   autoplayLongPressActive: false, // Flag to block events after long press activation
+  lightboxPausedAutoplay: false, // Track if autoplay was paused due to lightbox opening
 
   // Virtual scrolling configuration
   virtualScroll: {
@@ -953,6 +954,7 @@ window.Messenger = {
         mediaSrc = this.getCacheBustedUrl(`${vidsBasePath}/${scriptMsg.video}`);
         this.openLightbox(mediaSrc, 'video');
       }
+      // Note: autoplay pause is now handled in openLightbox()
     }
 
     // Auto-save after receiving media (image, video, audio)
@@ -3347,6 +3349,12 @@ window.Messenger = {
     this.lightboxEl.classList.add('ms-lightbox--open');
     this.lightboxOpen = true;
     this.lightboxType = type;
+
+    // Pause autoplay while viewing media (images/videos, not avatars)
+    if ((type === 'image' || type === 'video') && this.autoplayMode !== 'manual') {
+      this.lightboxPausedAutoplay = true;
+      this.pauseAutoPlay();
+    }
   },
 
   closeLightbox() {
@@ -3364,6 +3372,12 @@ window.Messenger = {
       }
     }
     this.lightboxOpen = false;
+
+    // Resume autoplay if it was paused while viewing media
+    if (this.lightboxPausedAutoplay) {
+      this.lightboxPausedAutoplay = false;
+      this.resumeAutoPlay();
+    }
   },
 
   createLightbox() {
@@ -4850,7 +4864,15 @@ window.Messenger = {
   },
 
   onClose() {
-    // Later if you want to reset something when leaving the app
+    // Pause autoplay when leaving the app (will resume when coming back)
+    if (this.autoplayMode !== 'manual') {
+      this.pauseAutoPlay();
+    }
+  },
+
+  onOpen() {
+    // Resume autoplay when coming back to the app
+    this.resumeAutoPlay();
   },
 
   /**
