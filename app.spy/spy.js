@@ -952,6 +952,44 @@ window.SpyMessenger = {
             continue;
           }
 
+          // Handle $react - attach reactions to previous message
+          if (/^\$react\b/i.test(trimmed)) {
+            const reactions = [];
+            const reactionPattern = /\(([^\s=]+)\s*=\s*([^)]+)\)/g;
+            let match;
+
+            while ((match = reactionPattern.exec(trimmed)) !== null) {
+              const emoji = match[1].trim();
+              const keysStr = match[2].trim();
+              const keys = keysStr.split(',').map(k => {
+                const trimmedKey = k.trim().toLowerCase();
+                if (this.nameToKey && this.nameToKey[trimmedKey]) {
+                  return this.nameToKey[trimmedKey];
+                }
+                return trimmedKey;
+              }).filter(k => k.length > 0);
+
+              if (emoji && keys.length > 0) {
+                reactions.push({ emoji, keys });
+              }
+            }
+
+            if (reactions.length > 0 && contactKey && this.conversationsByKey[contactKey]) {
+              const msgs = this.conversationsByKey[contactKey].messages;
+              // Find the last visible message to attach reactions
+              for (let j = msgs.length - 1; j >= 0; j--) {
+                if (['text', 'image', 'video', 'audio'].includes(msgs[j].kind)) {
+                  if (!msgs[j].reactions) {
+                    msgs[j].reactions = [];
+                  }
+                  msgs[j].reactions.push(...reactions);
+                  break;
+                }
+              }
+            }
+            continue;
+          }
+
           // Explicitly ignore disabled commands in GF's conversations:
           // - $delete = XXXX (timed deletion)
           // - $choices / $fake.choices (choice system)
@@ -1418,7 +1456,26 @@ window.SpyMessenger = {
       bubbleContent = `${speakerHtml}${this.escapeHtml(msg.text || '')}`;
     }
 
-    return `<div class="ms-msg ${sideClass} ${firstClass}" data-msg-index="${index}">${avatarHtml}<div class="${bubbleClass}">${bubbleContent}</div></div>`;
+    // Build reactions HTML if present (no animation for SpyMessenger - static display)
+    let reactionsHtml = '';
+    if (msg.reactions && msg.reactions.length > 0) {
+      const reactionElements = msg.reactions.map(reaction => {
+        const names = reaction.keys.map(key => {
+          // Check if it's the GF key - use custom name
+          if (key === this.gfKey && window.customCharacterNames && window.customCharacterNames[this.gfKey]) {
+            return window.customCharacterNames[this.gfKey];
+          }
+          return this.keyToName[key] || key;
+        }).join('\n');
+        // Limit to first character/emoji only
+        const firstEmoji = [...reaction.emoji][0] || reaction.emoji;
+        return `<div class="ms-msg-reaction ms-msg-reaction--static" data-reactors="${this.escapeHtml(names)}"><div class="ms-msg-reaction-tooltip">${this.escapeHtml(names)}</div>${firstEmoji}</div>`;
+      }).join('');
+      reactionsHtml = `<div class="ms-msg-reactions">${reactionElements}</div>`;
+    }
+
+    // Reactions are inside the bubble for proper positioning
+    return `<div class="ms-msg ${sideClass} ${firstClass}" data-msg-index="${index}">${avatarHtml}<div class="${bubbleClass}">${bubbleContent}${reactionsHtml}</div></div>`;
   },
 
   /**

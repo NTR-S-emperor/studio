@@ -1109,3 +1109,114 @@
     width: 100%;
   }
 }
+
+/* ===== MESSAGE REACTIONS ===== */
+
+/* Bubble needs position relative for reactions positioning */
+.ms-msg-bubble {
+  position: relative;
+}
+
+/* Add padding inside and margin below bubble when it has reactions */
+.ms-msg-bubble:has(.ms-msg-reactions) {
+  padding-bottom: 16px;
+  margin-bottom: 12px;
+  overflow: visible;
+}
+
+.ms-msg-reactions {
+  position: absolute;
+  bottom: -11px;
+  left: 10px;
+  display: flex;
+  gap: 2px;
+  z-index: 10;
+}
+
+/* For MC messages, position reactions on the right side */
+.ms-msg--mc .ms-msg-reactions {
+  left: auto;
+  right: 10px;
+}
+
+.ms-msg-reaction {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  font-size: 13px;
+  line-height: 1;
+  text-align: center;
+  padding-bottom: 1px;
+  background: rgba(30, 30, 30, 0.95);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  cursor: default;
+  animation: ms-reaction-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  opacity: 0;
+  transform: scale(0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes ms-reaction-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(-15deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2) rotate(5deg);
+  }
+  75% {
+    transform: scale(0.9) rotate(-2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Tooltip */
+.ms-msg-reaction-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 6px;
+  padding: 6px 10px;
+  background: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  font-size: 11px;
+  white-space: pre-line;
+  text-align: center;
+  border-radius: 4px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.ms-msg-reaction-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
+}
+
+.ms-msg-reaction:hover .ms-msg-reaction-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Static reactions (no animation) for SpyMessenger */
+.ms-msg-reaction--static {
+  animation: none;
+  opacity: 1;
+  transform: scale(1);
+}

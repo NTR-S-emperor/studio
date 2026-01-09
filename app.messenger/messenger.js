@@ -2332,6 +2332,43 @@ window.Messenger = {
         continue;
       }
 
+      // --- REACT LINE: $react (emoji = keys) (emoji = keys) ---
+      if (/^\$react\b/i.test(trimmed)) {
+        flushCurrentMessage();
+
+        // Parse reactions: $react (🥵 = gf, sk, ro) (🤣 = be)
+        const reactions = [];
+        const reactionPattern = /\(([^\s=]+)\s*=\s*([^)]+)\)/g;
+        let match;
+
+        while ((match = reactionPattern.exec(trimmed)) !== null) {
+          const emoji = match[1].trim();
+          const keysStr = match[2].trim();
+          const keys = keysStr.split(',').map(k => {
+            const trimmedKey = k.trim().toLowerCase();
+            // Resolve to the normalized key
+            if (this.nameToKey && this.nameToKey[trimmedKey]) {
+              return this.nameToKey[trimmedKey];
+            }
+            return trimmedKey;
+          }).filter(k => k.length > 0);
+
+          if (emoji && keys.length > 0) {
+            reactions.push({ emoji, keys });
+          }
+        }
+
+        if (reactions.length > 0) {
+          rawMessages.push({
+            kind: "react",
+            reactions: reactions
+          });
+        }
+
+        i++;
+        continue;
+      }
+
       // --- THINKING BLOCK: $thinking ... (until next message) ---
       if (/^\$thinking\b/i.test(trimmed)) {
         flushCurrentMessage();
@@ -2543,6 +2580,20 @@ window.Messenger = {
           kind: "spy_unlock_onlyslut",
           filename: filename
         });
+      } else if (msg.kind === "react") {
+        // Attach reactions to the previous visible message (talk, image, video, audio)
+        const visibleKinds = ['talk', 'image', 'video', 'audio'];
+        for (let j = convObj.messages.length - 1; j >= 0; j--) {
+          if (visibleKinds.includes(convObj.messages[j].kind)) {
+            // Initialize reactions array if not exists
+            if (!convObj.messages[j].reactions) {
+              convObj.messages[j].reactions = [];
+            }
+            // Append new reactions
+            convObj.messages[j].reactions.push(...msg.reactions);
+            break;
+          }
+        }
       } else {
         convObj.messages.push({
           kind: "talk",
@@ -3115,9 +3166,11 @@ window.Messenger = {
       this.virtualScroll.enabled = false;
 
       let previousFrom = null;
+      const lastIndex = conv.playedMessages.length - 1;
       for (let i = 0; i < conv.playedMessages.length; i++) {
         const msg = conv.playedMessages[i];
-        const { element, newPreviousFrom } = this.createMessageElement(msg, i, conv, previousFrom);
+        const isLastMessage = (i === lastIndex);
+        const { element, newPreviousFrom } = this.createMessageElement(msg, i, conv, previousFrom, isLastMessage);
         this.chatMessagesEl.appendChild(element);
         previousFrom = newPreviousFrom;
       }
@@ -4378,8 +4431,9 @@ window.Messenger = {
 
   /**
    * Create a single message DOM element
+   * @param {boolean} isLastMessage - If true, animate reactions; otherwise show static
    */
-  createMessageElement(msg, index, conv, previousFrom) {
+  createMessageElement(msg, index, conv, previousFrom, isLastMessage = false) {
     // Status message
     if (msg.kind === 'status') {
       const row = document.createElement('div');
@@ -4650,7 +4704,57 @@ window.Messenger = {
       bubble.appendChild(textNode);
     }
 
+    // Add reactions if present (inside the bubble)
+    if (msg.reactions && msg.reactions.length > 0) {
+      const reactionsContainer = document.createElement('div');
+      reactionsContainer.className = 'ms-msg-reactions';
+
+      // Calculate delays: first at 1.5s, spread up to 3s max
+      const baseDelay = 1500; // 1.5 seconds
+      const maxDelay = 3000;  // 3 seconds max
+      const totalReactions = msg.reactions.length;
+      const delayIncrement = totalReactions > 1
+        ? (maxDelay - baseDelay) / (totalReactions - 1)
+        : 0;
+
+      let reactionIndex = 0;
+      for (const reaction of msg.reactions) {
+        const reactionEl = document.createElement('div');
+        // Only animate reactions on the last (newest) message
+        if (isLastMessage) {
+          reactionEl.className = 'ms-msg-reaction';
+          // Add animation delay for staggered appearance (1.5s to 3s)
+          const delay = baseDelay + (reactionIndex * delayIncrement);
+          reactionEl.style.animationDelay = `${delay}ms`;
+        } else {
+          reactionEl.className = 'ms-msg-reaction ms-msg-reaction--static';
+        }
+        // Limit to first character/emoji only
+        const firstEmoji = [...reaction.emoji][0] || reaction.emoji;
+        reactionEl.textContent = firstEmoji;
+
+        // Build tooltip with full names (one per line)
+        const names = reaction.keys.map(key => {
+          return this.keyToName[key] || key;
+        }).join('\n');
+
+        reactionEl.setAttribute('data-reactors', names);
+
+        // Create tooltip element
+        const tooltip = document.createElement('div');
+        tooltip.className = 'ms-msg-reaction-tooltip';
+        tooltip.textContent = names;
+        reactionEl.appendChild(tooltip);
+
+        reactionsContainer.appendChild(reactionEl);
+        reactionIndex++;
+      }
+
+      bubble.appendChild(reactionsContainer);
+    }
+
     row.appendChild(bubble);
+
     return { element: row, newPreviousFrom: currentSpeaker };
   },
 
@@ -4758,9 +4862,11 @@ window.Messenger = {
       previousFrom = prevMsg.speakerKey || prevMsg.from;
     }
 
+    const lastIndex = messages.length - 1;
     for (let i = start; i < end; i++) {
       const msg = messages[i];
-      const { element, newPreviousFrom } = this.createMessageElement(msg, i, conv, previousFrom);
+      const isLastMessage = (i === lastIndex);
+      const { element, newPreviousFrom } = this.createMessageElement(msg, i, conv, previousFrom, isLastMessage);
       this.chatMessagesEl.appendChild(element);
       previousFrom = newPreviousFrom;
     }

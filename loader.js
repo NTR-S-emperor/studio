@@ -183,15 +183,28 @@ window.Loader = {
             // 3. Find files to update
             const filesToLoad = this.getFilesToUpdate(serverManifest, cachedManifest);
 
-            // 4. Preload files (pass manifest for cache-busting)
+            // 4. Check if critical files (JS/CSS) need updating
+            const criticalExtensions = ['js', 'css'];
+            const criticalFilesChanged = filesToLoad.some(file => {
+                const ext = file.split('.').pop().toLowerCase();
+                return criticalExtensions.includes(ext);
+            });
+
+            // 5. Preload files (pass manifest for cache-busting)
             if (filesToLoad.length > 0) {
                 await this.preloadFiles(filesToLoad, serverManifest);
             }
 
-            // 5. Save new manifest
+            // 6. Save new manifest
             this.saveCachedManifest(serverManifest);
 
-            // 6. Complete loading
+            // 7. If critical files changed, reload the page to use new versions
+            if (criticalFilesChanged) {
+                window.location.reload();
+                return;
+            }
+
+            // 8. Complete loading
             this.complete();
 
         } catch (error) {
