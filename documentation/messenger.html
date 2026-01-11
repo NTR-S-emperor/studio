@@ -32,11 +32,14 @@
                     <a href="messenger.html" class="nav-link active">Messenger</a>
                     <a href="messenger.html#characters" class="nav-link sub">Characters</a>
                     <a href="messenger.html#conversations" class="nav-link sub">Conversations</a>
-                    <a href="messenger.html#commands" class="nav-link sub">Commands</a>
                     <a href="messenger.html#media" class="nav-link sub">Media</a>
+                    <a href="messenger.html#status" class="nav-link sub">Status</a>
+                    <a href="messenger.html#typing" class="nav-link sub">Typing</a>
+                    <a href="messenger.html#delete" class="nav-link sub">Delete</a>
                     <a href="messenger.html#reactions" class="nav-link sub">Reactions</a>
                     <a href="messenger.html#thinking" class="nav-link sub">Thinking</a>
                     <a href="messenger.html#choices" class="nav-link sub">Choices</a>
+                    <a href="messenger.html#locks" class="nav-link sub">Locks</a>
                     <a href="instapics.html" class="nav-link">InstaPics</a>
                     <a href="instapics.html#characters" class="nav-link sub">Characters</a>
                     <a href="instapics.html#posts" class="nav-link sub">Posts</a>
@@ -143,6 +146,23 @@ $talks = lovepath/1.txt</code></pre>
                 </tr>
             </table>
 
+            <h3>Name Variables</h3>
+            <p>You can use dynamic variables to display the MC's or girlfriend's custom name:</p>
+            <table>
+                <tr>
+                    <th>Variable</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>$mc</code></td>
+                    <td>Displays the MC's custom name</td>
+                </tr>
+                <tr>
+                    <td><code>$gf</code></td>
+                    <td>Displays the girlfriend's custom name</td>
+                </tr>
+            </table>
+
             <h3>Multi-line Messages</h3>
             <p>As long as another protagonist does not speak, all the text you enter, including line breaks, will be in a single message:</p>
 
@@ -164,50 +184,8 @@ mc : I completely forgot.</code></pre>
 
             <p>If the MC already has a conversation with the person(s) in this new conversation, it will be reused and moved to the top of the MC's list, like a "new message" in WhatsApp.</p>
 
-            <!-- ========== COMMANDS ========== -->
-            <h2 id="commands">Commands Reference</h2>
-
-            <h3>Name Variables</h3>
-            <table>
-                <tr>
-                    <th>Command</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <td><code>$mc</code></td>
-                    <td>Allows you to use the MC's custom name</td>
-                </tr>
-                <tr>
-                    <td><code>$gf</code></td>
-                    <td>Allows you to use your girlfriend's custom name</td>
-                </tr>
-            </table>
-
-            <h3 id="media">Media</h3>
-            <table>
-                <tr>
-                    <th>Command</th>
-                    <th>Description</th>
-                    <th>Required Folder</th>
-                </tr>
-                <tr>
-                    <td><code>$pics = NAME.png</code></td>
-                    <td>To send a photo (you can use different image formats)</td>
-                    <td><code>pics/</code> folder next to the .txt file</td>
-                </tr>
-                <tr>
-                    <td><code>$vids = NAME.mp4</code></td>
-                    <td>To send a video</td>
-                    <td><code>vids/</code> folder next to the .txt file</td>
-                </tr>
-                <tr>
-                    <td><code>$audio = NAME.mp3</code></td>
-                    <td>To send a voice note</td>
-                    <td><code>audio/</code> folder next to the .txt file</td>
-                </tr>
-            </table>
-
             <h3>Content Unlocking</h3>
+            <p>You can unlock social media posts from within conversations:</p>
             <table>
                 <tr>
                     <th>Command</th>
@@ -223,7 +201,44 @@ mc : I completely forgot.</code></pre>
                 </tr>
             </table>
 
-            <h3>Special Effects</h3>
+            <!-- ========== MEDIA ========== -->
+            <h2 id="media">Media</h2>
+            <p>You can send photos, videos, and voice notes in conversations.</p>
+
+            <table>
+                <tr>
+                    <th>Command</th>
+                    <th>Description</th>
+                    <th>Required Folder</th>
+                </tr>
+                <tr>
+                    <td><code>$pics = NAME.png</code></td>
+                    <td>Send a photo (you can use different image formats)</td>
+                    <td><code>pics/</code> folder next to the .txt file</td>
+                </tr>
+                <tr>
+                    <td><code>$vids = NAME.mp4</code></td>
+                    <td>Send a video</td>
+                    <td><code>vids/</code> folder next to the .txt file</td>
+                </tr>
+                <tr>
+                    <td><code>$audio = NAME.mp3</code></td>
+                    <td>Send a voice note</td>
+                    <td><code>audio/</code> folder next to the .txt file</td>
+                </tr>
+            </table>
+
+            <h3>Example</h3>
+<pre><code>gf : Look what I found today!
+gf : $pics = surprise.jpg
+mc : Wow, that's amazing!
+gf : I even recorded a voice message for you
+gf : $audio = message.mp3</code></pre>
+
+            <!-- ========== STATUS ========== -->
+            <h2 id="status">Status</h2>
+            <p>The <code>$status</code> command displays a centered bubble in the conversation, typically used for dates, times, or system messages.</p>
+
             <table>
                 <tr>
                     <th>Command</th>
@@ -231,24 +246,114 @@ mc : I completely forgot.</code></pre>
                 </tr>
                 <tr>
                     <td><code>$status = TEXT</code></td>
-                    <td>Allows you to put a central bubble in the conversation, for example "TODAY"</td>
-                </tr>
-                <tr>
-                    <td><code>$delete</code></td>
-                    <td>The message just before this function is deleted (the bubble remains with "Message deleted" written on it)</td>
-                </tr>
-                <tr>
-                    <td><code>$delete = 3000</code></td>
-                    <td>Allows you to set a timer in milliseconds for deletion. This deletion will not wait for the user's "next" action</td>
-                </tr>
-                <tr>
-                    <td><code>@typing 2000</code></td>
-                    <td>Typing indicator (2000ms)</td>
+                    <td>Displays a centered status bubble with the specified text</td>
                 </tr>
             </table>
 
-            <h3 id="reactions">Message Reactions</h3>
-            <p>The <code>$react</code> command allows you to add emoji reactions to the previous message. Reactions appear at the bottom of the message bubble with a smooth animation.</p>
+            <h3>Example</h3>
+<pre><code>$status = Monday, 9:00 AM
+mc : Good morning!
+gf : Hey! Ready for the day?
+
+$status = 2 hours later
+gf : How's work going?
+mc : Pretty busy, but I'm managing.</code></pre>
+
+            <div class="info-box tip">
+                <div class="info-box-title">Tip</div>
+                <p>Use status messages to indicate time jumps, scene changes, or important moments in the story.</p>
+            </div>
+
+            <!-- ========== TYPING ========== -->
+            <h2 id="typing">Typing Indicator</h2>
+            <p>The <code>$typing</code> command displays a typing indicator (3 bouncing dots) before a message appears, simulating someone typing in real-time.</p>
+
+            <table>
+                <tr>
+                    <th>Command</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>$typing</code></td>
+                    <td>Typing indicator with random duration (1-2.5s)</td>
+                </tr>
+                <tr>
+                    <td><code>$typing 2000</code></td>
+                    <td>Typing indicator with specific duration (2000ms)</td>
+                </tr>
+                <tr>
+                    <td><code>$typing = gf</code></td>
+                    <td>Typing indicator with speaker name (hover to see who's typing)</td>
+                </tr>
+                <tr>
+                    <td><code>$typing 2000 = gf</code></td>
+                    <td>Full format: duration + speaker</td>
+                </tr>
+            </table>
+
+            <h3>Basic Example</h3>
+<pre><code>mc : Hey, are you there?
+$typing
+gf : Yes! Just got home.
+$typing 1500
+gf : What's up?</code></pre>
+
+            <h3>Group Conversation Example</h3>
+<pre><code>$typing = sarah
+sarah : Did you see what happened?
+$typing 2000 = emma
+emma : No, what?
+$typing = sarah
+sarah : Check InstaPics...</code></pre>
+
+            <div class="info-box info">
+                <div class="info-box-title">Behavior</div>
+                <p>The typing indicator automatically advances to the next message after the duration expires. In group conversations, specifying the speaker lets users hover to see who is typing.</p>
+            </div>
+
+            <div class="info-box tip">
+                <div class="info-box-title">User Controls</div>
+                <p>Users can click to skip the typing animation and immediately see the message. In <strong>fast mode</strong>, typing animations are automatically skipped.</p>
+            </div>
+
+            <!-- ========== DELETE ========== -->
+            <h2 id="delete">Message Deletion</h2>
+            <p>The <code>$delete</code> command deletes the previous message, leaving a "Message deleted" bubble in its place.</p>
+
+            <table>
+                <tr>
+                    <th>Command</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>$delete</code></td>
+                    <td>Deletes the previous message on the next click</td>
+                </tr>
+                <tr>
+                    <td><code>$delete = 3000</code></td>
+                    <td>Auto-deletes the previous message after 3000ms (no click needed)</td>
+                </tr>
+            </table>
+
+            <h3>Basic Example</h3>
+<pre><code>gf : I hate you!
+$delete
+gf : Sorry, I didn't mean that...</code></pre>
+
+            <h3>Timed Deletion Example</h3>
+<pre><code>gf : Oops, wrong person!
+gf : $pics = secret.jpg
+$delete = 2000
+gf : Pretend you didn't see that 😅</code></pre>
+
+            <div class="info-box info">
+                <div class="info-box-title">How it works</div>
+                <p>With <code>$delete</code>, the user clicks to see the deletion happen. With <code>$delete = TIME</code>, the deletion happens automatically after the specified time, and the conversation continues without waiting.</p>
+            </div>
+
+            <!-- ========== REACTIONS ========== -->
+            <h2 id="reactions">Reactions</h2>
+            <p>The <code>$react</code> command adds emoji reactions to the previous message. Reactions appear at the bottom of the message bubble with a smooth animation.</p>
 
 <pre><code>gf : Look at this photo!
 gf : $pics = photo.jpg
@@ -278,13 +383,8 @@ $react (🥵 = gf, be, ro) (🤣 = li)</code></pre>
                 <p>Reactions appear with a staggered animation (1.5s to 3s delay) when the message is first displayed. Hovering over a reaction shows who reacted (full names, displayed vertically if multiple people).</p>
             </div>
 
-            <div class="info-box tip">
-                <div class="info-box-title">Tip</div>
-                <p>Only the first character of the emoji is used. If you accidentally write <code>(🥵🥵 = gf)</code>, only <code>🥵</code> will be displayed.</p>
-            </div>
-
-            <h4>Reactions on Choices</h4>
-            <p>You can add reactions to fake choices, both on the MC's choice message and on the custom response. This makes the conversation feel more dynamic and realistic.</p>
+            <h3>Reactions on Choices</h3>
+            <p>You can add reactions to fake choices, both on the MC's choice message and on the custom response.</p>
 
             <div class="info-box warning">
                 <div class="info-box-title">Important: Different Format</div>
@@ -297,38 +397,15 @@ It looks amazing! [$react (😍 = gf)] $/
 It's okay I guess. [$react (😐 = gf)] $/
 Not really my style. [$react (😢 = gf)]</code></pre>
 
-            <p>In this example, when the MC selects a choice, the girlfriend will react with the corresponding emoji on his message.</p>
-
-            <h5>Reactions on Custom Responses</h5>
-            <p>You can also add reactions to custom responses. The reaction is placed inside the response brackets:</p>
-
+            <h4>Reactions on Custom Responses</h4>
 <pre><code>gf : Want to go out tonight?
 $fake.choices =
 Yes! [$react (😍 = gf)] $/ [gf : Perfect! [$react (❤️ = mc)]]
 Maybe later. [$react (😐 = gf)] $/ [gf : Okay... [$react (😔 = mc)]]
 I'm tired. [$react (😢 = gf)]</code></pre>
 
-            <table>
-                <tr>
-                    <th>Element</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <td><code>[$react (😍 = gf)]</code></td>
-                    <td>Reaction on the MC's choice message. The emoji will appear on the MC's message bubble.</td>
-                </tr>
-                <tr>
-                    <td><code>[gf : Perfect! [$react (❤️ = mc)]]</code></td>
-                    <td>Custom response with a reaction. The MC reacts to the girlfriend's response.</td>
-                </tr>
-            </table>
-
-            <div class="info-box info">
-                <div class="info-box-title">How it works</div>
-                <p>When a custom response is present, it appears on the <strong>next click</strong> after the MC's choice—not immediately. This makes the conversation flow more naturally. If the player goes back, both messages (MC's choice and the response) are removed together, returning to the choice selection.</p>
-            </div>
-
-            <h3 id="thinking">MC Thoughts ($thinking)</h3>
+            <!-- ========== THINKING ========== -->
+            <h2 id="thinking">Thinking</h2>
             <p>The <code>$thinking</code> command displays the MC's inner thoughts as an overlay on top of the chat. This is useful to show what the MC is thinking without sending an actual message.</p>
 
 <pre><code>$thinking
@@ -349,7 +426,7 @@ mc : Hey, are you okay?</code></pre>
                 </tr>
                 <tr>
                     <td><code>$/</code></td>
-                    <td>Separates thoughts into different bubbles/windows. Each section before <code>$/</code> appears in its own thought bubble.</td>
+                    <td>Separates thoughts into different bubbles. Each section before <code>$/</code> appears in its own thought bubble.</td>
                 </tr>
                 <tr>
                     <td>End of thoughts</td>
@@ -368,7 +445,7 @@ mc : Hey, are you okay?</code></pre>
             </div>
 
             <!-- ========== CHOICES ========== -->
-            <h2 id="choices">Choice System</h2>
+            <h2 id="choices">Choices</h2>
 
             <h3>Fake Choices (No Impact)</h3>
             <p>This function allows the MC to submit a response of their choice, but it has no impact on the story. It is intended to enhance immersion.</p>
@@ -384,7 +461,7 @@ Choice 3.</code></pre>
             </div>
 
             <h4>Custom Responses</h4>
-            <p>You can add a personalized response from an interlocutor for each choice. When the player selects that choice, the specified character will automatically reply with the custom message.</p>
+            <p>You can add a personalized response from an interlocutor for each choice:</p>
 
 <pre><code>gf : What do you want to do tonight?
 $fake.choices =
@@ -393,38 +470,10 @@ Go out for dinner. $/ [gf : Perfect, I know a nice restaurant!]
 Stay home and relax. $/ [gf : Sounds cozy, I like it.]
 I don't know, you choose.</code></pre>
 
-            <table>
-                <tr>
-                    <th>Element</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <td><code>[gf : message]</code></td>
-                    <td>Custom response from a character. Use their abbreviation (gf, be, etc.) followed by <code>:</code> and the message.</td>
-                </tr>
-                <tr>
-                    <td><code>$/</code></td>
-                    <td>Choice separator (required before the custom response brackets)</td>
-                </tr>
-            </table>
-
             <div class="info-box tip">
                 <div class="info-box-title">Note</div>
-                <p>Custom responses are <strong>completely optional</strong>. You don't need to add one to every choice—mix and match as needed. In the example above, the last choice has no custom response, which is perfectly valid.</p>
+                <p>Custom responses are <strong>completely optional</strong>. You don't need to add one to every choice—mix and match as needed.</p>
             </div>
-
-            <h4>More Examples</h4>
-
-<pre><code>mc : Hey, how was your day?
-gf : It was okay... kind of boring. You?
-$fake.choices =
-Same here, nothing special. $/
-I had a crazy day at work! $/ [gf : Oh really? Tell me everything!]
-I missed you all day. $/ [gf : Aww, that's so sweet! 💕]
-
-gf : Anyway, what should we have for dinner?</code></pre>
-
-            <p>In this example, only 2 out of 3 choices trigger a custom response. The conversation then continues normally regardless of which choice was selected.</p>
 
             <h3>Real Choices (With Impact)</h3>
             <p>Here is an example of a choice-based feature that impacts the story:</p>
@@ -436,7 +485,6 @@ C. Choice 3
 
 path a
 gf : We're in timeline 1!
-gf : And look, it's even possible to direct you to a discussion that will only concern this path!
 $talks = path1/example.txt
 end path
 
@@ -467,11 +515,9 @@ end path</code></pre>
 
             <p>Between these tags, you can create the conversation as you wish. You can even use <code>$talks = example.txt</code> to redirect the user to a discussion that only concerns that choice.</p>
 
-            <p>If you don't call up a discussion, after "end path" the conversation will revert to being common to all choices for whatever you put after it.</p>
-
             <!-- ========== LOCKS ========== -->
-            <h2 id="locks">Code Locking</h2>
-            <p>It is possible to block certain users who have a code from continuing the game.</p>
+            <h2 id="locks">Locks</h2>
+            <p>You can lock certain content behind a subscription code:</p>
 
 <pre><code>$lock = example.txt</code></pre>
 
@@ -479,11 +525,11 @@ end path</code></pre>
 <pre><code>[GOLD]
 $talks = chapter2/example.txt</code></pre>
 
-            <p>Only members with a gold code (or higher) will be able to access this chapter. The code is stored in LocalStorage.</p>
+            <p>Only members with a gold code (or higher) will be able to access this chapter.</p>
 
             <table>
                 <tr>
-                    <th>Available Locks</th>
+                    <th>Available Tiers</th>
                 </tr>
                 <tr>
                     <td><code>[BRONZE]</code>, <code>[SILVER]</code>, <code>[GOLD]</code>, <code>[DIAMOND]</code>, <code>[PLATINUM]</code></td>
@@ -499,44 +545,32 @@ $talks = chapter2/example.txt</code></pre>
                     <th>Usage</th>
                 </tr>
                 <tr>
-                    <td><code>$mc</code></td>
-                    <td>MC's custom name</td>
+                    <td><code>$mc</code> / <code>$gf</code></td>
+                    <td>Dynamic name variables</td>
                 </tr>
                 <tr>
-                    <td><code>$gf</code></td>
-                    <td>Girlfriend's custom name</td>
-                </tr>
-                <tr>
-                    <td><code>$pics = NAME.png</code></td>
-                    <td>Send a photo</td>
-                </tr>
-                <tr>
-                    <td><code>$vids = NAME.mp4</code></td>
-                    <td>Send a video</td>
-                </tr>
-                <tr>
-                    <td><code>$audio = NAME.mp3</code></td>
-                    <td>Send a voice note</td>
+                    <td><code>$pics</code> / <code>$vids</code> / <code>$audio</code></td>
+                    <td>Send media (photo, video, voice note)</td>
                 </tr>
                 <tr>
                     <td><code>$talks = path.txt</code></td>
                     <td>Start new conversation</td>
                 </tr>
                 <tr>
-                    <td><code>$insta = post.txt</code></td>
-                    <td>Unlock InstaPics post</td>
-                </tr>
-                <tr>
-                    <td><code>$slut = post.txt</code></td>
-                    <td>Unlock OnlySlut post</td>
+                    <td><code>$insta</code> / <code>$slut</code></td>
+                    <td>Unlock social media posts</td>
                 </tr>
                 <tr>
                     <td><code>$status = TEXT</code></td>
-                    <td>Central bubble</td>
+                    <td>Centered status bubble</td>
+                </tr>
+                <tr>
+                    <td><code>$typing</code></td>
+                    <td>Typing indicator (optional: duration, speaker)</td>
                 </tr>
                 <tr>
                     <td><code>$delete</code></td>
-                    <td>Delete message</td>
+                    <td>Delete previous message (optional: timer)</td>
                 </tr>
                 <tr>
                     <td><code>$react (emoji = keys)</code></td>
@@ -548,19 +582,15 @@ $talks = chapter2/example.txt</code></pre>
                 </tr>
                 <tr>
                     <td><code>$/</code></td>
-                    <td>Separate thought bubbles</td>
+                    <td>Separator (choices, thought bubbles)</td>
                 </tr>
                 <tr>
                     <td><code>$fake.choices =</code></td>
-                    <td>Choices without impact</td>
-                </tr>
-                <tr>
-                    <td><code>[speaker : msg]</code></td>
-                    <td>Custom response after a fake choice (optional)</td>
+                    <td>Cosmetic choices (no impact)</td>
                 </tr>
                 <tr>
                     <td><code>$choices =</code></td>
-                    <td>Choices with impact</td>
+                    <td>Story choices (with branching paths)</td>
                 </tr>
                 <tr>
                     <td><code>$lock = file.txt</code></td>
@@ -569,14 +599,6 @@ $talks = chapter2/example.txt</code></pre>
                 <tr>
                     <td><code>$spy_unlock</code></td>
                     <td>Unlock the Spy App</td>
-                </tr>
-                <tr>
-                    <td><code>$spy_unlock_instapics</code></td>
-                    <td>Show InstaPics on GF's phone</td>
-                </tr>
-                <tr>
-                    <td><code>$spy_unlock_onlyslut</code></td>
-                    <td>Show OnlySlut on GF's phone</td>
                 </tr>
                 <tr>
                     <td><code>$spy_anchor_X</code></td>
@@ -592,54 +614,6 @@ $talks = chapter2/example.txt</code></pre>
         }
     </script>
     <script src="search.js"></script>
-    <script>
-        // ===========================================
-        // SCROLL SPY
-        // ===========================================
-        (function() {
-            var sectionIds = ['characters', 'conversations', 'commands', 'media', 'reactions', 'thinking', 'choices'];
-
-            function getOffsetTop(el) {
-                var top = 0;
-                while (el) {
-                    top += el.offsetTop;
-                    el = el.offsetParent;
-                }
-                return top;
-            }
-
-            function updateActiveNav() {
-                var scrollPos = window.scrollY + 150;
-                var activeId = null;
-
-                for (var i = 0; i < sectionIds.length; i++) {
-                    var el = document.getElementById(sectionIds[i]);
-                    if (el && scrollPos >= getOffsetTop(el)) {
-                        activeId = sectionIds[i];
-                    }
-                }
-
-                document.querySelectorAll('.sidebar-nav .nav-link').forEach(function(link) {
-                    var href = link.getAttribute('href');
-                    var isActive = href && activeId && href.indexOf('#' + activeId) !== -1;
-
-                    if (isActive) {
-                        link.style.background = 'rgba(255,255,255,0.08)';
-                        link.style.borderRadius = '6px';
-                        link.style.marginLeft = '4px';
-                        link.style.marginRight = '4px';
-                    } else {
-                        link.style.background = '';
-                        link.style.borderRadius = '';
-                        link.style.marginLeft = '';
-                        link.style.marginRight = '';
-                    }
-                });
-            }
-
-            window.addEventListener('scroll', updateActiveNav);
-            setTimeout(updateActiveNav, 100);
-        })();
-    </script>
+    <script src="scrollspy.js"></script>
 </body>
 </html>

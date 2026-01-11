@@ -1,0 +1,35 @@
+# Route all HTML requests through the PHP server for cache busting
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /documentation/
+
+    # Don't rewrite if it's a real file that's not HTML (css, js, images, etc.)
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteCond %{REQUEST_URI} !\.(html?)$
+    RewriteRule ^ - [L]
+
+    # Route index/root to serve.php
+    RewriteRule ^$ serve.php?p=index [L,QSA]
+
+    # Route .html files to serve.php
+    RewriteRule ^([a-zA-Z0-9_-]+)\.html?$ serve.php?p=$1 [L,QSA]
+
+    # Route requests without extension to serve.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^([a-zA-Z0-9_-]+)$ serve.php?p=$1 [L,QSA]
+</IfModule>
+
+# Aggressive no-cache headers for all files in this directory
+<IfModule mod_headers.c>
+    Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires "Thu, 01 Jan 1970 00:00:00 GMT"
+    Header set CDN-Cache-Control "no-store"
+    Header set Cloudflare-CDN-Cache-Control "no-store"
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 0 seconds"
+</IfModule>

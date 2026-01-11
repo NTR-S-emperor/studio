@@ -867,6 +867,56 @@ window.Messenger = {
       return;
     }
 
+    // If it's a "typing" indicator, show it temporarily then auto-advance
+    if (scriptMsg.kind === "typing") {
+      // In fast mode, skip typing animation entirely
+      if (this.autoplayMode === 'fast') {
+        conv.scriptIndex += 1;
+        this.advanceConversation(conv);
+        return;
+      }
+
+      // If already showing typing (user clicked to skip), cancel and advance
+      if (conv.activeTyping) {
+        if (conv.typingTimeout) {
+          clearTimeout(conv.typingTimeout);
+          conv.typingTimeout = null;
+        }
+        conv.activeTyping = null;
+        conv.scriptIndex += 1;
+        this.advanceConversation(conv);
+        return;
+      }
+
+      // Calculate duration: use specified value or random between 1000-2500ms
+      const duration = scriptMsg.duration !== null
+        ? scriptMsg.duration
+        : Math.floor(Math.random() * 1500) + 1000; // 1000-2500ms
+
+      // Set the typing indicator state
+      conv.activeTyping = {
+        speakerKey: scriptMsg.speakerKey,
+        startTime: Date.now()
+      };
+
+      this.renderConversation();
+
+      // Clear any existing typing timeout
+      if (conv.typingTimeout) {
+        clearTimeout(conv.typingTimeout);
+      }
+
+      // Auto-advance after the duration
+      conv.typingTimeout = setTimeout(() => {
+        conv.activeTyping = null;
+        conv.typingTimeout = null;
+        conv.scriptIndex += 1;
+        this.advanceConversation(conv);
+      }, duration);
+
+      return;
+    }
+
     // If it's a "delete" message, handle the deletion
     if (scriptMsg.kind === "delete") {
       conv.scriptIndex += 1;
@@ -2446,6 +2496,42 @@ window.Messenger = {
         continue;
       }
 
+      // --- TYPING INDICATOR: $typing, $typing 2000, $typing = gf, $typing 2000 = gf ---
+      if (/^\$typing\b/i.test(trimmed)) {
+        flushCurrentMessage();
+
+        // Parse: $typing [duration] [= speaker]
+        // Examples: $typing, $typing 2000, $typing = gf, $typing 2000 = gf
+        const typingMatch = trimmed.match(/^\$typing(?:\s+(\d+))?(?:\s*=\s*(\S+))?$/i);
+
+        let duration = null; // null means random
+        let speakerKey = null;
+
+        if (typingMatch) {
+          if (typingMatch[1]) {
+            duration = parseInt(typingMatch[1], 10);
+          }
+          if (typingMatch[2]) {
+            const rawSpeaker = typingMatch[2].trim().toLowerCase();
+            // Resolve to normalized key
+            if (this.nameToKey && this.nameToKey[rawSpeaker]) {
+              speakerKey = this.nameToKey[rawSpeaker];
+            } else {
+              speakerKey = rawSpeaker;
+            }
+          }
+        }
+
+        rawMessages.push({
+          kind: "typing",
+          duration: duration,
+          speakerKey: speakerKey
+        });
+
+        i++;
+        continue;
+      }
+
       // --- REACT LINE: $react (emoji = keys) (emoji = keys) ---
       if (/^\$react\b/i.test(trimmed)) {
         flushCurrentMessage();
@@ -2708,6 +2794,13 @@ window.Messenger = {
             break;
           }
         }
+      } else if (msg.kind === "typing") {
+        convObj.messages.push({
+          kind: "typing",
+          duration: msg.duration,
+          speakerKey: msg.speakerKey,
+          filename: filename
+        });
       } else {
         convObj.messages.push({
           kind: "talk",
@@ -2942,8 +3035,8 @@ window.Messenger = {
         continue;
       }
 
-      // Special messages: skip them (unlocks, locks, thinking, spy commands are handled separately)
-      if (scriptMsg.kind === "unlock" || scriptMsg.kind === "unlockInsta" || scriptMsg.kind === "unlockSlutOnly" || scriptMsg.kind === "lock" || scriptMsg.kind === "thinking" || scriptMsg.kind === "spy_unlock" || scriptMsg.kind === "spy_anchor" || scriptMsg.kind === "spy_unlock_instapics" || scriptMsg.kind === "spy_unlock_onlyslut") {
+      // Special messages: skip them (unlocks, locks, thinking, typing, spy commands are handled separately)
+      if (scriptMsg.kind === "unlock" || scriptMsg.kind === "unlockInsta" || scriptMsg.kind === "unlockSlutOnly" || scriptMsg.kind === "lock" || scriptMsg.kind === "thinking" || scriptMsg.kind === "typing" || scriptMsg.kind === "spy_unlock" || scriptMsg.kind === "spy_anchor" || scriptMsg.kind === "spy_unlock_instapics" || scriptMsg.kind === "spy_unlock_onlyslut") {
         conv.scriptIndex++;
         continue;
       }
@@ -3290,6 +3383,9 @@ window.Messenger = {
       }
     }
 
+    // Render typing indicator if active
+    this.renderTypingIndicator(conv);
+
     // Render thinking overlay if active
     this.renderThinkingOverlay(conv);
 
@@ -3298,6 +3394,48 @@ window.Messenger = {
 
     // Scroll to bottom AFTER all DOM modifications are complete
     this.scrollToBottom();
+  },
+
+  renderTypingIndicator(conv) {
+    // Remove any existing typing indicator
+    if (this.chatMessagesEl) {
+      const existing = this.chatMessagesEl.querySelector('.ms-typing-container');
+      if (existing) {
+        existing.remove();
+      }
+    }
+
+    // Check if we have an active typing indicator
+    if (!conv || !conv.activeTyping) {
+      return;
+    }
+
+    // Create the typing indicator container (floating above input bar)
+    const typingContainer = document.createElement('div');
+    typingContainer.className = 'ms-typing-container';
+
+    // Create the bubble with dots only (text appears on hover via CSS)
+    const bubble = document.createElement('div');
+    bubble.className = 'ms-typing-bubble';
+
+    // If there's a speaker, add data attribute for hover tooltip
+    if (conv.activeTyping.speakerKey) {
+      const speakerName = this.keyToName[conv.activeTyping.speakerKey] || conv.activeTyping.speakerKey;
+      // Get translated text and replace {name} placeholder
+      const template = window.t ? window.t('messenger.typing') : '{name} is typing...';
+      bubble.dataset.typing = template.replace('{name}', speakerName);
+    }
+
+    // Add dots container
+    const dotsContainer = document.createElement('div');
+    dotsContainer.className = 'ms-typing-dots';
+    dotsContainer.innerHTML = '<span></span><span></span><span></span>';
+    bubble.appendChild(dotsContainer);
+
+    typingContainer.appendChild(bubble);
+
+    // Insert at the end of messages (in the flow, pushes content up)
+    this.chatMessagesEl.appendChild(typingContainer);
   },
 
   renderThinkingOverlay(conv) {
@@ -3799,6 +3937,17 @@ window.Messenger = {
         this.renderConversation();
         return;
       }
+    }
+
+    // If we're showing a typing indicator, cancel it
+    if (conv.activeTyping) {
+      if (conv.typingTimeout) {
+        clearTimeout(conv.typingTimeout);
+        conv.typingTimeout = null;
+      }
+      conv.activeTyping = null;
+      this.renderConversation();
+      return;
     }
 
     // If we're in the middle of a thinking block, go back to previous block or exit thinking
@@ -4563,6 +4712,16 @@ window.Messenger = {
    * @param {boolean} isLastMessage - If true, animate reactions; otherwise show static
    */
   createMessageElement(msg, index, conv, previousFrom, isLastMessage = false) {
+    // Skip non-displayable message kinds (typing, react, delete, etc.)
+    // These should not be in playedMessages but handle gracefully if they are
+    const nonDisplayableKinds = ['typing', 'react', 'delete', 'unlock', 'unlockInsta', 'unlockSlutOnly', 'lock', 'spy_unlock', 'spy_anchor', 'spy_unlock_instapics', 'spy_unlock_onlyslut', 'pathStart', 'pathEnd'];
+    if (nonDisplayableKinds.includes(msg.kind)) {
+      // Return empty element
+      const empty = document.createElement('div');
+      empty.style.display = 'none';
+      return { element: empty, newPreviousFrom: previousFrom };
+    }
+
     // Status message
     if (msg.kind === 'status') {
       const row = document.createElement('div');

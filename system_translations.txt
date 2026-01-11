@@ -127,6 +127,7 @@
 @messenger.selectcontact.short: EN= Select a contact on the left. | FR= Sélectionne un contact à gauche.
 @messenger.nomessages: EN= No messages for this contact. | FR= Aucun message pour ce contact.
 @messenger.deleted: EN= Message deleted | FR= Message supprimé
+@messenger.typing: EN= {name} is typing... | FR= {name} est en train d'écrire...
 
 
 # ============================================================================

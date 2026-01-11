@@ -15,8 +15,9 @@
 
         // Messenger - Navigation
         { term: '$talks', description: 'Start or continue a conversation file', page: 'messenger.html', anchor: '#conversations' },
-        { term: '$status', description: 'Display a status bubble (date, time, etc.)', page: 'messenger.html', anchor: '#commands' },
-        { term: '$delete', description: 'Delete the previous message', page: 'messenger.html', anchor: '#commands' },
+        { term: '$status', description: 'Display a status bubble (date, time, etc.)', page: 'messenger.html', anchor: '#status' },
+        { term: '$delete', description: 'Delete the previous message', page: 'messenger.html', anchor: '#delete' },
+        { term: '$typing', description: 'Display typing indicator (bouncing dots)', page: 'messenger.html', anchor: '#typing' },
 
         // Messenger - Reactions
         { term: '$react', description: 'Add emoji reactions to messages', page: 'messenger.html', anchor: '#reactions' },
@@ -30,7 +31,7 @@
         { term: '$fake.choices', description: 'Cosmetic choices without impact (immersion)', page: 'messenger.html', anchor: '#choices' },
 
         // Messenger - Locks
-        { term: '$lock', description: 'Lock content behind premium tiers', page: 'messenger.html', anchor: '#choices' },
+        { term: '$lock', description: 'Lock content behind premium tiers', page: 'messenger.html', anchor: '#locks' },
 
         // Social Media
         { term: '$insta', description: 'Unlock an InstaPics post', page: 'instapics.html', anchor: '#posts' },
@@ -71,6 +72,25 @@
         return results.slice(0, 15);
     }
 
+    function navigateTo(href) {
+        var parts = href.split('#');
+        var anchor = parts[1] ? '#' + parts[1] : '';
+
+        // Check if target element exists on current page
+        if (anchor) {
+            var target = document.getElementById(anchor.substring(1));
+            if (target) {
+                // Element exists on current page: scroll to it
+                target.scrollIntoView({ behavior: 'smooth' });
+                history.pushState(null, '', anchor);
+                return;
+            }
+        }
+
+        // Element not found or no anchor: navigate to the page
+        window.location.href = href;
+    }
+
     function initSearch() {
         var searchInputs = document.querySelectorAll('.search-input');
         searchInputs.forEach(function(input) {
@@ -81,10 +101,24 @@
             dropdown.style.cssText = 'position:absolute;top:100%;left:0;right:0;background:#2d2d44;border:1px solid #444;border-radius:0 0 6px 6px;max-height:300px;overflow-y:auto;display:none;z-index:1000;';
             parent.appendChild(dropdown);
 
+            var selectedIndex = -1;
+
+            function updateSelection() {
+                var items = dropdown.querySelectorAll('div[data-href]');
+                items.forEach(function(item, idx) {
+                    item.style.background = (idx === selectedIndex) ? '#3d3d54' : '';
+                });
+                // Scroll selected item into view
+                if (selectedIndex >= 0 && items[selectedIndex]) {
+                    items[selectedIndex].scrollIntoView({ block: 'nearest' });
+                }
+            }
+
             input.addEventListener('input', function(e) {
                 var query = e.target.value.trim();
                 var results = search(query);
                 dropdown.innerHTML = '';
+                selectedIndex = -1;
 
                 if (results.length > 0) {
                     for (var i = 0; i < results.length; i++) {
@@ -93,9 +127,16 @@
                         div.style.cssText = 'padding:10px;cursor:pointer;border-bottom:1px solid #444;';
                         div.innerHTML = '<div style="color:#f472b6;font-family:monospace;">' + item.term + '</div><div style="color:#888;font-size:12px;">' + item.description + '</div>';
                         div.dataset.href = item.page + item.anchor;
-                        div.addEventListener('click', function() { window.location.href = this.dataset.href; });
-                        div.addEventListener('mouseenter', function() { this.style.background = '#3d3d54'; });
-                        div.addEventListener('mouseleave', function() { this.style.background = ''; });
+                        div.dataset.index = i;
+                        div.addEventListener('click', function() {
+                            navigateTo(this.dataset.href);
+                            dropdown.style.display = 'none';
+                            input.value = '';
+                        });
+                        div.addEventListener('mouseenter', function() {
+                            selectedIndex = parseInt(this.dataset.index);
+                            updateSelection();
+                        });
                         dropdown.appendChild(div);
                     }
                     dropdown.style.display = 'block';
@@ -108,16 +149,41 @@
             });
 
             input.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') dropdown.style.display = 'none';
+                var items = dropdown.querySelectorAll('div[data-href]');
+                var itemCount = items.length;
+
+                if (e.key === 'Escape') {
+                    dropdown.style.display = 'none';
+                    selectedIndex = -1;
+                }
+
+                if (e.key === 'ArrowDown' && itemCount > 0) {
+                    e.preventDefault();
+                    selectedIndex = (selectedIndex + 1) % itemCount;
+                    updateSelection();
+                }
+
+                if (e.key === 'ArrowUp' && itemCount > 0) {
+                    e.preventDefault();
+                    selectedIndex = selectedIndex <= 0 ? itemCount - 1 : selectedIndex - 1;
+                    updateSelection();
+                }
+
                 if (e.key === 'Enter') {
-                    var first = dropdown.querySelector('div[data-href]');
-                    if (first) window.location.href = first.dataset.href;
+                    var targetItem = selectedIndex >= 0 ? items[selectedIndex] : items[0];
+                    if (targetItem) {
+                        navigateTo(targetItem.dataset.href);
+                        dropdown.style.display = 'none';
+                        input.value = '';
+                        selectedIndex = -1;
+                    }
                 }
             });
 
             document.addEventListener('click', function(e) {
                 if (!parent.contains(e.target)) {
                     dropdown.style.display = 'none';
+                    selectedIndex = -1;
                 }
             });
         });

@@ -735,6 +735,81 @@
   display: none;
 }
 
+/* ===== TYPING INDICATOR ===== */
+.ms-typing-container {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0px 0;
+  min-height: 26px;
+}
+
+.ms-typing-bubble {
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 8px;
+  padding: 1px 10px;
+  cursor: default;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ms-typing-bubble[data-typing]::before {
+  content: attr(data-typing);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.8);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.ms-typing-bubble[data-typing]:hover::before {
+  opacity: 1;
+}
+
+.ms-typing-dots {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.ms-typing-dots span {
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  animation: ms-typing-bounce 1.4s infinite ease-in-out both;
+}
+
+.ms-typing-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.ms-typing-dots span:nth-child(2) {
+  animation-delay: 0.16s;
+}
+
+.ms-typing-dots span:nth-child(3) {
+  animation-delay: 0.32s;
+}
+
+@keyframes ms-typing-bounce {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 /* ===== LIGHTBOX ===== */
 .ms-lightbox {
   position: absolute;
