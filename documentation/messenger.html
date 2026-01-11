@@ -30,16 +30,25 @@
                 <div class="nav-section">
                     <div class="nav-section-title">Applications</div>
                     <a href="messenger.html" class="nav-link active">Messenger</a>
-                    <a href="#characters" class="nav-link sub">Characters</a>
-                    <a href="#conversations" class="nav-link sub">Conversations</a>
-                    <a href="#commands" class="nav-link sub">Commands</a>
-                    <a href="#media" class="nav-link sub">Media</a>
-                    <a href="#reactions" class="nav-link sub">Reactions</a>
-                    <a href="#thinking" class="nav-link sub">Thinking</a>
-                    <a href="#choices" class="nav-link sub">Choices</a>
+                    <a href="messenger.html#characters" class="nav-link sub">Characters</a>
+                    <a href="messenger.html#conversations" class="nav-link sub">Conversations</a>
+                    <a href="messenger.html#commands" class="nav-link sub">Commands</a>
+                    <a href="messenger.html#media" class="nav-link sub">Media</a>
+                    <a href="messenger.html#reactions" class="nav-link sub">Reactions</a>
+                    <a href="messenger.html#thinking" class="nav-link sub">Thinking</a>
+                    <a href="messenger.html#choices" class="nav-link sub">Choices</a>
                     <a href="instapics.html" class="nav-link">InstaPics</a>
+                    <a href="instapics.html#characters" class="nav-link sub">Characters</a>
+                    <a href="instapics.html#posts" class="nav-link sub">Posts</a>
+                    <a href="instapics.html#comments" class="nav-link sub">Comments</a>
                     <a href="onlyslut.html" class="nav-link">OnlySlut</a>
+                    <a href="onlyslut.html#characters" class="nav-link sub">Characters</a>
+                    <a href="onlyslut.html#posts" class="nav-link sub">Posts</a>
                     <a href="spy.html" class="nav-link">Spy App</a>
+                    <a href="spy.html#unlock" class="nav-link sub">Unlock</a>
+                    <a href="spy.html#anchors" class="nav-link sub">Anchors</a>
+                    <a href="spy.html#gf-messenger" class="nav-link sub">GF Messenger</a>
+                    <a href="spy.html#gf-social" class="nav-link sub">GF Social</a>
                 </div>
 
                 <div class="nav-section">
@@ -47,6 +56,7 @@
                     <a href="configuration.html" class="nav-link">General Settings</a>
                     <a href="configuration.html#translations" class="nav-link sub">Translations</a>
                     <a href="configuration.html#assets" class="nav-link sub">Music & Wallpapers</a>
+                    <a href="configuration.html#customization" class="nav-link sub">Customization</a>
                 </div>
             </nav>
         </aside>
@@ -271,6 +281,51 @@ $react (🥵 = gf, be, ro) (🤣 = li)</code></pre>
             <div class="info-box tip">
                 <div class="info-box-title">Tip</div>
                 <p>Only the first character of the emoji is used. If you accidentally write <code>(🥵🥵 = gf)</code>, only <code>🥵</code> will be displayed.</p>
+            </div>
+
+            <h4>Reactions on Choices</h4>
+            <p>You can add reactions to fake choices, both on the MC's choice message and on the custom response. This makes the conversation feel more dynamic and realistic.</p>
+
+            <div class="info-box warning">
+                <div class="info-box-title">Important: Different Format</div>
+                <p>Unlike regular message reactions that use <code>$react (emoji = key)</code> on a separate line, reactions in choices use a <strong>bracketed format</strong>: <code>[$react (emoji = key)]</code> placed directly on the same line as the choice or response.</p>
+            </div>
+
+<pre><code>gf : What do you think about my new dress?
+$fake.choices =
+It looks amazing! [$react (😍 = gf)] $/
+It's okay I guess. [$react (😐 = gf)] $/
+Not really my style. [$react (😢 = gf)]</code></pre>
+
+            <p>In this example, when the MC selects a choice, the girlfriend will react with the corresponding emoji on his message.</p>
+
+            <h5>Reactions on Custom Responses</h5>
+            <p>You can also add reactions to custom responses. The reaction is placed inside the response brackets:</p>
+
+<pre><code>gf : Want to go out tonight?
+$fake.choices =
+Yes! [$react (😍 = gf)] $/ [gf : Perfect! [$react (❤️ = mc)]]
+Maybe later. [$react (😐 = gf)] $/ [gf : Okay... [$react (😔 = mc)]]
+I'm tired. [$react (😢 = gf)]</code></pre>
+
+            <table>
+                <tr>
+                    <th>Element</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>[$react (😍 = gf)]</code></td>
+                    <td>Reaction on the MC's choice message. The emoji will appear on the MC's message bubble.</td>
+                </tr>
+                <tr>
+                    <td><code>[gf : Perfect! [$react (❤️ = mc)]]</code></td>
+                    <td>Custom response with a reaction. The MC reacts to the girlfriend's response.</td>
+                </tr>
+            </table>
+
+            <div class="info-box info">
+                <div class="info-box-title">How it works</div>
+                <p>When a custom response is present, it appears on the <strong>next click</strong> after the MC's choice—not immediately. This makes the conversation flow more naturally. If the player goes back, both messages (MC's choice and the response) are removed together, returning to the choice selection.</p>
             </div>
 
             <h3 id="thinking">MC Thoughts ($thinking)</h3>
@@ -536,6 +591,183 @@ $talks = chapter2/example.txt</code></pre>
             document.getElementById('sidebar').classList.toggle('open');
         }
     </script>
-    <script src="search.js"></script>
+    <script>
+        // ===========================================
+        // RECHERCHE DYNAMIQUE
+        // ===========================================
+        (function() {
+            var searchIndex = [];
+
+            function buildSearchIndex() {
+                var currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
+                // Scanner tous les éléments code (hors pre)
+                document.querySelectorAll('code').forEach(function(codeEl) {
+                    if (codeEl.closest('pre')) return;
+                    var text = codeEl.textContent.trim();
+                    if (!text || text.length > 60) return;
+
+                    if (text.indexOf('$') === 0 || text.indexOf('@') === 0) {
+                        var desc = '';
+                        var parentTd = codeEl.closest('td');
+                        if (parentTd && parentTd.nextElementSibling) {
+                            desc = parentTd.nextElementSibling.textContent.trim().substring(0, 80);
+                        }
+
+                        var anchor = '';
+                        var headings = document.querySelectorAll('h2[id], h3[id]');
+                        var elTop = codeEl.getBoundingClientRect().top;
+                        for (var i = 0; i < headings.length; i++) {
+                            if (headings[i].getBoundingClientRect().top < elTop) {
+                                anchor = '#' + headings[i].id;
+                            }
+                        }
+
+                        var exists = false;
+                        for (var j = 0; j < searchIndex.length; j++) {
+                            if (searchIndex[j].term === text) { exists = true; break; }
+                        }
+                        if (!exists) {
+                            searchIndex.push({ term: text, description: desc || 'Command', page: currentPage, anchor: anchor });
+                        }
+                    }
+                });
+
+                // Ajouter les titres de sections
+                document.querySelectorAll('h2[id], h3[id]').forEach(function(heading) {
+                    var term = heading.textContent.trim();
+                    var exists = false;
+                    for (var j = 0; j < searchIndex.length; j++) {
+                        if (searchIndex[j].term === term) { exists = true; break; }
+                    }
+                    if (!exists) {
+                        searchIndex.push({ term: term, description: 'Section', page: currentPage, anchor: '#' + heading.id });
+                    }
+                });
+            }
+
+            function search(query) {
+                if (!query) return [];
+                var lowerQuery = query.toLowerCase();
+                var results = [];
+                for (var i = 0; i < searchIndex.length; i++) {
+                    var item = searchIndex[i];
+                    if (item.term.toLowerCase().indexOf(lowerQuery) !== -1 || item.description.toLowerCase().indexOf(lowerQuery) !== -1) {
+                        results.push(item);
+                    }
+                }
+                results.sort(function(a, b) {
+                    var aStarts = a.term.toLowerCase().indexOf(lowerQuery) === 0;
+                    var bStarts = b.term.toLowerCase().indexOf(lowerQuery) === 0;
+                    if (aStarts && !bStarts) return -1;
+                    if (!aStarts && bStarts) return 1;
+                    return a.term.localeCompare(b.term);
+                });
+                return results.slice(0, 15);
+            }
+
+            function initSearch() {
+                buildSearchIndex();
+
+                var searchInputs = document.querySelectorAll('.search-input');
+                searchInputs.forEach(function(input) {
+                    var parent = input.parentElement;
+                    parent.style.position = 'relative';
+
+                    var dropdown = document.createElement('div');
+                    dropdown.style.cssText = 'position:absolute;top:100%;left:0;right:0;background:#2d2d44;border:1px solid #444;border-radius:0 0 6px 6px;max-height:300px;overflow-y:auto;display:none;z-index:1000;';
+                    parent.appendChild(dropdown);
+
+                    input.addEventListener('input', function(e) {
+                        var query = e.target.value.trim();
+                        var results = search(query);
+                        dropdown.innerHTML = '';
+
+                        if (results.length > 0) {
+                            for (var i = 0; i < results.length; i++) {
+                                var item = results[i];
+                                var div = document.createElement('div');
+                                div.style.cssText = 'padding:10px;cursor:pointer;border-bottom:1px solid #444;';
+                                div.innerHTML = '<div style="color:#f472b6;font-family:monospace;">' + item.term + '</div><div style="color:#888;font-size:12px;">' + item.description + '</div>';
+                                div.dataset.href = item.page + item.anchor;
+                                div.addEventListener('click', function() { window.location.href = this.dataset.href; });
+                                div.addEventListener('mouseenter', function() { this.style.background = '#3d3d54'; });
+                                div.addEventListener('mouseleave', function() { this.style.background = ''; });
+                                dropdown.appendChild(div);
+                            }
+                            dropdown.style.display = 'block';
+                        } else if (query.length > 0) {
+                            dropdown.innerHTML = '<div style="padding:14px;color:#888;text-align:center;">Aucun résultat</div>';
+                            dropdown.style.display = 'block';
+                        } else {
+                            dropdown.style.display = 'none';
+                        }
+                    });
+
+                    input.addEventListener('keydown', function(e) {
+                        if (e.key === 'Escape') dropdown.style.display = 'none';
+                        if (e.key === 'Enter') {
+                            var first = dropdown.querySelector('div[data-href]');
+                            if (first) window.location.href = first.dataset.href;
+                        }
+                    });
+                });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSearch);
+            } else {
+                initSearch();
+            }
+        })();
+
+        // ===========================================
+        // SCROLL SPY
+        // ===========================================
+        (function() {
+            var sectionIds = ['characters', 'conversations', 'commands', 'media', 'reactions', 'thinking', 'choices'];
+
+            function getOffsetTop(el) {
+                var top = 0;
+                while (el) {
+                    top += el.offsetTop;
+                    el = el.offsetParent;
+                }
+                return top;
+            }
+
+            function updateActiveNav() {
+                var scrollPos = window.scrollY + 150;
+                var activeId = null;
+
+                for (var i = 0; i < sectionIds.length; i++) {
+                    var el = document.getElementById(sectionIds[i]);
+                    if (el && scrollPos >= getOffsetTop(el)) {
+                        activeId = sectionIds[i];
+                    }
+                }
+
+                document.querySelectorAll('.sidebar-nav .nav-link').forEach(function(link) {
+                    var href = link.getAttribute('href');
+                    var isActive = href && activeId && href.indexOf('#' + activeId) !== -1;
+
+                    if (isActive) {
+                        link.style.background = 'rgba(255,255,255,0.08)';
+                        link.style.borderRadius = '6px';
+                        link.style.marginLeft = '4px';
+                        link.style.marginRight = '4px';
+                    } else {
+                        link.style.background = '';
+                        link.style.borderRadius = '';
+                        link.style.marginLeft = '';
+                        link.style.marginRight = '';
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', updateActiveNav);
+            setTimeout(updateActiveNav, 100);
+        })();
+    </script>
 </body>
 </html>
