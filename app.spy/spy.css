@@ -622,23 +622,22 @@
 .spy-next-content-button {
   display: flex;
   justify-content: center;
-  padding: 20px 16px;
-  margin: 16px 0;
+  padding: 12px 16px;
+  margin: 8px 0;
 }
 
 .spy-next-content-btn {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 8px;
-  padding: 16px 24px;
+  gap: 10px;
+  padding: 10px 20px;
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.2) 100%);
   border: 1px solid rgba(147, 51, 234, 0.4);
-  border-radius: 16px;
+  border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
   color: #ffffff;
-  min-width: 200px;
 }
 
 .spy-next-content-btn:hover {
@@ -653,23 +652,17 @@
 }
 
 .spy-next-content-text {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-}
-
-.spy-next-content-target {
-  font-size: 15px;
-  font-weight: 600;
-  color: #ffffff;
+  font-weight: 500;
 }
 
 .spy-next-content-arrow {
-  width: 20px;
-  height: 20px;
-  color: rgba(255, 255, 255, 0.6);
-  margin-top: 4px;
+  width: 18px;
+  height: 18px;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* ===== CHUNKED LOADING INDICATORS ===== */

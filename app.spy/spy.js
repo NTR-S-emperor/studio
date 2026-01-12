@@ -1394,15 +1394,8 @@ window.SpyMessenger = {
     const conv = this.currentConversation;
     if (!conv) return;
 
-    console.log('SpyMessenger renderChatMessages:', {
-      conversationKey: conv.key,
-      messageCount: messages.length,
-      isFirstVisit: isFirstVisit
-    });
-
     if (messages.length === 0) {
       this.chatMessagesEl.innerHTML = '<div class="ms-placeholder">No messages</div>';
-      console.log('SpyMessenger: No messages to render');
       return;
     }
 
@@ -1411,7 +1404,6 @@ window.SpyMessenger = {
 
     // Check if we need chunked loading (300+ messages)
     const useChunkedLoading = messages.length >= 300;
-    console.log('SpyMessenger: useChunkedLoading =', useChunkedLoading, 'messageCount =', messages.length);
 
     if (useChunkedLoading) {
       // Use chunked loading for large conversations
@@ -1440,17 +1432,6 @@ window.SpyMessenger = {
 
     this.chatMessagesEl.innerHTML = html;
     this.bindMediaEvents();
-
-    // DEBUG: Log container dimensions to diagnose scroll issue
-    console.log('SpyMessenger scroll debug:', {
-      messageCount: messages.length,
-      htmlLength: html.length,
-      clientHeight: this.chatMessagesEl.clientHeight,
-      scrollHeight: this.chatMessagesEl.scrollHeight,
-      canScroll: this.chatMessagesEl.scrollHeight > this.chatMessagesEl.clientHeight,
-      overflow: getComputedStyle(this.chatMessagesEl).overflow,
-      childCount: this.chatMessagesEl.children.length
-    });
 
     // Determine scroll position
     if (isFirstVisit) {
@@ -1561,8 +1542,6 @@ window.SpyMessenger = {
 
     this.chatMessagesEl.innerHTML = html;
     this.bindMediaEvents();
-
-    console.log('SpyMessenger chunked render:', { start, end, total: messages.length });
 
     // Set initial scroll position
     if (isFirstVisit) {
@@ -1701,8 +1680,6 @@ window.SpyMessenger = {
         this.chatMessagesEl.scrollTop = scrollTopBefore;
       }
 
-      console.log('SpyMessenger loaded more:', { direction, start, end, total: messages.length });
-
       this.chunkedLoading.isLoading = false;
       this.initThinkingObserver();
     }, 150); // Small delay for visual feedback
@@ -1780,19 +1757,6 @@ window.SpyMessenger = {
     // Measure and cache actual heights of rendered messages
     this.measureRenderedHeights(start, end);
 
-    // DEBUG: Log virtual scroll state
-    console.log('SpyMessenger virtual scroll debug:', {
-      visibleRange: this.virtualScroll.visibleRange,
-      totalHeight: this.virtualScroll.totalHeight,
-      topSpacerHeight: topSpacerHeight,
-      bottomSpacerHeight: bottomSpacerHeight,
-      htmlLength: html.length,
-      clientHeight: this.chatMessagesEl.clientHeight,
-      scrollHeight: this.chatMessagesEl.scrollHeight,
-      canScroll: this.chatMessagesEl.scrollHeight > this.chatMessagesEl.clientHeight,
-      childCount: this.chatMessagesEl.children.length
-    });
-
     // Determine scroll position
     if (isFirstVisit) {
       const anchorIndex = this.findPreviousAnchorIndex(messages);
@@ -1838,15 +1802,12 @@ window.SpyMessenger = {
     // Handle "next content" navigation button
     if (msg.type === 'next_content_button') {
       const targetKey = msg.targetConversation;
-      const targetConv = this.conversations.find(c => c.key === targetKey);
-      const targetName = targetConv ? targetConv.name : targetKey;
       const buttonText = window.Translations
         ? window.Translations.get('spy.next_content')
         : 'Continue to next content';
       return `<div class="spy-next-content-button" data-target="${targetKey}">
         <button class="spy-next-content-btn">
           <span class="spy-next-content-text">${buttonText}</span>
-          <span class="spy-next-content-target">${this.escapeHtml(targetName)}</span>
           <svg class="spy-next-content-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
@@ -2071,7 +2032,7 @@ window.SpyMessenger = {
 
     // Next content button has a fixed height
     if (msg.type === 'next_content_button') {
-      return 80;
+      return 56;
     }
 
     const heights = this.virtualScroll.estimatedHeights;
