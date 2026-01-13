@@ -22,7 +22,8 @@ window.Translations = {
      */
     async load() {
         try {
-            const response = await fetch('system_translations.txt');
+            const url = window.getAssetUrl ? window.getAssetUrl('system_translations.txt') : 'system_translations.txt';
+            const response = await fetch(url);
             const text = await response.text();
             this.parse(text);
             this.loaded = true;

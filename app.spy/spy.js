@@ -801,9 +801,10 @@ window.SpyMessenger = {
     this.nameToKey = {};
     this.keyToName = {};
     const url = `${this.basePath}/characters/characters.txt`;
+    const cacheBustedUrl = window.getAssetUrl ? window.getAssetUrl(url) : url;
 
     try {
-      const res = await fetch(url);
+      const res = await fetch(cacheBustedUrl);
       if (!res.ok) return;
 
       const txt = await res.text();
@@ -908,7 +909,8 @@ window.SpyMessenger = {
         if (window.Translations && window.Translations.fetchMergedContent) {
           txt = await window.Translations.fetchMergedContent(url);
         } else {
-          const res = await fetch(url);
+          const cacheBustedUrl = window.getAssetUrl ? window.getAssetUrl(url) : url;
+          const res = await fetch(cacheBustedUrl);
           txt = res.ok ? await res.text() : null;
         }
 
@@ -3086,10 +3088,11 @@ window.SpyInstaPics = {
 
   async loadCharacters() {
     const url = `${this.basePath}/characters/characters.txt`;
+    const cacheBustedUrl = window.getAssetUrl ? window.getAssetUrl(url) : url;
     const users = [];
 
     try {
-      const res = await fetch(url);
+      const res = await fetch(cacheBustedUrl);
       if (!res.ok) return users;
 
       const txt = await res.text();
@@ -3137,7 +3140,8 @@ window.SpyInstaPics = {
         if (window.Translations && window.Translations.fetchMergedContent) {
           content = await window.Translations.fetchMergedContent(url);
         } else {
-          const res = await fetch(url);
+          const cacheBustedUrl = window.getAssetUrl ? window.getAssetUrl(url) : url;
+          const res = await fetch(cacheBustedUrl);
           content = res.ok ? await res.text() : null;
         }
 
@@ -3562,10 +3566,11 @@ window.SpyOnlySlut = {
 
   async loadCharacters() {
     const url = `${this.basePath}/characters/characters.txt`;
+    const cacheBustedUrl = window.getAssetUrl ? window.getAssetUrl(url) : url;
     const users = [];
 
     try {
-      const res = await fetch(url);
+      const res = await fetch(cacheBustedUrl);
       if (!res.ok) return users;
 
       const txt = await res.text();
@@ -3613,7 +3618,8 @@ window.SpyOnlySlut = {
         if (window.Translations && window.Translations.fetchMergedContent) {
           content = await window.Translations.fetchMergedContent(url);
         } else {
-          const res = await fetch(url);
+          const cacheBustedUrl = window.getAssetUrl ? window.getAssetUrl(url) : url;
+          const res = await fetch(cacheBustedUrl);
           content = res.ok ? await res.text() : null;
         }
 

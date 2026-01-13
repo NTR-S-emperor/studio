@@ -95,7 +95,9 @@ window.Tips = {
         // Try to load files sequentially: 1.txt, 2.txt, 3.txt, etc.
         while (hasMore) {
             try {
-                const response = await fetch(`${this.basePath}/${slideNumber}.txt`);
+                const fileUrl = `${this.basePath}/${slideNumber}.txt`;
+                const cacheBustedUrl = window.getAssetUrl ? window.getAssetUrl(fileUrl) : fileUrl;
+                const response = await fetch(cacheBustedUrl);
                 if (response.ok) {
                     const content = await response.text();
                     const parsed = this.parseSlideContent(content, slideNumber);

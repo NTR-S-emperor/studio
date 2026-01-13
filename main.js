@@ -102,8 +102,9 @@ function initApp() {
    */
   async function findCustomizableCharacter(messengerPath) {
     const url = `${messengerPath}/characters/characters.txt`;
+    const cacheBustedUrl = window.getAssetUrl ? window.getAssetUrl(url) : url;
     try {
-      const res = await fetch(url);
+      const res = await fetch(cacheBustedUrl);
       if (!res.ok) return null;
 
       const txt = await res.text();

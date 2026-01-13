@@ -5,11 +5,15 @@
  */
 
 // Prevent browser/CDN from caching this HTML page
-header('Cache-Control: no-cache, no-store, must-revalidate');
+header('Cache-Control: no-cache, no-store, must-revalidate, max-age=0');
 header('Pragma: no-cache');
-header('Expires: 0');
+header('Expires: ' . gmdate('D, d M Y H:i:s', time() - 3600) . ' GMT');
 header('CDN-Cache-Control: no-store');
 header('Cloudflare-CDN-Cache-Control: no-store');
+header('Vary: *');
+// ETag based on file modification times to force revalidation
+$etag = md5(filemtime(__FILE__) . '-' . time());
+header('ETag: "' . $etag . '"');
 
 // Clear PHP file stat cache to ensure fresh hashes
 clearstatcache(true);
