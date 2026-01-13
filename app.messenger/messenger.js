@@ -3305,12 +3305,12 @@ window.Messenger = {
       }
     }
 
-    // Vérifie si on peut revenir en arrière :
-    // - Il y a un historique d'actions OU on attend un choix
-    // Note: on permet TOUJOURS le retour en arrière, même si ce n'est pas la conversation active
-    // La restriction activeConversationKey ne s'applique qu'à l'avancement
+    // Check if we can go back:
+    // - Must be the active conversation (otherwise we risk corrupting the new conversation's progress)
+    // - AND there's action history OR waiting for a choice
+    const isActiveConversation = this.selectedKey === this.activeConversationKey;
     const hasHistory = Array.isArray(conv.actionHistory) && conv.actionHistory.length > 0;
-    const canGoBack = hasHistory || conv.waitingForChoice || conv.waitingForRealChoice;
+    const canGoBack = isActiveConversation && (hasHistory || conv.waitingForChoice || conv.waitingForRealChoice);
 
     // Determine the icon and class of the autoplay button
     let autoplayIconHtml;
@@ -4033,7 +4033,9 @@ window.Messenger = {
     const conv = this.conversationsByKey[this.selectedKey];
     if (!conv) return;
 
-    // Allow going back even if not active conversation (for canceling unlocks)
+    // Only allow going back in the active conversation
+    // Going back in a non-active conversation would corrupt the active conversation's state
+    if (this.selectedKey !== this.activeConversationKey) return;
 
     // If autoplay mode is active, switch to manual
     if (this.autoplayMode !== 'manual') {

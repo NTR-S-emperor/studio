@@ -252,7 +252,8 @@
 
 .ms-chat-back-btn--disabled {
   opacity: 0.3;
-  cursor: not-allowed;
+  cursor: default;
+  pointer-events: none;
 }
 
 .ms-chat-back-btn--disabled:hover {
