@@ -93,6 +93,16 @@
     text-align: center;
 }
 
+.settings-item-icon svg {
+    position: relative;
+    top: 2px;
+}
+
+.settings-item-icon--emoji {
+    position: relative;
+    top: 1px;
+}
+
 .settings-item-control {
     display: flex;
     align-items: center;

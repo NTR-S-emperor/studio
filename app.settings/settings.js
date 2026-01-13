@@ -121,7 +121,7 @@ window.Settings = {
                     <!-- Language -->
                     <div class="settings-item">
                         <div class="settings-item-label">
-                            <span class="settings-item-icon">🌐</span>
+                            <span class="settings-item-icon settings-item-icon--emoji">🌐</span>
                             <span data-i18n="settings.language">Language</span>
                         </div>
                         <div class="settings-item-control">
@@ -140,7 +140,7 @@ window.Settings = {
                     <!-- Background music -->
                     <div class="settings-item">
                         <div class="settings-item-label">
-                            <span class="settings-item-icon">🎵</span>
+                            <span class="settings-item-icon settings-item-icon--emoji">🎵</span>
                             <span data-i18n="settings.music">Background music</span>
                         </div>
                         <div class="settings-item-control settings-slider-control">
@@ -152,7 +152,7 @@ window.Settings = {
                     <!-- Wallpaper -->
                     <div class="settings-item">
                         <div class="settings-item-label">
-                            <span class="settings-item-icon">🖼️</span>
+                            <span class="settings-item-icon settings-item-icon--emoji">🖼️</span>
                             <span data-i18n="settings.wallpaper">Wallpaper</span>
                         </div>
                         <div class="settings-item-control">
@@ -179,7 +179,7 @@ window.Settings = {
                     <!-- Media volume -->
                     <div class="settings-item">
                         <div class="settings-item-label">
-                            <span class="settings-item-icon">🔊</span>
+                            <span class="settings-item-icon settings-item-icon--emoji">🔊</span>
                             <span data-i18n="settings.media">Media volume</span>
                         </div>
                         <div class="settings-item-control settings-slider-control">
@@ -272,7 +272,7 @@ window.Settings = {
                     <!-- Reset progress -->
                     <div class="settings-item settings-item-reset">
                         <div class="settings-item-label">
-                            <span class="settings-item-icon">🔄</span>
+                            <span class="settings-item-icon settings-item-icon--emoji">🔄</span>
                             <span data-i18n="settings.reset">Reset progress</span>
                         </div>
                         <div class="settings-item-control">
