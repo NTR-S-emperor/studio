@@ -1324,6 +1324,13 @@
   transform: scale(1);
 }
 
+/* Smaller emojis in reactions */
+.ms-msg-reaction img.emoji {
+  height: 1em;
+  width: 1em;
+  margin: 0;
+}
+
 /* ===== VIRTUAL SCROLL ===== */
 
 /* Sentinel elements for IntersectionObserver - invisible trigger zones */

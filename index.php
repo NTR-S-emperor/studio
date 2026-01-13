@@ -76,6 +76,7 @@ function v($path) {
   <link rel="stylesheet" href="<?= v('app.tips/tips.css') ?>">
   <link rel="stylesheet" href="<?= v('app.spy/spy.css') ?>">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/twemoji@latest/dist/twemoji.min.js"></script>
   <!-- Pre-calculate scale before content renders to avoid visual jump -->
   <script>
     (function() {
@@ -396,6 +397,38 @@ function v($path) {
       // Use manifest hash if available, otherwise use timestamp fallback to bust cache
       return hash ? path + '?v=' + hash : path + '?t=' + Date.now();
     };
+
+    // Twemoji configuration and auto-parsing
+    window.parseEmojis = function(element) {
+      if (typeof twemoji !== 'undefined') {
+        twemoji.parse(element || document.body, {
+          folder: 'svg',
+          ext: '.svg',
+          base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/'
+        });
+      }
+    };
+
+    // Auto-parse emojis when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+      window.parseEmojis();
+
+      // MutationObserver to auto-parse new content
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          mutation.addedNodes.forEach(function(node) {
+            if (node.nodeType === 1) { // Element node
+              window.parseEmojis(node);
+            }
+          });
+        });
+      });
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+    });
   </script>
 
   <script src="<?= v('loader.js') ?>"></script>
