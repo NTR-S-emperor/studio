@@ -228,7 +228,15 @@ function v($path) {
                   <span class="app-icon-label" data-i18n="app.gallery">Gallery</span>
                 </button>
 
-                <!-- 5. SETTINGS -->
+                <!-- 5. SPY (hidden by default, shown when unlocked) -->
+                <button class="app-icon app-spy hidden" id="openSpyBtn">
+                  <div class="app-icon-image app-icon-spy-svg">
+                    <img src="<?= v('assets/spyapp/icon-spy-notification.svg') ?>" alt="Spy">
+                  </div>
+                  <span class="app-icon-label" data-i18n="app.spy">Spy</span>
+                </button>
+
+                <!-- 6. SETTINGS -->
                 <button class="app-icon app-settings">
                   <div class="app-icon-image">
                     <img src="<?= v('assets/apps_icon/settings.png') ?>" alt="Settings">
@@ -260,23 +268,12 @@ function v($path) {
                   <span class="app-icon-label" data-i18n="app.tips">Tips</span>
                 </button>
 
-                <!-- 9. DISCLAIMER -->
+                <!-- 10. DISCLAIMER -->
                 <button class="app-icon app-disclaimer" id="openDisclaimerBtn">
                   <div class="app-icon-image">
                     <img src="<?= v('assets/apps_icon/disclaimer.svg') ?>" alt="Disclaimer">
                   </div>
                   <span class="app-icon-label" data-i18n="app.disclaimer">Disclaimer</span>
-                </button>
-
-                <!-- 10. SPY (hidden by default, shown when unlocked) -->
-                <button class="app-icon app-spy hidden" id="openSpyBtn">
-                  <div class="app-icon-image app-icon-spy-svg">
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="12" cy="12" r="11" fill="#1a1a2e"/>
-                      <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="#e94560"/>
-                    </svg>
-                  </div>
-                  <span class="app-icon-label" data-i18n="app.spy">Spy</span>
                 </button>
 
               </div>
