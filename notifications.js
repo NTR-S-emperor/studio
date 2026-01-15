@@ -191,6 +191,8 @@ window.Notifications = {
             this.openOnlySlutProfile(authorName);
         } else if (app === 'spyapp') {
             this.openSpyApp();
+        } else if (app === 'wallet') {
+            this.openWallet();
         }
     },
 
@@ -199,6 +201,16 @@ window.Notifications = {
      */
     openSpyApp() {
         const openBtn = document.getElementById('openSpyBtn');
+        if (openBtn && !openBtn.classList.contains('hidden')) {
+            openBtn.click();
+        }
+    },
+
+    /**
+     * Open Wallet
+     */
+    openWallet() {
+        const openBtn = document.getElementById('openWalletBtn');
         if (openBtn && !openBtn.classList.contains('hidden')) {
             openBtn.click();
         }
@@ -336,6 +348,20 @@ window.Notifications = {
         return this.show({
             app: 'SpyApp',
             appIcon: 'assets/spyapp/icon-spy-notification.svg',
+            avatar: null,
+            author: '',
+            text: text,
+            postIndex: 0
+        });
+    },
+
+    /**
+     * Utility method to create a Wallet notification
+     */
+    showWallet(text) {
+        return this.show({
+            app: 'Wallet',
+            appIcon: 'assets/apps_icon/wallet.svg',
             avatar: null,
             author: '',
             text: text,

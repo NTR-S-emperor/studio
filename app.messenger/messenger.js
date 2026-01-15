@@ -261,6 +261,10 @@ window.Messenger = {
   async reloadForLanguageChange() {
     if (!this.storyPath) return;
 
+    // Clear wallet transactions before replay (keep unlock state and initial balance)
+    if (window.Wallet) {
+      window.Wallet.transactions = [];
+    }
 
     // 1. Save the state of all conversations
     const savedStates = {};
@@ -759,6 +763,68 @@ window.Messenger = {
     if (scriptMsg.kind === "unlockSlutOnly") {
       conv.scriptIndex += 1;
       this.unlockSlutOnlyPost(scriptMsg.file);
+      // Continue to display the next message
+      this.advanceConversation(conv);
+      return;
+    }
+
+    // If it's a "wallet_unlock" message, unlock the Wallet app
+    if (scriptMsg.kind === "wallet_unlock") {
+      // Record in action history for goBack support
+      if (!Array.isArray(conv.actionHistory)) conv.actionHistory = [];
+      conv.actionHistory.push({
+        type: 'wallet_unlock',
+        previousScriptIndex: conv.scriptIndex,
+        initialAmount: scriptMsg.initialAmount
+      });
+
+      if (typeof window.unlockWalletApp === 'function') {
+        window.unlockWalletApp();
+      }
+
+      // If there's an initial amount, set it as the initial balance (not as a transaction)
+      if (scriptMsg.initialAmount !== null && scriptMsg.initialAmount !== undefined && window.Wallet) {
+        window.Wallet.setInitialBalance(scriptMsg.initialAmount);
+      }
+
+      // Show notification for Wallet app installation
+      if (window.Notifications && window.Notifications.showWallet) {
+        const notifText = window.Translations ? window.Translations.get('notif.wallet.installed') : 'Wallet has been installed';
+        window.Notifications.showWallet(notifText);
+      }
+
+      // Move to next message
+      conv.scriptIndex += 1;
+      this.advanceConversation(conv);
+      return;
+    }
+
+    // If it's a "wallet" message, add transaction to Wallet app and move to next
+    if (scriptMsg.kind === "wallet") {
+      // Record in action history for goBack support
+      if (!Array.isArray(conv.actionHistory)) conv.actionHistory = [];
+      conv.actionHistory.push({
+        type: 'wallet_transaction',
+        previousScriptIndex: conv.scriptIndex,
+        transaction: {
+          author: scriptMsg.author,
+          amount: scriptMsg.amount,
+          label: scriptMsg.label,
+          date: scriptMsg.date
+        }
+      });
+
+      conv.scriptIndex += 1;
+      if (window.Wallet && window.Wallet.addTransaction) {
+        window.Wallet.addTransaction(scriptMsg.author, scriptMsg.amount, scriptMsg.label, scriptMsg.date);
+
+        // Show notification for new transaction
+        if (window.Notifications && window.Notifications.showWallet) {
+          const sign = scriptMsg.amount >= 0 ? '+' : '';
+          const notifText = `${sign}$${scriptMsg.amount.toFixed(2)} - ${scriptMsg.label}`;
+          window.Notifications.showWallet(notifText);
+        }
+      }
       // Continue to display the next message
       this.advanceConversation(conv);
       return;
@@ -2509,6 +2575,75 @@ window.Messenger = {
         continue;
       }
 
+      // --- WALLET UNLOCK: $wallet.unlock or $wallet.unlock.AMOUNT ---
+      if (/^\$wallet\.unlock\b/i.test(trimmed)) {
+        flushCurrentMessage();
+
+        // Check for optional initial amount: $wallet.unlock.100 or $wallet.unlock.-50
+        const unlockMatch = trimmed.match(/^\$wallet\.unlock\.([+-]?\d+(?:\.\d{1,2})?)\s*$/i);
+        const initialAmount = unlockMatch ? parseFloat(unlockMatch[1]) : null;
+
+        rawMessages.push({
+          kind: "wallet_unlock",
+          initialAmount: initialAmount
+        });
+
+        i++;
+        continue;
+      }
+
+      // --- WALLET TRANSACTION LINE: $wallet.mc = -100 : Label : Date ---
+      if (/^\$wallet\.(mc|gf)\b/i.test(trimmed) || /wallet\s*\.\s*(mc|gf)/i.test(trimmed)) {
+        flushCurrentMessage();
+
+        // Parse: $wallet.mc = -100.50 : Label : Optional Date
+        const m = trimmed.match(/wallet\s*\.\s*(mc|gf)\s*=\s*([+-]?\d+(?:\.\d{1,2})?)\s*:\s*([^:]+)(?:\s*:\s*(.+))?$/i);
+        if (m) {
+          rawMessages.push({
+            kind: "wallet",
+            author: m[1].toLowerCase(),
+            amount: parseFloat(m[2]),
+            label: m[3].trim(),
+            date: m[4] ? m[4].trim() : ''
+          });
+        } else {
+          // Fallback: try a simpler extraction if the strict regex fails
+          const simpleFallback = trimmed.match(/wallet\s*\.\s*(mc|gf)\s*=\s*([+-]?\d+(?:\.\d{1,2})?)\s*:\s*(.+)/i);
+          if (simpleFallback) {
+            // Split the rest by colon to get label and optional date
+            const rest = simpleFallback[3];
+            const colonIndex = rest.lastIndexOf(':');
+            let label, date;
+            if (colonIndex > 0 && colonIndex < rest.length - 1) {
+              // Check if what's after the colon looks like a date
+              const possibleDate = rest.slice(colonIndex + 1).trim();
+              const possibleLabel = rest.slice(0, colonIndex).trim();
+              // If the "date" part contains mostly digits/punctuation, treat it as a date
+              if (/^\d|^[a-z]{3,}\s+\d|hier|today|yesterday/i.test(possibleDate)) {
+                label = possibleLabel;
+                date = possibleDate;
+              } else {
+                label = rest.trim();
+                date = '';
+              }
+            } else {
+              label = rest.trim();
+              date = '';
+            }
+            rawMessages.push({
+              kind: "wallet",
+              author: simpleFallback[1].toLowerCase(),
+              amount: parseFloat(simpleFallback[2]),
+              label: label,
+              date: date
+            });
+          }
+        }
+
+        i++;
+        continue;
+      }
+
       // --- LOCK LINE: $lock = X.txt ---
       if (/^\$lock\b/.test(trimmed)) {
         flushCurrentMessage();
@@ -2885,6 +3020,21 @@ window.Messenger = {
           speakerKey: msg.speakerKey,
           filename: filename
         });
+      } else if (msg.kind === "wallet") {
+        convObj.messages.push({
+          kind: "wallet",
+          author: msg.author,
+          amount: msg.amount,
+          label: msg.label,
+          date: msg.date,
+          filename: filename
+        });
+      } else if (msg.kind === "wallet_unlock") {
+        convObj.messages.push({
+          kind: "wallet_unlock",
+          initialAmount: msg.initialAmount,
+          filename: filename
+        });
       } else {
         convObj.messages.push({
           kind: "talk",
@@ -3133,6 +3283,28 @@ window.Messenger = {
 
       // Special messages: skip them (unlocks, locks, thinking, typing are handled separately)
       if (scriptMsg.kind === "unlock" || scriptMsg.kind === "unlockInsta" || scriptMsg.kind === "unlockSlutOnly" || scriptMsg.kind === "lock" || scriptMsg.kind === "thinking" || scriptMsg.kind === "typing") {
+        conv.scriptIndex++;
+        continue;
+      }
+
+      // Wallet commands: execute them during replay to restore wallet state
+      if (scriptMsg.kind === "wallet_unlock") {
+        if (typeof window.unlockWalletApp === 'function') {
+          window.unlockWalletApp();
+        }
+        // If there's an initial amount, set it as the initial balance
+        if (scriptMsg.initialAmount !== null && scriptMsg.initialAmount !== undefined && window.Wallet) {
+          window.Wallet.setInitialBalance(scriptMsg.initialAmount);
+        }
+        conv.scriptIndex++;
+        continue;
+      }
+
+      if (scriptMsg.kind === "wallet") {
+        // Replay wallet transaction (add to wallet without notification)
+        if (window.Wallet && window.Wallet.addTransaction) {
+          window.Wallet.addTransaction(scriptMsg.author, scriptMsg.amount, scriptMsg.label, scriptMsg.date);
+        }
         conv.scriptIndex++;
         continue;
       }
@@ -4426,6 +4598,36 @@ window.Messenger = {
       return;
     }
 
+    // Special case: canceling wallet_unlock
+    if (lastAction.type === 'wallet_unlock') {
+      // Reset initial balance if there was one
+      if (window.Wallet) {
+        window.Wallet.initialBalance = 0;
+        window.Wallet.render();
+      }
+      // Re-lock Wallet app
+      if (typeof window.lockWalletApp === 'function') {
+        window.lockWalletApp();
+      }
+      // Restore script index
+      conv.scriptIndex = lastAction.previousScriptIndex;
+      this.renderConversation();
+      return;
+    }
+
+    // Special case: canceling wallet_transaction
+    if (lastAction.type === 'wallet_transaction') {
+      // Remove the last transaction from Wallet
+      if (window.Wallet && window.Wallet.transactions && window.Wallet.transactions.length > 0) {
+        window.Wallet.transactions.pop();
+        window.Wallet.render();
+      }
+      // Restore script index
+      conv.scriptIndex = lastAction.previousScriptIndex;
+      this.renderConversation();
+      return;
+    }
+
     if (lastAction.type === 'delete') {
       // Restore deleted message
       if (lastAction.deletedMessage) {
@@ -4924,7 +5126,7 @@ window.Messenger = {
   createMessageElement(msg, index, conv, previousFrom, isLastMessage = false) {
     // Skip non-displayable message kinds (typing, react, delete, etc.)
     // These should not be in playedMessages but handle gracefully if they are
-    const nonDisplayableKinds = ['typing', 'react', 'delete', 'unlock', 'unlockInsta', 'unlockSlutOnly', 'lock', 'spy_unlock', 'spy_anchor', 'spy_unlock_instapics', 'spy_unlock_onlyslut', 'pathStart', 'pathEnd'];
+    const nonDisplayableKinds = ['typing', 'react', 'delete', 'unlock', 'unlockInsta', 'unlockSlutOnly', 'lock', 'spy_unlock', 'spy_anchor', 'spy_unlock_instapics', 'spy_unlock_onlyslut', 'pathStart', 'pathEnd', 'wallet', 'wallet_unlock'];
     if (nonDisplayableKinds.includes(msg.kind)) {
       // Return empty element
       const empty = document.createElement('div');

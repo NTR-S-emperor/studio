@@ -42,7 +42,12 @@
         { term: '$spy_unlock', description: 'Unlock the Spy App for the MC', page: 'spy.html', anchor: '#unlock' },
         { term: '$spy_unlock_instapics', description: 'Show InstaPics on girlfriend\'s phone', page: 'spy.html', anchor: '#unlock' },
         { term: '$spy_unlock_onlyslut', description: 'Show OnlySlut on girlfriend\'s phone', page: 'spy.html', anchor: '#unlock' },
-        { term: '$spy_anchor', description: 'Set visibility anchor for Spy App content', page: 'spy.html', anchor: '#anchors' }
+        { term: '$spy_anchor', description: 'Set visibility anchor for Spy App content', page: 'spy.html', anchor: '#anchors' },
+
+        // Wallet
+        { term: '$wallet.unlock', description: 'Unlock the Wallet app (optionally with initial balance)', page: 'wallet.html', anchor: '#unlock' },
+        { term: '$wallet.mc', description: 'Add a transaction from MC', page: 'wallet.html', anchor: '#transactions' },
+        { term: '$wallet.gf', description: 'Add a transaction from GF', page: 'wallet.html', anchor: '#transactions' }
     ];
 
     function search(query) {

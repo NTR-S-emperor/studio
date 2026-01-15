@@ -452,6 +452,11 @@ window.SavesLoad = {
         window.Messenger.nameToKey = {};
         window.Messenger.keyToName = {};
 
+        // Reset Wallet state before replay (will be restored by replaying wallet commands)
+        if (typeof window.resetWalletAppState === 'function') {
+            window.resetWalletAppState();
+        }
+
         // 2. Reload data from unlocked files ONLY
         await window.Messenger.reloadData();
 

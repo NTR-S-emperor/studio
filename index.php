@@ -75,6 +75,7 @@ function v($path) {
   <link rel="stylesheet" href="<?= v('app.settings/settings.css') ?>">
   <link rel="stylesheet" href="<?= v('app.tips/tips.css') ?>">
   <link rel="stylesheet" href="<?= v('app.spy/spy.css') ?>">
+  <link rel="stylesheet" href="<?= v('app.wallet/wallet.css') ?>">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/twemoji@latest/dist/twemoji.min.js"></script>
   <!-- Pre-calculate scale before content renders to avoid visual jump -->
@@ -220,7 +221,15 @@ function v($path) {
                   <span class="app-icon-label" data-i18n="app.onlyslut">OnlySlut</span>
                 </button>
 
-                <!-- 4. GALLERY -->
+                <!-- 4. WALLET (hidden by default, unlocked via $wallet.unlock) -->
+                <button class="app-icon app-wallet hidden" id="openWalletBtn">
+                  <div class="app-icon-image">
+                    <img src="<?= v('assets/apps_icon/wallet.svg') ?>" alt="Wallet">
+                  </div>
+                  <span class="app-icon-label" data-i18n="app.wallet">Wallet</span>
+                </button>
+
+                <!-- 5. GALLERY -->
                 <button class="app-icon app-gallery" id="openGalleryBtn">
                   <div class="app-icon-image">
                     <img src="<?= v('assets/apps_icon/gallery.png') ?>" alt="Gallery">
@@ -286,6 +295,9 @@ function v($path) {
 
               <!-- OnlySlut screen, hidden by default -->
               <div id="onlyslutScreen" class="hidden"></div>
+
+              <!-- Wallet screen, hidden by default -->
+              <div id="walletScreen" class="hidden"></div>
 
               <!-- Gallery screen, hidden by default -->
               <div id="galleryScreen" class="hidden"></div>
@@ -426,6 +438,7 @@ function v($path) {
         subtree: true
       });
     });
+
   </script>
 
   <script src="<?= v('loader.js') ?>"></script>
@@ -443,5 +456,6 @@ function v($path) {
   <script src="<?= v('app.settings/settings.js') ?>"></script>
   <script src="<?= v('app.tips/tips.js') ?>"></script>
   <script src="<?= v('app.spy/spy.js') ?>"></script>
+  <script src="<?= v('app.wallet/wallet.js') ?>"></script>
 </body>
 </html>

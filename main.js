@@ -370,6 +370,11 @@ function initApp() {
   async function handleStorySelection(story) {
     currentStory = story;
 
+    // Reset Wallet app state when selecting a new story
+    if (typeof window.resetWalletAppState === 'function') {
+      window.resetWalletAppState();
+    }
+
     // Try to guess the story folder name
     // stories.php may return story.folder, story.slug or story.id
     const slug = (story.folder || story.slug || story.id || '').trim();
@@ -465,6 +470,11 @@ function initApp() {
       const spyBtn = document.getElementById('openSpyBtn');
       if (spyBtn) spyBtn.classList.add('hidden');
 
+      // Reset Wallet app state when leaving a story
+      if (typeof window.resetWalletAppState === 'function') {
+        window.resetWalletAppState();
+      }
+
       if (phonePages) {
         phonePages.classList.remove('phone-pages--show-second');
       }
@@ -497,6 +507,8 @@ function initApp() {
   const openTipsBtn      = document.getElementById('openTipsBtn');      // Tips icon
   const spyScreen        = document.getElementById('spyScreen');        // Spy app screen
   const openSpyBtn       = document.getElementById('openSpyBtn');       // Spy icon
+  const walletScreen     = document.getElementById('walletScreen');     // Wallet app screen
+  const openWalletBtn    = document.getElementById('openWalletBtn');    // Wallet icon
   const disclaimerPopup  = document.getElementById('disclaimerPopup');  // Disclaimer popup
   const openDisclaimerBtn = document.getElementById('openDisclaimerBtn'); // Disclaimer icon
   const closeDisclaimerPopup = document.getElementById('closeDisclaimerPopup'); // Close disclaimer btn
@@ -515,6 +527,7 @@ function initApp() {
     if (settingsScreen) settingsScreen.classList.add('hidden');
     if (tipsScreen) tipsScreen.classList.add('hidden');
     if (spyScreen) spyScreen.classList.add('hidden');
+    if (walletScreen) walletScreen.classList.add('hidden');
 
     // Cleanup spy mode if it was active
     if (window.Spy && typeof window.Spy.cleanup === 'function') {
@@ -550,6 +563,7 @@ function initApp() {
     if (settingsScreen) settingsScreen.classList.add('hidden');
     if (tipsScreen) tipsScreen.classList.add('hidden');
     if (spyScreen) spyScreen.classList.add('hidden');
+    if (walletScreen) walletScreen.classList.add('hidden');
 
     // force a uniform white background for the app
     if (phoneFrame) {
@@ -581,6 +595,7 @@ function initApp() {
     if (settingsScreen) settingsScreen.classList.add('hidden');
     if (tipsScreen) tipsScreen.classList.add('hidden');
     if (spyScreen) spyScreen.classList.add('hidden');
+    if (walletScreen) walletScreen.classList.add('hidden');
 
     // force a uniform white background for the app
     if (phoneFrame) {
@@ -607,6 +622,7 @@ function initApp() {
     if (settingsScreen) settingsScreen.classList.add('hidden');
     if (tipsScreen) tipsScreen.classList.add('hidden');
     if (spyScreen) spyScreen.classList.add('hidden');
+    if (walletScreen) walletScreen.classList.add('hidden');
 
     // dark background + texture (handled in CSS)
     if (phoneFrame) {
@@ -638,6 +654,7 @@ function initApp() {
     if (settingsScreen) settingsScreen.classList.add('hidden');
     if (tipsScreen) tipsScreen.classList.add('hidden');
     if (spyScreen) spyScreen.classList.add('hidden');
+    if (walletScreen) walletScreen.classList.add('hidden');
 
     // dark background (like Messenger)
     if (phoneFrame) {
@@ -669,6 +686,7 @@ function initApp() {
     if (settingsScreen) settingsScreen.classList.add('hidden');
     if (tipsScreen) tipsScreen.classList.add('hidden');
     if (spyScreen) spyScreen.classList.add('hidden');
+    if (walletScreen) walletScreen.classList.add('hidden');
 
     // dark background (like Messenger)
     if (phoneFrame) {
@@ -700,6 +718,7 @@ function initApp() {
     if (savesloadScreen) savesloadScreen.classList.add('hidden');
     if (tipsScreen) tipsScreen.classList.add('hidden');
     if (spyScreen) spyScreen.classList.add('hidden');
+    if (walletScreen) walletScreen.classList.add('hidden');
 
     // dark background (like Messenger)
     if (phoneFrame) {
@@ -731,6 +750,7 @@ function initApp() {
     if (savesloadScreen) savesloadScreen.classList.add('hidden');
     if (settingsScreen) settingsScreen.classList.add('hidden');
     if (spyScreen) spyScreen.classList.add('hidden');
+    if (walletScreen) walletScreen.classList.add('hidden');
 
     // dark background (like Messenger)
     if (phoneFrame) {
@@ -762,6 +782,39 @@ function initApp() {
     if (savesloadScreen) savesloadScreen.classList.add('hidden');
     if (settingsScreen) settingsScreen.classList.add('hidden');
     if (tipsScreen) tipsScreen.classList.add('hidden');
+    if (walletScreen) walletScreen.classList.add('hidden');
+
+    // dark background (like Messenger)
+    if (phoneFrame) {
+      phoneFrame.classList.add('phone-app-dark');
+      phoneFrame.classList.remove('phone-app-white');
+    }
+
+    // keep the original light battery
+    if (batteryImg && originalBatterySrc) {
+      batteryImg.setAttribute('src', originalBatterySrc);
+    }
+  }
+
+  // Wallet screen with dark background
+  function showWallet() {
+    if (!homeScreen || !walletScreen) return;
+
+    // Pause Messenger autoplay when leaving
+    if (window.Messenger && typeof window.Messenger.onClose === 'function') {
+      window.Messenger.onClose();
+    }
+
+    homeScreen.classList.add('hidden');
+    walletScreen.classList.remove('hidden');
+    if (instapicsScreen) instapicsScreen.classList.add('hidden');
+    if (onlyslutScreen) onlyslutScreen.classList.add('hidden');
+    if (messengerScreen) messengerScreen.classList.add('hidden');
+    if (galleryScreen) galleryScreen.classList.add('hidden');
+    if (savesloadScreen) savesloadScreen.classList.add('hidden');
+    if (settingsScreen) settingsScreen.classList.add('hidden');
+    if (tipsScreen) tipsScreen.classList.add('hidden');
+    if (spyScreen) spyScreen.classList.add('hidden');
 
     // dark background (like Messenger)
     if (phoneFrame) {
@@ -804,6 +857,9 @@ function initApp() {
         break;
       case 'spy':
         showSpy();
+        break;
+      case 'wallet':
+        showWallet();
         break;
       default:
 
@@ -1006,6 +1062,28 @@ function initApp() {
 
       if (window.Spy && typeof window.Spy.init === 'function') {
         window.Spy.init(storyPath);
+      }
+    });
+  }
+
+  // Click on Wallet icon: open the app
+  if (openWalletBtn) {
+    openWalletBtn.addEventListener('click', () => {
+      // Check that a story is selected
+      if (!currentStory) {
+        alert(window.t('alert.wallet') || 'Please select a story first.');
+        return;
+      }
+
+      showWallet();
+
+      // Initialize Wallet
+      if (window.Wallet && typeof window.Wallet.init === 'function') {
+        window.Wallet.init();
+      }
+
+      if (window.Wallet && typeof window.Wallet.onOpen === 'function') {
+        window.Wallet.onOpen();
       }
     });
   }

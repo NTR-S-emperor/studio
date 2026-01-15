@@ -35,6 +35,7 @@
 @app.patreon: EN= Patreon | FR= Patreon
 @app.tips: EN= Tips | FR= Tips
 @app.spy: EN= Spy | FR= Spy
+@app.wallet: EN= Wallet | FR= Wallet
 @app.disclaimer: EN= Disclaimer | FR= Disclaimer
 
 
@@ -80,6 +81,15 @@
 @alert.messenger: EN= Please select a story first to open Messenger. | FR= Sélectionne d'abord une histoire pour ouvrir Messenger.
 @alert.gallery: EN= Please select a story first to open the gallery. | FR= Sélectionne d'abord une histoire pour ouvrir la galerie.
 @alert.spy: EN= Please select a story first. | FR= Sélectionne d'abord une histoire.
+@alert.wallet: EN= Please select a story first to open the wallet. | FR= Sélectionne d'abord une histoire pour ouvrir le portefeuille.
+
+
+# ============================================================================
+# WALLET
+# ============================================================================
+
+@wallet.balance: EN= Current Balance | FR= Solde actuel
+@wallet.empty: EN= No transactions yet | FR= Aucune transaction
 
 
 # ============================================================================
@@ -223,6 +233,7 @@
 @notif.spy.installed: EN= SpyApp has been successfully installed | FR= SpyApp a été installé avec succès
 @notif.spy.instapics: EN= New app detected: InstaPics | FR= Nouvelle application détectée : InstaPics
 @notif.spy.onlyslut: EN= New app detected: OnlySlut | FR= Nouvelle application détectée : OnlySlut
+@notif.wallet.installed: EN= Wallet has been installed | FR= Wallet a été installé
 @spy.separator.old: EN= Previous content | FR= Contenu précédent
 @spy.next_content: EN= Continue to next content | FR= Passer au contenu suivant
 @spy.end_content: EN= End of intercepted content | FR= Fin du nouveau contenu intercepté

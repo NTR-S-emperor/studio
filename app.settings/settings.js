@@ -1263,6 +1263,11 @@ window.Settings = {
             window.Gallery.render();
         }
 
+        // Reset Wallet
+        if (window.Wallet?.clearTransactions) {
+            window.Wallet.clearTransactions();
+        }
+
         // Reset Spy app state
         const slug = window.currentStorySlug || 'default';
         try {
@@ -1304,6 +1309,11 @@ window.Settings = {
         // Reset and hide spy app
         if (window.resetSpyAppState) {
             window.resetSpyAppState();
+        }
+
+        // Reset and hide wallet app
+        if (typeof window.resetWalletAppState === 'function') {
+            window.resetWalletAppState();
         }
 
         // Force SpyMessenger to reload data next time SpyApp opens
