@@ -98,9 +98,13 @@
     top: 2px;
 }
 
-.settings-item-icon--emoji {
+.settings-item-icon img {
     position: relative;
-    top: 1px;
+    top: 2px;
+}
+
+.settings-item-icon img[src*="icon-user"] {
+    top: 0;
 }
 
 .settings-item-control {

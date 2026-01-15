@@ -121,7 +121,7 @@ window.Settings = {
                     <!-- Language -->
                     <div class="settings-item">
                         <div class="settings-item-label">
-                            <span class="settings-item-icon settings-item-icon--emoji">🌐</span>
+                            <span class="settings-item-icon"><img src="assets/system/icon-language.svg" width="18" height="18" alt=""></span>
                             <span data-i18n="settings.language">Language</span>
                         </div>
                         <div class="settings-item-control">
@@ -140,7 +140,7 @@ window.Settings = {
                     <!-- Background music -->
                     <div class="settings-item">
                         <div class="settings-item-label">
-                            <span class="settings-item-icon settings-item-icon--emoji">🎵</span>
+                            <span class="settings-item-icon"><img src="assets/system/icon-music.svg" width="18" height="18" alt=""></span>
                             <span data-i18n="settings.music">Background music</span>
                         </div>
                         <div class="settings-item-control settings-slider-control">
@@ -152,7 +152,7 @@ window.Settings = {
                     <!-- Wallpaper -->
                     <div class="settings-item">
                         <div class="settings-item-label">
-                            <span class="settings-item-icon settings-item-icon--emoji">🖼️</span>
+                            <span class="settings-item-icon"><img src="assets/system/icon-wallpaper.svg" width="18" height="18" alt=""></span>
                             <span data-i18n="settings.wallpaper">Wallpaper</span>
                         </div>
                         <div class="settings-item-control">
@@ -163,7 +163,7 @@ window.Settings = {
                     <!-- Reset settings -->
                     <div class="settings-item">
                         <div class="settings-item-label">
-                            <span class="settings-item-icon">⚙️</span>
+                            <span class="settings-item-icon"><img src="assets/system/icon-settings.svg" width="18" height="18" alt=""></span>
                             <span data-i18n="settings.default">Default settings</span>
                         </div>
                         <div class="settings-item-control">
@@ -179,7 +179,7 @@ window.Settings = {
                     <!-- Media volume -->
                     <div class="settings-item">
                         <div class="settings-item-label">
-                            <span class="settings-item-icon settings-item-icon--emoji">🔊</span>
+                            <span class="settings-item-icon"><img src="assets/system/icon-volume.svg" width="18" height="18" alt=""></span>
                             <span data-i18n="settings.media">Media volume</span>
                         </div>
                         <div class="settings-item-control settings-slider-control">
@@ -248,7 +248,7 @@ window.Settings = {
                     <!-- Girlfriend name -->
                     <div class="settings-item settings-item-girlfriend hidden" id="settings-girlfriend-item">
                         <div class="settings-item-label">
-                            <span class="settings-item-icon">💕</span>
+                            <span class="settings-item-icon"><img src="assets/system/icon-heart.svg" width="18" height="18" alt=""></span>
                             <span data-i18n="settings.gf.label">Girlfriend's name</span>
                         </div>
                         <div class="settings-item-control settings-girlfriend-control">
@@ -260,7 +260,7 @@ window.Settings = {
                     <!-- Player nickname (MC) -->
                     <div class="settings-item settings-item-mc" id="settings-mc-item">
                         <div class="settings-item-label">
-                            <span class="settings-item-icon">🎮</span>
+                            <span class="settings-item-icon"><img src="assets/system/icon-user.svg" width="18" height="18" alt=""></span>
                             <span data-i18n="settings.mc.label">Nickname</span>
                         </div>
                         <div class="settings-item-control settings-mc-control">
@@ -272,7 +272,7 @@ window.Settings = {
                     <!-- Reset progress -->
                     <div class="settings-item settings-item-reset">
                         <div class="settings-item-label">
-                            <span class="settings-item-icon settings-item-icon--emoji">🔄</span>
+                            <span class="settings-item-icon"><img src="assets/system/icon-reset.svg" width="18" height="18" alt=""></span>
                             <span data-i18n="settings.reset">Reset progress</span>
                         </div>
                         <div class="settings-item-control">
