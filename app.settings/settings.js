@@ -191,7 +191,7 @@ window.Settings = {
                     <!-- Autoplay speed (auto mode = simple play) -->
                     <div class="settings-item">
                         <div class="settings-item-label">
-                            <span class="settings-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="#f97316"><path d="M8 5v14l11-7z"/></svg></span>
+                            <span class="settings-item-icon"><img src="assets/system/icon-play.svg" width="18" height="18" alt=""></span>
                             <span data-i18n="settings.autoscroll">Auto scroll</span>
                         </div>
                         <div class="settings-item-control settings-slider-control">
@@ -203,7 +203,7 @@ window.Settings = {
                     <!-- Doubleplay speed (fast mode = double play) -->
                     <div class="settings-item">
                         <div class="settings-item-label">
-                            <span class="settings-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="#f97316"><path d="M4 5v14l8-7zm9 0v14l8-7z"/></svg></span>
+                            <span class="settings-item-icon"><img src="assets/system/icon-fastforward.svg" width="18" height="18" alt=""></span>
                             <span data-i18n="settings.fastscroll">Fast Scroll</span>
                         </div>
                         <div class="settings-item-control settings-slider-control">
@@ -215,7 +215,7 @@ window.Settings = {
                     <!-- Auto-expand media -->
                     <div class="settings-item">
                         <div class="settings-item-label">
-                            <span class="settings-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></span>
+                            <span class="settings-item-icon"><img src="assets/system/icon-expand.svg" width="18" height="18" alt=""></span>
                             <span data-i18n="settings.autoexpand">Auto-expand media</span>
                         </div>
                         <div class="settings-item-control">
@@ -229,7 +229,7 @@ window.Settings = {
                     <!-- Show choice hints -->
                     <div class="settings-item">
                         <div class="settings-item-label">
-                            <span class="settings-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+                            <span class="settings-item-icon"><img src="assets/system/icon-question.svg" width="18" height="18" alt=""></span>
                             <span data-i18n="settings.choicehints">Choice hints</span>
                         </div>
                         <div class="settings-item-control">
